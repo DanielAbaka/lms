@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ✅ Document Form View -->
+        <record id="view_lms_document_form" model="ir.ui.view">
+            <field name="name">lms.document.form</field>
+            <field name="model">lms.document</field>
+            <field name="arch" type="xml">
+                <form string="LMS Document">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="course_id"/>
+                        </group>
+                        <group>
+                            <!-- 
+                                This references an existing attachment in the system.
+                                The user can pick from existing attachments in the M2O dropdown.
+                            -->
+                            <field name="attachment_id"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ✅ Document Tree View -->
+        <record id="view_lms_document_tree" model="ir.ui.view">
+            <field name="name">lms.document.tree</field>
+            <field name="model">lms.document</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="attachment_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Document Search View (Optional) -->
+        <record id="view_lms_document_search" model="ir.ui.view">
+            <field name="name">lms.document.search</field>
+            <field name="model">lms.document</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="attachment_id"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ✅ Document Action -->
+        <record id="action_lms_document" model="ir.actions.act_window">
+            <field name="name">Documents</field>
+            <field name="res_model">lms.document</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_document_search"/>
+        </record>
+
+        <!-- ✅ Menu Item under LMS Module -->
+        <menuitem id="menu_lms_document"
+                  name="Documents"
+                  parent="lms_module.menu_root"
+                  action="action_lms_document"
+                  sequence="11"/>
+    </data>
+</odoo>

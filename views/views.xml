@@ -1,0 +1,32 @@
+<odoo>
+  <data>
+    <!-- ✅ Top-Level Menu -->
+    <menuitem name="LMS MODULE" id="lms_module.menu_root"/>
+
+    <!-- ✅ Student Menu (First) -->
+    <!-- <menuitem name="Students" id="lms_module.menu_students" parent="lms_module.menu_root"/> -->
+
+    <!-- <record model="ir.actions.act_window" id="action_lms_students">
+      <field name="name">Students</field>
+      <field name="res_model">res.users</field>
+      <field name="domain">[('is_student', '=', True)]</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Manage Students" id="lms_module.menu_manage_students"
+              parent="lms_module.menu_students" action="action_lms_students"/> -->
+
+    <!-- ✅ Courses Menu (Second) -->
+    <!-- <menuitem name="Courses" id="lms_module.menu_courses" parent="lms_module.menu_root"/>
+
+    <record model="ir.actions.act_window" id="action_lms_courses">
+      <field name="name">Courses</field>
+      <field name="res_model">slide.channel</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Manage Courses" id="lms_module.menu_manage_courses"
+              parent="lms_module.menu_courses" action="action_lms_courses"/> -->
+
+  </data>
+</odoo>

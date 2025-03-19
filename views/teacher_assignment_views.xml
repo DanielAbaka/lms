@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- ✅ Teacher Assignment List View (Tree) -->
+        <record id="view_lms_teacher_assignment_tree" model="ir.ui.view">
+            <field name="name">lms.teacher.assignment.tree</field>
+            <field name="model">lms.teacher.assignment</field>
+            <field name="arch" type="xml">
+                <tree string="Teacher Assignments">
+                    <field name="teacher_id"/>
+                    <field name="course_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Teacher Assignment Form View -->
+        <record id="view_lms_teacher_assignment_form" model="ir.ui.view">
+            <field name="name">lms.teacher.assignment.form</field>
+            <field name="model">lms.teacher.assignment</field>
+            <field name="arch" type="xml">
+                <form string="Teacher Assignment">
+                    <sheet>
+                        <group>
+                            <field name="teacher_id" domain="[('is_teacher', '=', True)]"/>  <!-- ✅ Restrict to teachers only -->
+                            <field name="course_id"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ✅ Teacher Assignment Search View -->
+        <record id="view_lms_teacher_assignment_search" model="ir.ui.view">
+            <field name="name">lms.teacher.assignment.search</field>
+            <field name="model">lms.teacher.assignment</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="teacher_id"/>
+                    <field name="course_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <filter name="current_assignments" string="Current Assignments" domain="[('end_date', '>=', context_today())]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ✅ Teacher Assignment Action -->
+        <record id="action_lms_teacher_assignment" model="ir.actions.act_window">
+            <field name="name">Teacher Assignments</field>
+            <field name="res_model">lms.teacher.assignment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_teacher_assignment_search"/>
+        </record>
+
+        <!-- ✅ Add Teacher Assignments to the LMS Module Menu -->
+        <menuitem id="menu_lms_teacher_assignments" name="Teacher Assignments"
+                  parent="lms_module.menu_root"
+                  action="action_lms_teacher_assignment"
+                  sequence="6"/>
+    </data>
+</odoo>

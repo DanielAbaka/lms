@@ -1,0 +1,51 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_lms_teacher_assignment_admin,LMS Teacher Assignment Admin,model_lms_teacher_assignment,base.group_system,1,1,1,1
+access_lms_teacher_assignment_manager,LMS Teacher Assignment Manager,model_lms_teacher_assignment,lms_module.group_lms_manager,1,1,1,1
+access_lms_teacher_assignment_user,LMS Teacher Assignment User,model_lms_teacher_assignment,lms_module.group_lms_user,1,0,0,0
+
+access_lms_academic_year_admin,LMS Academic Year Admin,model_lms_academic_year,base.group_system,1,1,1,1
+access_lms_academic_year_manager,LMS Academic Year Manager,model_lms_academic_year,lms_module.group_lms_manager,1,1,1,1
+access_lms_academic_year_user,LMS Academic Year User,model_lms_academic_year,lms_module.group_lms_user,1,0,0,0
+
+access_lms_semester_admin,LMS Semester Admin,model_lms_semester,base.group_system,1,1,1,1
+access_lms_semester_manager,LMS Semester Manager,model_lms_semester,lms_module.group_lms_manager,1,1,1,1
+access_lms_semester_user,LMS Semester User,model_lms_semester,lms_module.group_lms_user,1,0,0,0
+
+
+access_lms_teacher_admin,LMS Teacher Admin,model_res_users,base.group_system,1,1,1,1
+access_lms_teacher_manager,LMS Teacher Manager,model_res_users,lms_module.group_lms_manager,1,1,1,1
+access_lms_teacher_user,LMS Teacher User,model_res_users,lms_module.group_lms_user,1,0,0,0
+
+access_lms_teacher_assignment_admin,LMS Teacher Assignment Admin,model_lms_teacher_assignment,base.group_system,1,1,1,1
+access_lms_teacher_assignment_manager,LMS Teacher Assignment Manager,model_lms_teacher_assignment,lms_module.group_lms_manager,1,1,1,1
+access_lms_teacher_assignment_user,LMS Teacher Assignment User,model_lms_teacher_assignment,lms_module.group_lms_user,1,0,0,0
+
+
+access_lms_course_planning_admin,LMS Course Planning Admin,model_lms_course_planning,base.group_system,1,1,1,1
+access_lms_course_planning_manager,LMS Course Planning Manager,model_lms_course_planning,lms_module.group_lms_manager,1,1,1,1
+access_lms_course_planning_user,LMS Course Planning User,model_lms_course_planning,lms_module.group_lms_user,1,0,0,0
+
+access_lms_enrollment_admin,LMS Enrollment Admin,model_lms_enrollment,base.group_system,1,1,1,1
+access_lms_enrollment_manager,LMS Enrollment Manager,model_lms_enrollment,lms_module.group_lms_manager,1,1,1,1
+access_lms_enrollment_user,LMS Enrollment User,model_lms_enrollment,lms_module.group_lms_user,1,0,0,0
+
+access_lms_payment_admin,LMS Payment Admin,model_payment_transaction,base.group_system,1,1,1,1
+access_lms_payment_manager,LMS Payment Manager,model_payment_transaction,lms_module.group_lms_manager,1,1,1,1
+access_lms_payment_user,LMS Payment User,model_payment_transaction,lms_module.group_lms_user,1,0,0,0
+
+access_lms_grade_admin,LMS Grade Admin,model_lms_grade,base.group_system,1,1,1,1
+access_lms_grade_manager,LMS Grade Manager,model_lms_grade,lms_module.group_lms_manager,1,1,1,1
+access_lms_grade_user,LMS Grade User,model_lms_grade,lms_module.group_lms_user,1,0,0,0
+
+access_lms_transcript_admin,LMS Transcript Admin,model_lms_transcript,base.group_system,1,1,1,1
+access_lms_transcript_manager,LMS Transcript Manager,model_lms_transcript,lms_module.group_lms_manager,1,1,1,1
+access_lms_transcript_user,LMS Transcript User,model_lms_transcript,lms_module.group_lms_user,1,0,0,0
+
+
+access_lms_document_admin,LMS Document Admin,model_lms_document,base.group_system,1,1,1,1
+access_lms_document_manager,LMS Document Manager,model_lms_document,lms_module.group_lms_manager,1,1,1,1
+access_lms_document_user,LMS Document User,model_lms_document,lms_module.group_lms_user,1,0,0,0
+
+access_lms_messaging_admin,LMS Messaging Admin,model_lms_messaging,base.group_system,1,1,1,1
+access_lms_messaging_manager,LMS Messaging Manager,model_lms_messaging,lms_module.group_lms_manager,1,1,1,1
+access_lms_messaging_user,LMS Messaging User,model_lms_messaging,lms_module.group_lms_user,1,0,0,0

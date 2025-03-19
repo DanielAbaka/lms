@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ✅ Student Profile Form View -->
+        <record id="view_lms_student_form" model="ir.ui.view">
+            <field name="name">lms.student.form</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="Student Profile">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="student_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="enrolled_courses" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ✅ Student Profile List View (Tree) -->
+        <record id="view_lms_student_tree" model="ir.ui.view">
+            <field name="name">lms.student.tree</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="student_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Student Profile Search View -->
+        <record id="view_lms_student_search" model="ir.ui.view">
+            <field name="name">lms.student.search</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- 
+            ✅ Student Profile Action
+            - domain=[('is_student','=',True)] so only students are shown
+            - context="{'default_is_student': True}" so any new record defaults to a student
+        -->
+        <record id="action_lms_students" model="ir.actions.act_window">
+            <field name="name">Students</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_student_search"/>
+            <field name="domain">[('is_student', '=', True)]</field>
+            <field name="context">{'default_is_student': True}</field>  <!-- ✅ Mark new records as students -->
+        </record>
+
+        <!-- ✅ Add Menu Item for Students -->
+        <menuitem id="menu_lms_students" name="Students"
+                  parent="lms_module.menu_root"
+                  action="action_lms_students"
+                  sequence="4"/>
+    </data>
+</odoo>

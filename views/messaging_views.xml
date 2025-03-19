@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- ✅ Messaging Form View -->
+        <record id="view_lms_messaging_form" model="ir.ui.view">
+            <field name="name">lms.messaging.form</field>
+            <field name="model">lms.messaging</field> <!-- ✅ Use the new custom model -->
+            <field name="arch" type="xml">
+                <form string="Messaging">
+                    <sheet>
+                        <group>
+                            <field name="message_content"/>
+                            <field name="sender_id"/>
+                            <field name="recipient_ids" widget="many2many_tags"/>
+                        </group>
+                        <!--
+                            If you want chatter attachments/discussions:
+                            <div class="oe_chatter">
+                                <field name="message_ids" widget="mail_thread"/>
+                                <field name="activity_ids" widget="mail_activity"/>
+                            </div>
+                        -->
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ✅ Messaging Tree View -->
+        <record id="view_lms_messaging_tree" model="ir.ui.view">
+            <field name="name">lms.messaging.tree</field>
+            <field name="model">lms.messaging</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="sender_id"/>
+                    <field name="message_content"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Messaging Search View (Optional) -->
+        <record id="view_lms_messaging_search" model="ir.ui.view">
+            <field name="name">lms.messaging.search</field>
+            <field name="model">lms.messaging</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="sender_id"/>
+                    <field name="message_content"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ✅ Messaging Action -->
+        <record id="action_lms_messaging" model="ir.actions.act_window">
+            <field name="name">Messaging</field>
+            <field name="res_model">lms.messaging</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_messaging_search"/>
+        </record>
+
+        <!-- ✅ Menu Item under LMS Module -->
+        <menuitem id="menu_lms_messaging"
+                  name="Messaging"
+                  parent="lms_module.menu_root"
+                  action="action_lms_messaging"
+                  sequence="12"/>
+    </data>
+</odoo>

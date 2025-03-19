@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- ✅ Define the Action First -->
+    <record id="action_lms_quiz" model="ir.actions.act_window">
+        <field name="name">Quizzes</field>
+        <field name="res_model">survey.survey</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ✅ Define the Menu After the Action -->
+    <menuitem id="menu_lms_quiz" name="Quizzes"
+              parent="lms_module.menu_root"
+              action="action_lms_quiz"
+              sequence="20"/>
+
+    <!-- ✅ Tree View for LMS Quiz (FIXED: Removed question_and_page_count) -->
+    <record id="view_lms_quiz_tree" model="ir.ui.view">
+        <field name="name">lms.quiz.tree</field>
+        <field name="model">survey.survey</field>
+        <field name="arch" type="xml">
+            <tree string="Quizzes">
+                <field name="title"/>
+                <field name="course_id"/> <!-- Ensure this field exists -->
+            </tree>
+        </field>
+    </record>
+
+    <!-- ✅ Form View for LMS Quiz -->
+    <record id="view_lms_quiz_form" model="ir.ui.view">
+        <field name="name">lms.quiz.form</field>
+        <field name="model">survey.survey</field>
+        <field name="arch" type="xml">
+            <form string="LMS Quiz">
+                <sheet>
+                    <group>
+                        <field name="title"/>
+                        <field name="course_id"/>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

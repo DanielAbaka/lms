@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- ✅ Course Form View -->
+        <record id="view_lms_course_form" model="ir.ui.view">
+            <field name="name">lms.course.form</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <form string="Course">
+                    <sheet>
+                        <notebook>
+                            <page string="General Information">
+                                <group>
+                                    <field name="name" required="1"/>
+                                    <field name="academic_year_id"/>
+                                    <field name="semester_id"/>
+                                    <field name="credits"/>
+                                </group>
+                                <group>
+                                    <field name="prerequisite_course_ids" widget="many2many_tags"/>
+                                    <field name="teacher_assignment_ids" widget="one2many_list"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ✅ Course List View (Tree) -->
+        <record id="view_lms_course_tree" model="ir.ui.view">
+            <field name="name">lms.course.tree</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <tree default_order="academic_year_id desc">
+                    <field name="name"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="credits"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Course Search View -->
+        <record id="view_lms_course_search" model="ir.ui.view">
+            <field name="name">lms.course.search</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="credits"/>
+                    <filter name="current_year" string="Current Year" domain="[('academic_year_id', '=', context_today())]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ✅ Course Action -->
+        <record id="action_lms_courses" model="ir.actions.act_window">
+            <field name="name">Courses</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_course_search"/>
+        </record>
+
+        <!-- ✅ Add Courses to the LMS Module Menu -->
+        <menuitem id="menu_lms_courses" name="Courses"
+                  parent="lms_module.menu_root"
+                  action="action_lms_courses"
+                   sequence="3"/>
+    </data>
+</odoo>

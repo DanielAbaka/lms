@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- ✅ Enrollment Form View -->
+        <record id="view_lms_enrollment_form" model="ir.ui.view">
+            <field name="name">lms.enrollment.form</field>
+            <field name="model">lms.enrollment</field>
+            <field name="arch" type="xml">
+                <form string="Enrollment">
+                    <sheet>
+                        <group>
+                            <field name="student_id" required="1"/>
+                            <field name="course_id" widget="many2many_tags" required="1"/>
+                            <field name="enrollment_date" required="1"/>
+                        </group>
+                        <group>
+                            <!-- 
+                                Using modifiers instead of attrs if needed for Odoo 17 
+                                But removing states as Odoo 17 no longer supports old states/attrs
+                            -->
+                            <field name="payment_status" widget="statusbar" options="{'clickable': '1'}"/>
+                            <field name="total_cost" readonly="1"/>
+                            <field name="remaining_balance" readonly="1"/>
+                        </group>
+                        <footer>
+                            <!-- 
+                                For Odoo 17, we use modifiers or remove the old attrs syntax.
+                                Example: modifiers="{'invisible': [('payment_status','=', 'paid')]}" 
+                                to hide the button if fully paid.
+                            -->
+                            <button name="make_payment"
+                                    type="object"
+                                    string="Make Payment"
+                                    class="btn-primary"
+                                    modifiers="{'invisible': [('payment_status','=', 'paid')]}" />
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ✅ Enrollment Tree View -->
+        <record id="view_lms_enrollment_tree" model="ir.ui.view">
+            <field name="name">lms.enrollment.tree</field>
+            <field name="model">lms.enrollment</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="student_id"/>
+                    <field name="course_id" widget="many2many_tags"/>
+                    <field name="enrollment_date"/>
+                    <field name="payment_status"/>
+                    <field name="total_cost"/>
+                    <field name="remaining_balance"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Enrollment Search View -->
+        <record id="view_lms_enrollment_search" model="ir.ui.view">
+            <field name="name">lms.enrollment.search</field>
+            <field name="model">lms.enrollment</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="student_id"/>
+                    <field name="course_id"/>
+                    <field name="enrollment_date"/>
+                    <field name="payment_status"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ✅ Enrollment Action -->
+        <record id="action_lms_enrollment" model="ir.actions.act_window">
+            <field name="name">Enrollments</field>
+            <field name="res_model">lms.enrollment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_enrollment_search"/>
+        </record>
+
+        <!-- ✅ Menu Item under LMS Module -->
+        <menuitem id="menu_lms_enrollment"
+                  name="Enrollments"
+                  parent="lms_module.menu_root"
+                  action="action_lms_enrollment"
+                  sequence="8"/>
+    </data>
+</odoo>

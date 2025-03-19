@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- ✅ Payment Form View -->
+        <record id="view_lms_payment_form" model="ir.ui.view">
+            <field name="name">lms.payment.form</field>
+            <field name="model">payment.transaction</field>
+            <field name="arch" type="xml">
+                <form string="Payment Transaction">
+                    <sheet>
+                        <group>
+                            <field name="enrollment_id" required="1"/>
+                            <!-- Example references to standard payment.transaction fields: -->
+                            <field name="reference"/>
+                            <field name="amount"/>
+                            <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ✅ Payment Tree View -->
+        <record id="view_lms_payment_tree" model="ir.ui.view">
+            <field name="name">lms.payment.tree</field>
+            <field name="model">payment.transaction</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <!-- Show relevant fields from payment.transaction -->
+                    <field name="reference"/>
+                    <field name="enrollment_id"/>
+                    <field name="amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Payment Search View (Optional) -->
+        <record id="view_lms_payment_search" model="ir.ui.view">
+            <field name="name">lms.payment.search</field>
+            <field name="model">payment.transaction</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="reference"/>
+                    <field name="enrollment_id"/>
+                    <filter name="state_done" string="Done" domain="[('state', '=', 'done')]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ✅ Payment Action -->
+        <record id="action_lms_payment" model="ir.actions.act_window">
+            <field name="name">Payments</field>
+            <field name="res_model">payment.transaction</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_payment_search"/>
+        </record>
+
+        <!-- ✅ Menu Item under LMS Module -->
+        <menuitem id="menu_lms_payments"
+                  name="Payments"
+                  parent="lms_module.menu_root"
+                  action="action_lms_payment"
+                  sequence="9"/>
+    </data>
+</odoo>

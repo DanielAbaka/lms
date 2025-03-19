@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- ✅ Semester Form View -->
+        <record id="view_lms_semester_form" model="ir.ui.view">
+            <field name="name">lms.semester.form</field>
+            <field name="model">lms.semester</field>
+            <field name="arch" type="xml">
+                <form string="Semester">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="academic_year_id"/>
+                            <field name="is_current"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ✅ Semester Tree View (List View) -->
+        <record id="view_lms_semester_tree" model="ir.ui.view">
+            <field name="name">lms.semester.tree</field>
+            <field name="model">lms.semester</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="academic_year_id"/>
+                    <field name="is_current"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Semester Action (Links the Views) -->
+        <record id="action_lms_semester" model="ir.actions.act_window">
+            <field name="name">Semesters</field>
+            <field name="res_model">lms.semester</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- ✅ Add Semesters to the LMS Module Menu -->
+        <menuitem id="menu_lms_semesters" name="Semester"
+                  parent="lms_module.menu_root"
+                  action="action_lms_semester"
+                   sequence="2"/>
+    </data>
+</odoo>
