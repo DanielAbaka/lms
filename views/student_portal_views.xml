@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <!-- Transcript Form View -->
-        <record id="view_lms_transcript_form" model="ir.ui.view">
-            <field name="name">lms.transcript.form</field>
-            <field name="model">lms.transcript</field>
+        <!-- Student Portal Form View -->
+        <record id="view_lms_student_portal_form" model="ir.ui.view">
+            <field name="name">lms.student.portal.form</field>
+            <field name="model">lms.student.portal</field>
             <field name="arch" type="xml">
-                <form string="Transcript">
+                <form string="Student Portal">
                     <header>
                         <button name="action_activate" string="Activate" type="object" class="oe_highlight" states="draft"/>
                         <button name="action_complete" string="Complete" type="object" class="oe_highlight" states="active"/>
@@ -16,11 +16,14 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
+                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
+                            </button>
                             <button name="action_view_grades" type="object" class="oe_stat_button" icon="fa-star">
                                 <field name="grade_count" widget="statinfo" string="Grades"/>
                             </button>
-                            <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
-                                <field name="course_count" widget="statinfo" string="Courses"/>
+                            <button name="action_view_transcripts" type="object" class="oe_stat_button" icon="fa-file-text">
+                                <field name="transcript_count" widget="statinfo" string="Transcripts"/>
                             </button>
                         </div>
                         <notebook>
@@ -55,8 +58,14 @@
                                     </group>
                                 </group>
                             </page>
-                            <page string="Notes">
-                                <field name="notes"/>
+                            <page string="Enrollments">
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
                             </page>
                             <page string="Grades">
                                 <field name="grade_ids">
@@ -71,16 +80,34 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Courses">
-                                <field name="course_ids">
+                            <page string="Transcripts">
+                                <field name="transcript_ids">
+                                    <tree>
+                                        <field name="academic_year_id"/>
+                                        <field name="semester_id"/>
+                                        <field name="gpa"/>
+                                        <field name="total_credits"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Payments">
+                                <field name="payment_ids">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="amount"/>
+                                        <field name="payment_method"/>
+                                        <field name="payment_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="document_ids">
                                     <tree>
                                         <field name="name"/>
-                                        <field name="code"/>
-                                        <field name="credits"/>
-                                        <field name="grade"/>
-                                        <field name="grade_letter"/>
-                                        <field name="grade_point"/>
-                                        <field name="grade_status"/>
+                                        <field name="date"/>
+                                        <field name="is_public"/>
                                         <field name="state"/>
                                     </tree>
                                 </field>
@@ -96,10 +123,10 @@
             </field>
         </record>
 
-        <!-- Transcript Tree View -->
-        <record id="view_lms_transcript_tree" model="ir.ui.view">
-            <field name="name">lms.transcript.tree</field>
-            <field name="model">lms.transcript</field>
+        <!-- Student Portal Tree View -->
+        <record id="view_lms_student_portal_tree" model="ir.ui.view">
+            <field name="name">lms.student.portal.tree</field>
+            <field name="model">lms.student.portal</field>
             <field name="arch" type="xml">
                 <tree decoration-info="state == 'draft'" decoration-success="state == 'active'" decoration-muted="state in ['completed', 'cancelled']">
                     <field name="student_id"/>
@@ -111,17 +138,18 @@
                     <field name="courses_completed"/>
                     <field name="courses_in_progress"/>
                     <field name="courses_failed"/>
+                    <field name="enrollment_count"/>
                     <field name="grade_count"/>
-                    <field name="course_count"/>
+                    <field name="transcript_count"/>
                     <field name="state"/>
                 </tree>
             </field>
         </record>
 
-        <!-- Transcript Search View -->
-        <record id="view_lms_transcript_search" model="ir.ui.view">
-            <field name="name">lms.transcript.search</field>
-            <field name="model">lms.transcript</field>
+        <!-- Student Portal Search View -->
+        <record id="view_lms_student_portal_search" model="ir.ui.view">
+            <field name="name">lms.student.portal.search</field>
+            <field name="model">lms.student.portal</field>
             <field name="arch" type="xml">
                 <search>
                     <field name="student_id"/>
@@ -144,18 +172,73 @@
             </field>
         </record>
 
-        <!-- Transcript Action -->
-        <record id="action_lms_transcript" model="ir.actions.act_window">
-            <field name="name">Transcripts</field>
-            <field name="res_model">lms.transcript</field>
+        <!-- Student Portal Action -->
+        <record id="action_lms_student_portal" model="ir.actions.act_window">
+            <field name="name">Student Portals</field>
+            <field name="res_model">lms.student.portal</field>
             <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref="view_lms_transcript_search"/>
+            <field name="search_view_id" ref="view_lms_student_portal_search"/>
         </record>
 
-        <!-- Transcripts Menu Item -->
-        <menuitem id="menu_lms_transcripts" name="Transcripts"
+        <!-- Student Portals Menu Item -->
+        <menuitem id="menu_lms_student_portals" name="Student Portals"
                   parent="lms_module.menu_root"
-                  action="action_lms_transcript" 
-                  sequence="8"/>
+                  action="action_lms_student_portal" 
+                  sequence="9"/>
+
+        <!-- Student Schedule Tree View -->
+        <record id="view_lms_student_schedule_tree" model="ir.ui.view">
+            <field name="name">lms.student.schedule.tree</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="is_full" decoration-info="state == 'draft'" decoration-success="state == 'active'">
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="teacher_assignment_id"/>
+                    <field name="day_of_week"/>
+                    <field name="start_time" widget="float_time"/>
+                    <field name="end_time" widget="float_time"/>
+                    <field name="classroom"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Student Schedule Search View -->
+        <record id="view_lms_student_schedule_search" model="ir.ui.view">
+            <field name="name">lms.student.schedule.search</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="teacher_assignment_id"/>
+                    <field name="classroom"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                        <filter string="Day of Week" name="group_by_day" context="{'group_by': 'day_of_week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Student Schedule Action -->
+        <record id="action_lms_student_schedule" model="ir.actions.act_window">
+            <field name="name">My Schedule</field>
+            <field name="res_model">lms.schedule</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('id', 'in', [e.schedule_id.id for e in env['lms.enrollment'].search([('student_id', '=', user.id)])])]</field>
+            <field name="context">{'search_default_active': 1}</field>
+        </record>
+
+        <!-- Add Schedule to Student Portal Menu -->
+        <menuitem id="menu_lms_student_schedule"
+                  name="My Schedule"
+                  parent="menu_lms_student_portals"
+                  action="action_lms_student_schedule"
+                  sequence="2"/>
     </data>
-</odoo>
+</odoo> 

@@ -1,54 +1,86 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "LMS Module",
-
-    'summary': "A Learning Management System for managing courses, students, teachers, enrollments, and more.",
-
+    'name': 'Learning Management System',
+    'version': '1.0',
+    'category': 'Education',
+    'summary': 'Manage educational courses, students, and teachers',
     'description': """
-Long description of module's purpose
+        Learning Management System for educational institutions.
+        Features:
+        - Course Management
+        - Student Management
+        - Teacher Management
+        - Enrollment Management
+        - Attendance Tracking
+        - Grade Management
+        - Quiz System
+        - Document Management
+        - Payment Processing
+        - Academic Year & Semester Management
     """,
-
-    'author': "CS4LIBERIA",
-    'website': "https://www.yourcompany.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
-
-    # any module necessary for this one to work correctly
-    'depends': ['base','website_slides','survey','hr','payment','mail'],
-
-    # always loaded
+    'author': 'Your Company',
+    'website': 'https://www.yourcompany.com',
+    'depends': ['base', 'mail', 'web', 'website_slides'],
     'data': [
-        'security/groups.xml',
+        # Security
+        'security/lms_security.xml',
         'security/ir.model.access.csv',
-
-        # 'security/lms_security.xml',
+        
+        # Core Views
         'views/views.xml',
+        'views/templates.xml',
         'views/menu.xml',
-        'views/student_views.xml',
-        'views/course_views.xml',
-        'views/course_planning_views.xml',
-        'views/enrollment_views.xml',
+        
+        # Academic Management
         'views/academic_year_views.xml',
         'views/semester_views.xml',
+        'views/course_views.xml',
+        
+        # Student Management
+        'views/student_views.xml',
+        'views/enrollment_views.xml',
+        'views/course_planning_views.xml',
+        'views/student_portal_views.xml',
+        
+        # Teaching Management
         'views/teacher_views.xml',
         'views/teacher_assignment_views.xml',
+        'views/teacher_portal_views.xml',
+        'views/course_material_views.xml',
+        
+        # Assessment
+        'views/attendance_views.xml',
         'views/grade_views.xml',
-        'views/payment_views.xml',
         'views/transcript_views.xml',
+        
+        # Quiz System
+        'views/quiz_views.xml',
+        'views/quiz_question_views.xml',
+        'views/quiz_option_views.xml',
+        'views/quiz_attempt_views.xml',
+        'views/quiz_question_attempt_views.xml',
+        
+        # Financial Management
+        'views/payment_views.xml',
         'views/document_views.xml',
+        'views/document_access_views.xml',
+        
+        # Communication
         'views/messaging_views.xml',
-
-
-
+        
+        # Administration
+        'views/administrator_views.xml',
+        'views/admin_portal_views.xml',
+        'views/enhanced_views.xml',
+        'views/schedule_views.xml',
     ],
-    # only loaded in demonstration mode
+    'demo': [
+        'demo/lms_demo.xml',
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,
+    'license': 'LGPL-3',
 }
 
 

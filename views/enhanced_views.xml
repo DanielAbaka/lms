@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Dashboard View -->
+        <record id="view_lms_dashboard" model="ir.ui.view">
+            <field name="name">lms.dashboard</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="LMS Dashboard">
+                    <div class="oe_title">
+                        <h1>Learning Management System</h1>
+                    </div>
+                    <div class="oe_stat_info">
+                        <div class="oe_stat_box">
+                            <field name="student_count" widget="statinfo" string="Total Students"/>
+                        </div>
+                        <div class="oe_stat_box">
+                            <field name="course_count" widget="statinfo" string="Active Courses"/>
+                        </div>
+                        <div class="oe_stat_box">
+                            <field name="teacher_count" widget="statinfo" string="Teachers"/>
+                        </div>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="student_count" widget="statinfo" string="Students"/>
+                        </button>
+                        <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
+                            <field name="course_count" widget="statinfo" string="Courses"/>
+                        </button>
+                        <button name="action_view_teachers" type="object" class="oe_stat_button" icon="fa-user-md">
+                            <field name="teacher_count" widget="statinfo" string="Teachers"/>
+                        </button>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Enhanced Course Form View -->
+        <record id="view_lms_course_form_enhanced" model="ir.ui.view">
+            <field name="name">lms.course.form.enhanced</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <form string="Course">
+                    <header>
+                        <button name="action_publish" string="Publish" type="object" class="oe_highlight" 
+                                attrs="{'invisible': [('state', '=', 'published')]}"/>
+                        <button name="action_unpublish" string="Unpublish" type="object" 
+                                attrs="{'invisible': [('state', '!=', 'published')]}"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,published"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
+                            </button>
+                            <button name="action_view_assignments" type="object" class="oe_stat_button" icon="fa-tasks">
+                                <field name="assignment_count" widget="statinfo" string="Assignments"/>
+                            </button>
+                        </div>
+                        <notebook>
+                            <page string="General Information" name="general_info">
+                                <group>
+                                    <group>
+                                        <field name="name" required="1"/>
+                                        <field name="code"/>
+                                        <field name="credits"/>
+                                    </group>
+                                    <group>
+                                        <field name="academic_year_id"/>
+                                        <field name="semester_id"/>
+                                        <field name="max_students"/>
+                                    </group>
+                                </group>
+                                <group string="Course Details">
+                                    <field name="description" placeholder="Enter course description..."/>
+                                    <field name="objectives" placeholder="Enter course objectives..."/>
+                                    <field name="prerequisites" placeholder="Enter prerequisites..."/>
+                                </group>
+                            </page>
+                            <page string="Teachers" name="teachers">
+                                <field name="teacher_assignment_ids">
+                                    <tree editable="bottom">
+                                        <field name="teacher_id"/>
+                                        <field name="role"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Content" name="content">
+                                <field name="slide_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="slide_type"/>
+                                        <field name="sequence"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Enrollments" name="enrollments">
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="status"/>
+                                        <field name="grade"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Enhanced Course Tree View -->
+        <record id="view_lms_course_tree_enhanced" model="ir.ui.view">
+            <field name="name">lms.course.tree.enhanced</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'" default_order="academic_year_id desc">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="credits"/>
+                    <field name="enrollment_count" sum="Total Enrollments"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Enhanced Course Search View -->
+        <record id="view_lms_course_search_enhanced" model="ir.ui.view">
+            <field name="name">lms.course.search.enhanced</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Academic Year" name="group_by_year" context="{'group_by': 'academic_year_id'}"/>
+                        <filter string="Semester" name="group_by_semester" context="{'group_by': 'semester_id'}"/>
+                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Dashboard Action -->
+        <record id="action_lms_dashboard" model="ir.actions.act_window">
+            <field name="name">LMS Dashboard</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <!-- Enhanced Course Action -->
+        <record id="action_lms_courses_enhanced" model="ir.actions.act_window">
+            <field name="name">Courses</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_course_search_enhanced"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course
+                </p>
+            </field>
+        </record>
+
+        <!-- Enhanced Menu Structure -->
+        <menuitem id="menu_lms_root" name="LMS" sequence="10"/>
+        
+        <menuitem id="menu_lms_dashboard" name="Dashboard"
+                  parent="menu_lms_root"
+                  action="action_lms_dashboard"
+                  sequence="1"/>
+
+        <menuitem id="menu_lms_academic" name="Academic"
+                  parent="menu_lms_root"
+                  sequence="2"/>
+
+        <menuitem id="menu_lms_courses" name="Courses"
+                  parent="menu_lms_academic"
+                  action="action_lms_courses_enhanced"
+                  sequence="1"/>
+
+        <menuitem id="menu_lms_students" name="Students"
+                  parent="menu_lms_academic"
+                  sequence="2"/>
+
+        <menuitem id="menu_lms_teachers" name="Teachers"
+                  parent="menu_lms_academic"
+                  sequence="3"/>
+
+        <menuitem id="menu_lms_administration" name="Administration"
+                  parent="menu_lms_root"
+                  sequence="3"/>
+
+        <menuitem id="menu_lms_enrollments" name="Enrollments"
+                  parent="menu_lms_administration"
+                  sequence="1"/>
+
+        <menuitem id="menu_lms_grades" name="Grades"
+                  parent="menu_lms_administration"
+                  sequence="2"/>
+
+        <menuitem id="menu_lms_reports" name="Reports"
+                  parent="menu_lms_root"
+                  sequence="4"/>
+    </data>
+</odoo> 

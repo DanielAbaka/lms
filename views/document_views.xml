@@ -1,59 +1,118 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <!-- ✅ Document Form View -->
+        <!-- Document Form View -->
         <record id="view_lms_document_form" model="ir.ui.view">
             <field name="name">lms.document.form</field>
             <field name="model">lms.document</field>
             <field name="arch" type="xml">
-                <form string="LMS Document">
+                <form string="Document">
+                    <header>
+                        <button name="action_publish" string="Publish" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_archive" string="Archive" type="object" states="published"/>
+                        <button name="action_unarchive" string="Unarchive" type="object" states="archived"/>
+                        <button name="action_reset_to_draft" string="Reset to Draft" type="object" states="archived"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
                     <sheet>
-                        <group>
-                            <field name="name" required="1"/>
-                            <field name="course_id"/>
-                        </group>
-                        <group>
-                            <!-- 
-                                This references an existing attachment in the system.
-                                The user can pick from existing attachments in the M2O dropdown.
-                            -->
-                            <field name="attachment_id"/>
-                        </group>
-                        <group>
-                            <field name="description"/>
-                        </group>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_access_logs" type="object" class="oe_stat_button" icon="fa-eye">
+                                <field name="access_count" widget="statinfo" string="Accesses"/>
+                            </button>
+                            <button name="action_view_last_access" type="object" class="oe_stat_button" icon="fa-clock-o">
+                                <field name="last_accessed" widget="statinfo" string="Last Access"/>
+                            </button>
+                        </div>
+                        <notebook>
+                            <page string="Document Details">
+                                <group>
+                                    <group>
+                                        <field name="name" required="1"/>
+                                        <field name="teacher_assignment_id" required="1"/>
+                                        <field name="description"/>
+                                    </group>
+                                    <group>
+                                        <field name="date" required="1"/>
+                                        <field name="is_public"/>
+                                        <field name="state"/>
+                                        <field name="active"/>
+                                    </group>
+                                </group>
+                                <group string="File Information">
+                                    <field name="file" filename="file_name" required="1"/>
+                                    <field name="file_name" readonly="1"/>
+                                    <field name="file_type" readonly="1"/>
+                                    <field name="file_size" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Access Logs">
+                                <field name="access_log_ids">
+                                    <tree>
+                                        <field name="user_id"/>
+                                        <field name="access_date"/>
+                                        <field name="ip_address"/>
+                                        <field name="user_agent"/>
+                                        <field name="duration"/>
+                                        <field name="is_downloaded"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
                 </form>
             </field>
         </record>
 
-        <!-- ✅ Document Tree View -->
+        <!-- Document Tree View -->
         <record id="view_lms_document_tree" model="ir.ui.view">
             <field name="name">lms.document.tree</field>
             <field name="model">lms.document</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'">
                     <field name="name"/>
-                    <field name="course_id"/>
-                    <field name="attachment_id"/>
+                    <field name="teacher_assignment_id"/>
+                    <field name="date"/>
+                    <field name="file_type"/>
+                    <field name="file_size"/>
+                    <field name="access_count"/>
+                    <field name="last_accessed"/>
+                    <field name="is_public"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
 
-        <!-- ✅ Document Search View (Optional) -->
+        <!-- Document Search View -->
         <record id="view_lms_document_search" model="ir.ui.view">
             <field name="name">lms.document.search</field>
             <field name="model">lms.document</field>
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
-                    <field name="course_id"/>
-                    <field name="attachment_id"/>
+                    <field name="teacher_assignment_id"/>
+                    <field name="date"/>
+                    <field name="file_type"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
+                    <filter string="Archived" name="archived" domain="[('state', '=', 'archived')]"/>
+                    <filter string="Public" name="public" domain="[('is_public', '=', True)]"/>
+                    <filter string="Private" name="private" domain="[('is_public', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Teacher Assignment" name="group_by_assignment" context="{'group_by': 'teacher_assignment_id'}"/>
+                        <filter string="File Type" name="group_by_type" context="{'group_by': 'file_type'}"/>
+                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    </group>
                 </search>
             </field>
         </record>
 
-        <!-- ✅ Document Action -->
+        <!-- Document Action -->
         <record id="action_lms_document" model="ir.actions.act_window">
             <field name="name">Documents</field>
             <field name="res_model">lms.document</field>
@@ -61,11 +120,10 @@
             <field name="search_view_id" ref="view_lms_document_search"/>
         </record>
 
-        <!-- ✅ Menu Item under LMS Module -->
-        <menuitem id="menu_lms_document"
-                  name="Documents"
+        <!-- Document Menu Item -->
+        <menuitem id="menu_lms_document" name="Documents"
                   parent="lms_module.menu_root"
                   action="action_lms_document"
-                  sequence="11"/>
+                  sequence="10"/>
     </data>
 </odoo>

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Administrator Portal Dashboard -->
+        <record id="view_admin_portal_dashboard" model="ir.ui.view">
+            <field name="name">admin.portal.dashboard</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="Administrator Dashboard">
+                    <div class="oe_title">
+                        <h1>Welcome, <field name="name"/></h1>
+                    </div>
+                    <div class="oe_stat_info">
+                        <div class="oe_stat_box">
+                            <field name="total_student_count" widget="statinfo" string="Total Students"/>
+                        </div>
+                        <div class="oe_stat_box">
+                            <field name="total_teacher_count" widget="statinfo" string="Total Teachers"/>
+                        </div>
+                        <div class="oe_stat_box">
+                            <field name="total_course_count" widget="statinfo" string="Total Courses"/>
+                        </div>
+                        <div class="oe_stat_box">
+                            <field name="total_revenue" widget="statinfo" string="Total Revenue"/>
+                        </div>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="total_student_count" widget="statinfo" string="Students"/>
+                        </button>
+                        <button name="action_view_teachers" type="object" class="oe_stat_button" icon="fa-user-md">
+                            <field name="total_teacher_count" widget="statinfo" string="Teachers"/>
+                        </button>
+                        <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
+                            <field name="total_course_count" widget="statinfo" string="Courses"/>
+                        </button>
+                        <button name="action_view_payments" type="object" class="oe_stat_button" icon="fa-money">
+                            <field name="total_revenue" widget="statinfo" string="Payments"/>
+                        </button>
+                    </div>
+                    <notebook>
+                        <page string="Academic Setup" name="academic_setup">
+                            <group>
+                                <group string="Academic Year">
+                                    <field name="academic_year_ids">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="start_date"/>
+                                            <field name="end_date"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Semesters">
+                                    <field name="semester_ids">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="academic_year_id"/>
+                                            <field name="start_date"/>
+                                            <field name="end_date"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="User Management" name="user_management">
+                            <group>
+                                <group string="Students">
+                                    <field name="student_ids">
+                                        <tree>
+                                            <field name="student_id"/>
+                                            <field name="name"/>
+                                            <field name="enrolled_course_count"/>
+                                            <field name="attendance_rate"/>
+                                            <field name="average_grade"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Teachers">
+                                    <field name="teacher_ids">
+                                        <tree>
+                                            <field name="teacher_id"/>
+                                            <field name="name"/>
+                                            <field name="current_course_count"/>
+                                            <field name="department"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Financial Overview" name="financial_overview">
+                            <group>
+                                <group string="Revenue">
+                                    <field name="revenue_ids">
+                                        <tree>
+                                            <field name="date"/>
+                                            <field name="amount"/>
+                                            <field name="payment_method"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <group string="Pending Payments">
+                                    <field name="pending_payment_ids">
+                                        <tree>
+                                            <field name="student_id"/>
+                                            <field name="amount"/>
+                                            <field name="due_date"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Reports" name="reports">
+                            <group>
+                                <button name="action_generate_student_report" type="object" class="oe_stat_button" icon="fa-file-pdf-o">
+                                    Student Report
+                                </button>
+                                <button name="action_generate_teacher_report" type="object" class="oe_stat_button" icon="fa-file-pdf-o">
+                                    Teacher Report
+                                </button>
+                                <button name="action_generate_financial_report" type="object" class="oe_stat_button" icon="fa-file-pdf-o">
+                                    Financial Report
+                                </button>
+                                <button name="action_generate_attendance_report" type="object" class="oe_stat_button" icon="fa-file-pdf-o">
+                                    Attendance Report
+                                </button>
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <!-- Administrator Portal Action -->
+        <record id="action_admin_portal" model="ir.actions.act_window">
+            <field name="name">Administrator Portal</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+            <field name="domain">[('id', '=', user.id)]</field>
+            <field name="context">{'form_view_initial_mode': 'edit'}</field>
+        </record>
+
+        <!-- Administrator Portal Menu -->
+        <menuitem id="menu_admin_portal"
+                  name="Administrator Portal"
+                  parent="lms_module.menu_root"
+                  action="action_admin_portal"
+                  sequence="3"/>
+
+        <!-- Administrator Form View -->
+        <record id="view_admin_form_portal" model="ir.ui.view">
+            <field name="name">admin.form.portal</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="Administrator">
+                    <sheet>
+                        <notebook>
+                            <page string="System Overview" name="system_overview">
+                                <group>
+                                    <field name="total_student_count" widget="statinfo" string="Total Students"/>
+                                    <field name="total_teacher_count" widget="statinfo" string="Total Teachers"/>
+                                    <field name="total_course_count" widget="statinfo" string="Total Courses"/>
+                                    <field name="total_revenue" widget="statinfo" string="Total Revenue"/>
+                                </group>
+                            </page>
+                            <page string="Academic Management" name="academic_management">
+                                <group>
+                                    <group string="Academic Year">
+                                        <field name="academic_year_ids">
+                                            <tree>
+                                                <field name="name"/>
+                                                <field name="start_date"/>
+                                                <field name="end_date"/>
+                                                <field name="state"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                    <group string="Semesters">
+                                        <field name="semester_ids">
+                                            <tree>
+                                                <field name="name"/>
+                                                <field name="academic_year_id"/>
+                                                <field name="start_date"/>
+                                                <field name="end_date"/>
+                                                <field name="state"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="User Management" name="user_management">
+                                <group>
+                                    <group string="Students">
+                                        <field name="student_ids">
+                                            <tree>
+                                                <field name="student_id"/>
+                                                <field name="name"/>
+                                                <field name="enrolled_course_count"/>
+                                                <field name="attendance_rate"/>
+                                                <field name="average_grade"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                    <group string="Teachers">
+                                        <field name="teacher_ids">
+                                            <tree>
+                                                <field name="teacher_id"/>
+                                                <field name="name"/>
+                                                <field name="current_course_count"/>
+                                                <field name="department"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Financial Management" name="financial_management">
+                                <group>
+                                    <group string="Revenue">
+                                        <field name="revenue_ids">
+                                            <tree>
+                                                <field name="date"/>
+                                                <field name="amount"/>
+                                                <field name="payment_method"/>
+                                                <field name="state"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                    <group string="Pending Payments">
+                                        <field name="pending_payment_ids">
+                                            <tree>
+                                                <field name="student_id"/>
+                                                <field name="amount"/>
+                                                <field name="due_date"/>
+                                                <field name="state"/>
+                                            </tree>
+                                        </field>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Administrator Tree View -->
+        <record id="view_admin_tree_portal" model="ir.ui.view">
+            <field name="name">admin.tree.portal</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="total_revenue > 0">
+                    <field name="name"/>
+                    <field name="total_student_count"/>
+                    <field name="total_teacher_count"/>
+                    <field name="total_course_count"/>
+                    <field name="total_revenue"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Administrator Search View -->
+        <record id="view_admin_search_portal" model="ir.ui.view">
+            <field name="name">admin.search.portal</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="login"/>
+                    <separator/>
+                    <filter string="High Revenue" name="high_revenue" domain="[('total_revenue', '>', 10000)]"/>
+                    <filter string="Low Student Count" name="low_students" domain="[('total_student_count', '&lt;', 100)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="User Type" name="group_by_type" context="{'group_by': 'is_admin:is_teacher:is_student'}"/>
+                        <filter string="Revenue Range" name="group_by_revenue" context="{'group_by': 'total_revenue'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo> 

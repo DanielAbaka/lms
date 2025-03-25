@@ -8,7 +8,6 @@ from . import teacher
 from . import teacher_assignment
 from . import academic_year
 from . import semester
-from . import course
 from . import course_planning
 from . import enrollment
 from . import payment
@@ -16,3 +15,13 @@ from . import grade
 from . import transcript
 from . import document
 from . import messaging
+from . import res_users
+from . import administrator
+from . import attendance
+from . import course_material
+from . import quiz_question
+from . import quiz_option
+from . import quiz_attempt
+from . import quiz_question_attempt
+from . import document_access
+from . import schedule

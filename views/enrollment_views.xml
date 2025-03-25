@@ -1,75 +1,169 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <!-- ✅ Enrollment Form View -->
+        <!-- Enrollment Form View -->
         <record id="view_lms_enrollment_form" model="ir.ui.view">
             <field name="name">lms.enrollment.form</field>
             <field name="model">lms.enrollment</field>
             <field name="arch" type="xml">
                 <form string="Enrollment">
+                    <header>
+                        <button name="action_submit_for_approval" string="Submit for Approval" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_approve" string="Approve" type="object" class="oe_highlight" states="pending"/>
+                        <button name="action_reject" string="Reject" type="object" states="pending"/>
+                        <button name="action_cancel" string="Cancel" type="object" states="draft,pending"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
                     <sheet>
-                        <group>
-                            <field name="student_id" required="1"/>
-                            <field name="course_id" widget="many2many_tags" required="1"/>
-                            <field name="enrollment_date" required="1"/>
-                        </group>
-                        <group>
-                            <!-- 
-                                Using modifiers instead of attrs if needed for Odoo 17 
-                                But removing states as Odoo 17 no longer supports old states/attrs
-                            -->
-                            <field name="payment_status" widget="statusbar" options="{'clickable': '1'}"/>
-                            <field name="total_cost" readonly="1"/>
-                            <field name="remaining_balance" readonly="1"/>
-                        </group>
-                        <footer>
-                            <!-- 
-                                For Odoo 17, we use modifiers or remove the old attrs syntax.
-                                Example: modifiers="{'invisible': [('payment_status','=', 'paid')]}" 
-                                to hide the button if fully paid.
-                            -->
-                            <button name="make_payment"
-                                    type="object"
-                                    string="Make Payment"
-                                    class="btn-primary"
-                                    modifiers="{'invisible': [('payment_status','=', 'paid')]}" />
-                        </footer>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_payments" type="object" class="oe_stat_button" icon="fa-money">
+                                <field name="payment_count" widget="statinfo" string="Payments"/>
+                            </button>
+                            <button name="action_view_grades" type="object" class="oe_stat_button" icon="fa-star">
+                                <field name="grade_count" widget="statinfo" string="Grades"/>
+                            </button>
+                            <button name="action_view_attendance" type="object" class="oe_stat_button" icon="fa-calendar-check">
+                                <field name="attendance_count" widget="statinfo" string="Attendance"/>
+                            </button>
+                        </div>
+                        <notebook>
+                            <page string="General Information">
+                                <group>
+                                    <group>
+                                        <field name="name" readonly="1"/>
+                                        <field name="student_id" required="1"/>
+                                        <field name="course_id" required="1"/>
+                                        <field name="academic_year_id" required="1"/>
+                                        <field name="semester_id" required="1"/>
+                                        <field name="state"/>
+                                    </group>
+                                    <group>
+                                        <field name="enrollment_date" required="1"/>
+                                        <field name="start_date" required="1"/>
+                                        <field name="end_date" required="1"/>
+                                        <field name="payment_status"/>
+                                        <field name="active"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Payment Information">
+                                <group>
+                                    <group>
+                                        <field name="total_fee"/>
+                                        <field name="paid_amount"/>
+                                        <field name="remaining_amount"/>
+                                        <field name="payment_plan_id"/>
+                                    </group>
+                                </group>
+                                <field name="payment_ids">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="amount"/>
+                                        <field name="payment_method"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Grades">
+                                <field name="grade_ids">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="grade"/>
+                                        <field name="credits"/>
+                                        <field name="grade_type"/>
+                                        <field name="is_final"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Attendance">
+                                <field name="attendance_ids">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="status"/>
+                                        <field name="session_type"/>
+                                        <field name="duration"/>
+                                        <field name="location"/>
+                                        <field name="is_verified"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
                 </form>
             </field>
         </record>
 
-        <!-- ✅ Enrollment Tree View -->
+        <!-- Enrollment Tree View -->
         <record id="view_lms_enrollment_tree" model="ir.ui.view">
             <field name="name">lms.enrollment.tree</field>
             <field name="model">lms.enrollment</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'approved'" decoration-muted="state in ['rejected', 'cancelled']">
+                    <field name="name"/>
                     <field name="student_id"/>
-                    <field name="course_id" widget="many2many_tags"/>
+                    <field name="course_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
                     <field name="enrollment_date"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="total_fee"/>
+                    <field name="paid_amount"/>
+                    <field name="remaining_amount"/>
                     <field name="payment_status"/>
-                    <field name="total_cost"/>
-                    <field name="remaining_balance"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
 
-        <!-- ✅ Enrollment Search View -->
+        <!-- Enrollment Search View -->
         <record id="view_lms_enrollment_search" model="ir.ui.view">
             <field name="name">lms.enrollment.search</field>
             <field name="model">lms.enrollment</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="name"/>
                     <field name="student_id"/>
                     <field name="course_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
                     <field name="enrollment_date"/>
-                    <field name="payment_status"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="total_fee"/>
+                    <field name="paid_amount"/>
+                    <field name="remaining_amount"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Pending Approval" name="pending" domain="[('state', '=', 'pending')]"/>
+                    <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                    <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <filter string="Pending Payment" name="pending_payment" domain="[('payment_status', '=', 'pending')]"/>
+                    <filter string="Partial Payment" name="partial_payment" domain="[('payment_status', '=', 'partial')]"/>
+                    <filter string="Paid" name="paid" domain="[('payment_status', '=', 'paid')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Student" name="group_by_student" context="{'group_by': 'student_id'}"/>
+                        <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                        <filter string="Academic Year" name="group_by_academic_year" context="{'group_by': 'academic_year_id'}"/>
+                        <filter string="Semester" name="group_by_semester" context="{'group_by': 'semester_id'}"/>
+                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Payment Status" name="group_by_payment_status" context="{'group_by': 'payment_status'}"/>
+                    </group>
                 </search>
             </field>
         </record>
 
-        <!-- ✅ Enrollment Action -->
+        <!-- Enrollment Action -->
         <record id="action_lms_enrollment" model="ir.actions.act_window">
             <field name="name">Enrollments</field>
             <field name="res_model">lms.enrollment</field>
@@ -77,11 +171,10 @@
             <field name="search_view_id" ref="view_lms_enrollment_search"/>
         </record>
 
-        <!-- ✅ Menu Item under LMS Module -->
-        <menuitem id="menu_lms_enrollment"
-                  name="Enrollments"
+        <!-- Enrollments Menu Item -->
+        <menuitem id="menu_lms_enrollments" name="Enrollments"
                   parent="lms_module.menu_root"
-                  action="action_lms_enrollment"
-                  sequence="8"/>
+                  action="action_lms_enrollment" 
+                  sequence="10"/>
     </data>
 </odoo>

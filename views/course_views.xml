@@ -1,73 +1,163 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <data>
-        <!-- ✅ Course Form View -->
+        <!-- Course Form View -->
         <record id="view_lms_course_form" model="ir.ui.view">
             <field name="name">lms.course.form</field>
-            <field name="model">slide.channel</field>
+            <field name="model">lms.course</field>
             <field name="arch" type="xml">
                 <form string="Course">
+                    <header>
+                        <button name="action_publish" string="Publish" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_unpublish" string="Unpublish" type="object" states="published"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
+                            </button>
+                            <button name="action_view_quizzes" type="object" class="oe_stat_button" icon="fa-question-circle">
+                                <field name="quiz_count" widget="statinfo" string="Quizzes"/>
+                            </button>
+                            <button name="action_view_documents" type="object" class="oe_stat_button" icon="fa-file">
+                                <field name="document_count" widget="statinfo" string="Documents"/>
+                            </button>
+                        </div>
                         <notebook>
                             <page string="General Information">
                                 <group>
-                                    <field name="name" required="1"/>
-                                    <field name="academic_year_id"/>
-                                    <field name="semester_id"/>
-                                    <field name="credits"/>
+                                    <group>
+                                        <field name="name" required="1"/>
+                                        <field name="code" required="1"/>
+                                        <field name="academic_year_id" required="1"/>
+                                        <field name="semester_id" required="1"/>
+                                        <field name="credits" required="1"/>
+                                        <field name="max_students"/>
+                                        <field name="state"/>
+                                    </group>
+                                    <group>
+                                        <field name="description"/>
+                                        <field name="objectives"/>
+                                        <field name="prerequisites"/>
+                                        <field name="active"/>
+                                    </group>
                                 </group>
-                                <group>
-                                    <field name="prerequisite_course_ids" widget="many2many_tags"/>
-                                    <field name="teacher_assignment_ids" widget="one2many_list"/>
-                                </group>
+                            </page>
+                            <page string="Enrollments">
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Teacher Assignments">
+                                <field name="teacher_assignment_ids">
+                                    <tree>
+                                        <field name="teacher_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Quizzes">
+                                <field name="quiz_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="document_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="date"/>
+                                        <field name="is_public"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Grades">
+                                <field name="grade_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="grade"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
                 </form>
             </field>
         </record>
 
-        <!-- ✅ Course List View (Tree) -->
+        <!-- Course Tree View -->
         <record id="view_lms_course_tree" model="ir.ui.view">
             <field name="name">lms.course.tree</field>
-            <field name="model">slide.channel</field>
+            <field name="model">lms.course</field>
             <field name="arch" type="xml">
-                <tree default_order="academic_year_id desc">
+                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'">
                     <field name="name"/>
+                    <field name="code"/>
                     <field name="academic_year_id"/>
                     <field name="semester_id"/>
                     <field name="credits"/>
+                    <field name="max_students"/>
+                    <field name="enrollment_count"/>
+                    <field name="quiz_count"/>
+                    <field name="document_count"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
 
-        <!-- ✅ Course Search View -->
+        <!-- Course Search View -->
         <record id="view_lms_course_search" model="ir.ui.view">
             <field name="name">lms.course.search</field>
-            <field name="model">slide.channel</field>
+            <field name="model">lms.course</field>
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
+                    <field name="code"/>
                     <field name="academic_year_id"/>
                     <field name="semester_id"/>
                     <field name="credits"/>
-                    <filter name="current_year" string="Current Year" domain="[('academic_year_id', '=', context_today())]"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Academic Year" name="group_by_academic_year" context="{'group_by': 'academic_year_id'}"/>
+                        <filter string="Semester" name="group_by_semester" context="{'group_by': 'semester_id'}"/>
+                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    </group>
                 </search>
             </field>
         </record>
 
-        <!-- ✅ Course Action -->
-        <record id="action_lms_courses" model="ir.actions.act_window">
+        <!-- Course Action -->
+        <record id="action_lms_course" model="ir.actions.act_window">
             <field name="name">Courses</field>
-            <field name="res_model">slide.channel</field>
+            <field name="res_model">lms.course</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_lms_course_search"/>
         </record>
 
-        <!-- ✅ Add Courses to the LMS Module Menu -->
+        <!-- Courses Menu Item -->
         <menuitem id="menu_lms_courses" name="Courses"
                   parent="lms_module.menu_root"
-                  action="action_lms_courses"
-                   sequence="3"/>
+                  action="action_lms_course" 
+                  sequence="3"/>
     </data>
 </odoo>

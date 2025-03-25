@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Teacher Portal Dashboard -->
+        <record id="view_teacher_portal_dashboard" model="ir.ui.view">
+            <field name="name">teacher.portal.dashboard</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="Teacher Dashboard">
+                    <div class="oe_title">
+                        <h1>Welcome, <field name="name"/></h1>
+                    </div>
+                    <div class="oe_stat_info">
+                        <div class="oe_stat_box">
+                            <field name="current_course_count" widget="statinfo" string="Current Courses"/>
+                        </div>
+                        <div class="oe_stat_box">
+                            <field name="total_student_count" widget="statinfo" string="Total Students"/>
+                        </div>
+                        <div class="oe_stat_box">
+                            <field name="average_attendance_rate" widget="statinfo" string="Average Attendance"/>
+                        </div>
+                        <div class="oe_stat_box">
+                            <field name="pending_gradings" widget="statinfo" string="Pending Gradings"/>
+                        </div>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
+                            <field name="current_course_count" widget="statinfo" string="My Courses"/>
+                        </button>
+                        <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="total_student_count" widget="statinfo" string="My Students"/>
+                        </button>
+                        <button name="action_take_attendance" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="average_attendance_rate" widget="statinfo" string="Take Attendance"/>
+                        </button>
+                        <button name="action_view_assignments" type="object" class="oe_stat_button" icon="fa-tasks">
+                            <field name="pending_gradings" widget="statinfo" string="Assignments"/>
+                        </button>
+                    </div>
+                    <notebook>
+                        <page string="My Courses" name="courses">
+                            <field name="assigned_course_ids">
+                                <tree>
+                                    <field name="course_id"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Course Materials" name="materials">
+                            <field name="course_material_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="course_id"/>
+                                    <field name="material_type"/>
+                                    <field name="category"/>
+                                    <field name="is_published"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="My Profile" name="profile">
+                            <group>
+                                <group>
+                                    <field name="teacher_id"/>
+                                    <field name="name"/>
+                                    <field name="specialization"/>
+                                </group>
+                                <group>
+                                    <field name="qualification"/>
+                                    <field name="department"/>
+                                    <field name="joining_date"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="office_location"/>
+                                <field name="office_hours"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <!-- Teacher Portal Action -->
+        <record id="action_teacher_portal" model="ir.actions.act_window">
+            <field name="name">Teacher Portal</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+            <field name="domain">[('id', '=', user.id)]</field>
+            <field name="context">{'form_view_initial_mode': 'edit'}</field>
+        </record>
+
+        <!-- Teacher Portal Menu -->
+        <menuitem id="menu_teacher_portal"
+                  name="Teacher Portal"
+                  parent="lms_module.menu_root"
+                  action="action_teacher_portal"
+                  sequence="2"/>
+
+        <!-- Teacher Form View -->
+        <record id="view_teacher_form_portal" model="ir.ui.view">
+            <field name="name">teacher.form.portal</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="Teacher">
+                    <sheet>
+                        <notebook>
+                            <page string="Personal Information" name="personal_info">
+                                <group>
+                                    <group>
+                                        <field name="teacher_id"/>
+                                        <field name="name"/>
+                                        <field name="specialization"/>
+                                        <field name="qualification"/>
+                                    </group>
+                                    <group>
+                                        <field name="department"/>
+                                        <field name="joining_date"/>
+                                        <field name="office_location"/>
+                                        <field name="office_hours"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Course Management" name="course_management">
+                                <group>
+                                    <field name="current_course_count" widget="statinfo" string="Current Courses"/>
+                                    <field name="total_student_count" widget="statinfo" string="Total Students"/>
+                                    <field name="average_attendance_rate" widget="statinfo" string="Average Attendance"/>
+                                    <field name="pending_gradings" widget="statinfo" string="Pending Gradings"/>
+                                </group>
+                                <group string="Assigned Courses">
+                                    <field name="assigned_course_ids">
+                                        <tree>
+                                            <field name="course_id"/>
+                                            <field name="start_date"/>
+                                            <field name="end_date"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Course Materials" name="materials">
+                                <field name="course_material_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="course_id"/>
+                                        <field name="material_type"/>
+                                        <field name="category"/>
+                                        <field name="is_published"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Teacher Tree View -->
+        <record id="view_teacher_tree_portal" model="ir.ui.view">
+            <field name="name">teacher.tree.portal</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="pending_gradings > 0">
+                    <field name="teacher_id"/>
+                    <field name="name"/>
+                    <field name="current_course_count"/>
+                    <field name="total_student_count"/>
+                    <field name="average_attendance_rate"/>
+                    <field name="pending_gradings"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Teacher Search View -->
+        <record id="view_teacher_search_portal" model="ir.ui.view">
+            <field name="name">teacher.search.portal</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="teacher_id"/>
+                    <field name="name"/>
+                    <field name="department"/>
+                    <separator/>
+                    <filter string="With Pending Gradings" name="pending_gradings" domain="[('pending_gradings', '>', 0)]"/>
+                    <filter string="Low Attendance" name="low_attendance" domain="[('average_attendance_rate', '&lt;', 75)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Department" name="group_by_department" context="{'group_by': 'department'}"/>
+                        <filter string="Course Status" name="group_by_course" context="{'group_by': 'assigned_course_ids.state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Teacher Schedule Tree View -->
+        <record id="view_lms_teacher_schedule_tree" model="ir.ui.view">
+            <field name="name">lms.teacher.schedule.tree</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="is_full" decoration-info="state == 'draft'" decoration-success="state == 'active'">
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="day_of_week"/>
+                    <field name="start_time" widget="float_time"/>
+                    <field name="end_time" widget="float_time"/>
+                    <field name="classroom"/>
+                    <field name="enrolled_students_count"/>
+                    <field name="available_slots"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Teacher Schedule Search View -->
+        <record id="view_lms_teacher_schedule_search" model="ir.ui.view">
+            <field name="name">lms.teacher.schedule.search</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="classroom"/>
+                    <separator/>
+                    <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                        <filter string="Day of Week" name="group_by_day" context="{'group_by': 'day_of_week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Teacher Schedule Action -->
+        <record id="action_lms_teacher_schedule" model="ir.actions.act_window">
+            <field name="name">My Schedule</field>
+            <field name="res_model">lms.schedule</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
+            <field name="context">{'search_default_active': 1}</field>
+        </record>
+
+        <!-- Add Schedule to Teacher Portal Menu -->
+        <menuitem id="menu_lms_teacher_schedule"
+                  name="My Schedule"
+                  parent="menu_lms_teacher_portal"
+                  action="action_lms_teacher_schedule"
+                  sequence="2"/>
+    </data>
+</odoo> 
