@@ -8,6 +8,7 @@ class Student(models.Model):
 
     is_student = fields.Boolean(string='Is Student', default=True)
     student_id = fields.Char(string='Student ID', required=True, copy=False)
+    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     date_of_birth = fields.Date(string='Date of Birth')
     gender = fields.Selection([
         ('male', 'Male'),

@@ -18,7 +18,7 @@ class Administrator(models.Model):
     # New fields for administrator portal
     academic_year_ids = fields.One2many('lms.academic.year', 'admin_id', string='Academic Years')
     semester_ids = fields.One2many('lms.semester', 'admin_id', string='Semesters')
-    student_ids = fields.One2many('res.users', 'admin_id', string='Students', domain=[('is_student', '=', True)])
+    student_ids = fields.One2many('lms.student', 'admin_id', string='Students')
     teacher_ids = fields.One2many('res.users', 'admin_id', string='Teachers', domain=[('is_teacher', '=', True)])
     revenue_ids = fields.One2many('lms.payment', 'admin_id', string='Revenue', domain=[('state', '=', 'paid')])
     pending_payment_ids = fields.One2many('lms.payment', 'admin_id', string='Pending Payments', domain=[('state', '=', 'pending')])
