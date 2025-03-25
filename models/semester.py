@@ -11,6 +11,7 @@ class Semester(models.Model):
     name = fields.Char(string='Name', required=True, tracking=True)
     code = fields.Char(string='Code', required=True, tracking=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True, tracking=True)
+    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     sequence = fields.Integer(string='Sequence', required=True, default=1)
     start_date = fields.Date(string='Start Date', required=True, tracking=True)
     end_date = fields.Date(string='End Date', required=True, tracking=True)

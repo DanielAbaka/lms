@@ -10,6 +10,7 @@ class AcademicYear(models.Model):
 
     name = fields.Char(string='Name', required=True, tracking=True)
     code = fields.Char(string='Code', required=True, tracking=True)
+    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     start_date = fields.Date(string='Start Date', required=True, tracking=True)
     end_date = fields.Date(string='End Date', required=True, tracking=True)
     state = fields.Selection([
