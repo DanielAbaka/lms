@@ -8,7 +8,6 @@ class Administrator(models.Model):
 
     # Existing fields
     is_admin = fields.Boolean(string='Is Administrator', default=True)
-    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     department = fields.Char(string='Department')
     position = fields.Char(string='Position')
     joining_date = fields.Date(string='Joining Date')

@@ -83,3 +83,7 @@ access_lms_payment_plan_admin,LMS Payment Plan Admin,model_lms_payment_plan,base
 access_lms_payment_plan_manager,LMS Payment Plan Manager,model_lms_payment_plan,group_lms_manager,1,1,1,1
 access_lms_payment_plan_teacher,LMS Payment Plan Teacher,model_lms_payment_plan,group_lms_teacher,1,0,0,0
 access_lms_payment_plan_student,LMS Payment Plan Student,model_lms_payment_plan,group_lms_student,1,0,0,0
+
+access_lms_admin_admin,LMS Admin Admin,model_res_users,base.group_system,1,1,1,1
+access_lms_admin_manager,LMS Admin Manager,model_res_users,group_lms_manager,1,1,1,0
+access_lms_admin_user,LMS Admin User,model_res_users,group_lms_user,1,0,0,0

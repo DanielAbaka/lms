@@ -50,12 +50,11 @@ class LMSCourse(models.Model):
     def action_view_enrollments(self):
         self.ensure_one()
         return {
-            'name': 'Course Enrollments',
+            'name': 'Enrollments',
             'type': 'ir.actions.act_window',
             'res_model': 'lms.enrollment',
             'view_mode': 'tree,form',
             'domain': [('course_id', '=', self.id)],
-            'context': {'default_course_id': self.id},
         }
 
     def action_view_assignments(self):
