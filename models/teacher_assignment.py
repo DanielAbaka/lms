@@ -28,6 +28,8 @@ class TeacherAssignment(models.Model):
     active = fields.Boolean(default=True, tracking=True)
 
     # Related Records
+    schedule_template_id = fields.Many2one('lms.schedule.template', string='Schedule Template')
+    bulk_wizard_id = fields.Many2one('lms.schedule.bulk.wizard', string='Bulk Wizard')
     enrollment_ids = fields.One2many('lms.enrollment', 'teacher_assignment_id', string='Enrollments')
     attendance_ids = fields.One2many('lms.attendance', 'teacher_assignment_id', string='Attendance')
     grade_ids = fields.One2many('lms.grade', 'teacher_assignment_id', string='Grades')

@@ -35,6 +35,8 @@
                                         <field name="course_id" required="1"/>
                                         <field name="academic_year_id" required="1"/>
                                         <field name="semester_id" required="1"/>
+                                        <field name="schedule_id"/>
+                                        <field name="teacher_assignment_id"/>
                                         <field name="state"/>
                                     </group>
                                     <group>

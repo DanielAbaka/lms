@@ -37,6 +37,7 @@ class Enrollment(models.Model):
     notes = fields.Text(string='Notes')
     active = fields.Boolean(default=True)
     schedule_id = fields.Many2one('lms.schedule', string='Schedule')
+    teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment')
 
     @api.depends('total_fee', 'paid_amount')
     def _compute_remaining_amount(self):
