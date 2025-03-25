@@ -8,7 +8,7 @@ class Enrollment(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='Enrollment Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
-    student_id = fields.Many2one('res.users', string='Student', required=True, domain=[('is_student', '=', True)])
+    student_id = fields.Many2one('lms.student', string='Student', required=True)
     course_id = fields.Many2one('slide.channel', string='Course', required=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', required=True)

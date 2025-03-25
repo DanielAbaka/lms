@@ -5,7 +5,8 @@ class LMSCoursePlanning(models.Model):
     _name = 'lms.course.planning'
     _description = 'Student Course Planning'
 
-    student_id = fields.Many2one('res.users', string="Student", required=True, domain=[('is_student', '=', True)])
+    name = fields.Char(string='Course Planning Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
+    student_id = fields.Many2one('lms.student', string='Student', required=True)
     semester_id = fields.Many2one('lms.semester', string="Semester", required=True)
     course_ids = fields.Many2many('slide.channel', string="Planned Courses")
     total_credits = fields.Integer(string="Total Credits", compute="_compute_total_credits", store=True)

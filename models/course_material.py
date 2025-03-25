@@ -29,8 +29,7 @@ class CourseMaterial(models.Model):
     is_published = fields.Boolean(string='Published', default=False, tracking=True)
     published_date = fields.Datetime(string='Published Date', readonly=True)
     published_by = fields.Many2one('res.users', string='Published By', readonly=True)
-    student_ids = fields.Many2many('res.users', 'student_material_rel', 'material_id', 'student_id', 
-                                 string='Students', domain=[('is_student', '=', True)])
+    student_ids = fields.Many2many('lms.student', 'student_material_rel', 'material_id', 'student_id', string='Students')
     teacher_ids = fields.Many2many('res.users', 'teacher_material_rel', 'material_id', 'teacher_id', 
                                  string='Teachers', domain=[('is_teacher', '=', True)])
     view_count = fields.Integer(string='View Count', compute='_compute_view_count', store=True)
