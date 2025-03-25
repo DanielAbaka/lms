@@ -34,7 +34,7 @@ class Student(models.Model):
     attendance_rate = fields.Float(string='Attendance Rate', compute='_compute_attendance_stats', store=True)
     average_grade = fields.Float(string='Average Grade', compute='_compute_grade_stats', store=True)
     pending_payments = fields.Float(string='Pending Payments', compute='_compute_payment_stats', store=True)
-    enrollment_ids = fields.One2many('lms.enrollment', 'student_id', string='Enrollments', inverse_name='student_id')
+    enrollment_ids = fields.One2many('lms.enrollment', 'student_id', string='Enrollments')
     attendance_ids = fields.One2many('lms.attendance', 'student_id', string='Attendance Records')
     grade_ids = fields.One2many('lms.grade', 'student_id', string='Grades')
     payment_ids = fields.One2many('lms.payment', 'student_id', string='Payments')
