@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_lms_root"
+              name="Learning Management"
+              web_icon="static/description/icon.png"
+              sequence="10"/>
+
+    <!-- Dashboard Menu -->
+    <record id="action_lms_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        <field name="tag">lms_dashboard</field>
+    </record>
+
+    <menuitem id="menu_lms_dashboard"
+              name="Dashboard"
+              action="action_lms_dashboard"
+              parent="menu_lms_root"
+              sequence="1"/>
+
+    <!-- Academic Menu -->
+    <menuitem id="menu_lms_academic"
+              name="Academic"
+              parent="menu_lms_root"
+              sequence="10"/>
+
+    <!-- Semester Menu Action -->
+    <record id="action_lms_semester" model="ir.actions.act_window">
+        <field name="name">Semesters</field>
+        <field name="res_model">lms.semester</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first semester!
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_lms_semester"
+              name="Semesters"
+              action="action_lms_semester"
+              parent="menu_lms_academic"
+              sequence="10"/>
+
+    <!-- Course Menu Items -->
+    <record id="action_lms_course" model="ir.actions.act_window">
+        <field name="name">Courses</field>
+        <field name="res_model">lms.course</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_lms_course"
+              name="Courses"
+              action="action_lms_course"
+              parent="menu_lms_course_management"
+              sequence="10"/>
+
+    <!-- Course Management Submenu -->
+    <menuitem id="menu_lms_course_management"
+              name="Course Management"
+              parent="menu_lms_academic"
+              sequence="20"/>
+
+    <menuitem id="menu_lms_course_material"
+              name="Course Materials"
+              action="action_lms_course_material"
+              parent="menu_lms_course_management"
+              sequence="20"/>
+
+    <menuitem id="menu_lms_course_schedule"
+              name="Course Schedule"
+              action="action_lms_course_schedule"
+              parent="menu_lms_course_management"
+              sequence="30"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_lms_configuration"
+              name="Configuration"
+              parent="menu_lms_root"
+              sequence="100"
+              groups="group_lms_admin"/>
+
+    <menuitem id="menu_lms_settings"
+              name="Settings"
+              action="action_lms_settings"
+              parent="menu_lms_configuration"
+              sequence="10"/>
+
+    <!-- Sequences -->
+    <record id="seq_lms_student" model="ir.sequence">
+        <field name="name">Student Registration Number</field>
+    </record>
+</odoo> 

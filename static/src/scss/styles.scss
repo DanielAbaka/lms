@@ -1,0 +1,33 @@
+.o_lms_dashboard {
+  .card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      color: #666;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card-text {
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+}
+
+// Custom styling for menu items
+.o_menu_apps {
+  .dropdown-item.o_app {
+    &[data-menu-xmlid^="odoo_lms"] {
+      background-color: #4a90e2;
+      color: white;
+    }
+  }
+}

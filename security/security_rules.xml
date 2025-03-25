@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- LMS User Groups -->
+        <record id="group_lms_student" model="res.groups">
+            <field name="name">LMS / Student</field>
+            <field name="category_id" ref="base.module_category_education"/>
+        </record>
+
+        <record id="group_lms_teacher" model="res.groups">
+            <field name="name">LMS / Teacher</field>
+            <field name="category_id" ref="base.module_category_education"/>
+        </record>
+
+        <record id="group_lms_admin" model="res.groups">
+            <field name="name">LMS / Administrator</field>
+            <field name="category_id" ref="base.module_category_education"/>
+            <field name="implied_ids" eval="[(4, ref('group_lms_teacher'))]"/>
+        </record>
+
+        <!-- Menu Access Rights -->
+        <record id="access_menu_lms_dashboard" model="ir.rule">
+            <field name="name">LMS Dashboard Access</field>
+            <field name="model_id" ref="model_ir_ui_menu"/>
+            <field name="domain_force">[('parent_id.complete_name', 'ilike', 'Learning Management/']"/>
+        </record>
+    </data>
+</odoo> 

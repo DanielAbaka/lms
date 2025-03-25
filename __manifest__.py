@@ -1,54 +1,59 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "LMS Module",
-
-    'summary': "A Learning Management System for managing courses, students, teachers, enrollments, and more.",
-
+    'name': 'Learning Management System',
+    'version': '16.0.1.0.0',
+    'category': 'Education',
+    'summary': 'Comprehensive Learning Management System for Educational Institutions',
     'description': """
-Long description of module's purpose
+    Learning Management System
+    =================================
+    
+    Key Features:
+    ------------
+    * Academic Year & Semester Management
+    * Comprehensive Course Management
+    * Course Material Management
+    * Interactive Course Scheduling
+    * Role-based Access Control
+    * Professional Dashboard Interface
+    
+    This module provides a complete solution for educational institutions to manage their academic operations.
     """,
-
-    'author': "CS4LIBERIA",
-    'website': "https://www.yourcompany.com",
-
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
-
-    # any module necessary for this one to work correctly
-    'depends': ['base','website_slides','survey','hr','payment','mail'],
-
-    # always loaded
-    'data': [
-        'security/groups.xml',
-        'security/ir.model.access.csv',
-
-        # 'security/lms_security.xml',
-        'views/views.xml',
-        'views/menu.xml',
-        'views/student_views.xml',
-        'views/course_views.xml',
-        'views/course_planning_views.xml',
-        'views/enrollment_views.xml',
-        'views/academic_year_views.xml',
-        'views/semester_views.xml',
-        'views/teacher_views.xml',
-        'views/teacher_assignment_views.xml',
-        'views/grade_views.xml',
-        'views/payment_views.xml',
-        'views/transcript_views.xml',
-        'views/document_views.xml',
-        'views/messaging_views.xml',
-
-
-
+    'author': 'Your Company',
+    'website': 'https://www.yourcompany.com',
+    'depends': [
+        'base',
+        'mail',
+        'web',
+        'portal',
+        'resource',
+        'website',
     ],
-    # only loaded in demonstration mode
+    'data': [
+        # Security
+        'security/security_rules.xml',
+        'security/ir.model.access.csv',
+        
+        # Views
+        'views/menu_views.xml',
+        'views/semester_views.xml',
+        'views/course_views.xml',
+        'views/course_material_views.xml',
+        'views/dashboard_views.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'static/src/scss/styles.scss',
+            'static/src/js/dashboard.js',
+        ],
+    },
+    'demo': [],
+    'images': ['static/description/banner.png'],
     'installable': True,
     'application': True,
     'auto_install': False,
+    'license': 'LGPL-3',
+    'sequence': 1,
 }
 
 

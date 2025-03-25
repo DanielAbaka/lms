@@ -8,7 +8,6 @@ from . import teacher
 from . import teacher_assignment
 from . import academic_year
 from . import semester
-from . import course
 from . import course_planning
 from . import enrollment
 from . import payment

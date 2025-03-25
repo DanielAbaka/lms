@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Course Material Action -->
+    <record id="action_lms_course_material" model="ir.actions.act_window">
+        <field name="name">Course Materials</field>
+        <field name="res_model">lms.course.material</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first course material!
+            </p>
+            <p>
+                Add documents, videos, and other learning materials for your courses.
+            </p>
+        </field>
+    </record>
+
+    <!-- Course Schedule Action -->
+    <record id="action_lms_course_schedule" model="ir.actions.act_window">
+        <field name="name">Course Schedule</field>
+        <field name="res_model">lms.course.schedule</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first course schedule!
+            </p>
+            <p>
+                Set up class schedules and time slots for your courses.
+            </p>
+        </field>
+    </record>
+
+    <!-- Settings Action -->
+    <record id="action_lms_settings" model="ir.actions.act_window">
+        <field name="name">LMS Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'odoo_lms'}</field>
+    </record>
+</odoo> 
