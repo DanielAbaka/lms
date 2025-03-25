@@ -29,7 +29,7 @@ class Administrator(models.Model):
     total_course_count = fields.Integer(compute='_compute_admin_stats', string='Total Courses')
     total_revenue = fields.Float(compute='_compute_admin_stats', string='Total Revenue')
 
-    @api.depends('id')
+    @api.depends('self')
     def _compute_related_records(self):
         for admin in self:
             admin.academic_year_ids = self.env['lms.academic.year'].search([('admin_id', '=', admin.id)])
