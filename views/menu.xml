@@ -669,7 +669,7 @@
                     <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
                     <filter string="Archived" name="archived" domain="[('state', '=', 'archived')]"/>
                     <group expand="0" string="Group By">
-                        <filter string="Quiz" name="group_by_quiz" context="{'group_by': 'quiz_id'}"/>
+                        <filter string="Quiz" name="group_by_quiz" context="{'group_by': 'code'}"/>
                         <filter string="Question Type" name="group_by_type" context="{'group_by': 'question_type'}"/>
                         <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
                     </group>
