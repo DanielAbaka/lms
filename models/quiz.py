@@ -10,7 +10,7 @@ class Quiz(models.Model):
 
     name = fields.Char(string='Name', required=True, tracking=True)
     code = fields.Char(string='Quiz Code', required=True, copy=False)
-    teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True)
+    teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True, ondelete='cascade')
     course_id = fields.Many2one('slide.channel', string='Course', related='teacher_assignment_id.course_id', store=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='teacher_assignment_id.academic_year_id', store=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', related='teacher_assignment_id.semester_id', store=True)
