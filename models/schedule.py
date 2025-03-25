@@ -163,7 +163,7 @@ class Schedule(models.Model):
 
     # Related Records
     attendance_ids = fields.One2many('lms.attendance', 'schedule_id', string='Attendance Records')
-    enrollment_ids = fields.One2many('lms.enrollment', 'schedule_id', string='Enrollments', inverse_name='schedule_id')
+    enrollment_ids = fields.One2many('lms.enrollment', 'schedule_id', string='Enrollments')
 
     # Computed Fields
     enrolled_students_count = fields.Integer(string='Enrolled Students', compute='_compute_enrollment_count', store=True)
