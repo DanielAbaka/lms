@@ -36,6 +36,7 @@ class Enrollment(models.Model):
     attendance_ids = fields.One2many('lms.attendance', 'enrollment_id', string='Attendance Records')
     notes = fields.Text(string='Notes')
     active = fields.Boolean(default=True)
+    schedule_id = fields.Many2one('lms.schedule', string='Schedule')
 
     @api.depends('total_fee', 'paid_amount')
     def _compute_remaining_amount(self):
