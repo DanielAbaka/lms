@@ -10,6 +10,7 @@ class TeacherAssignment(models.Model):
 
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
     teacher_id = fields.Many2one('res.users', string='Teacher', required=True, domain=[('is_teacher', '=', True)])
+    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     course_id = fields.Many2one('slide.channel', string='Course', required=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', required=True)

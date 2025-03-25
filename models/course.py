@@ -20,6 +20,7 @@ class LMSCourse(models.Model):
 
     # New fields for enhanced views
     code = fields.Char(string="Course Code", required=True, copy=False)
+    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     max_students = fields.Integer(string="Maximum Students", default=30)
     objectives = fields.Text(string="Course Objectives")
     prerequisites = fields.Text(string="Course Prerequisites")

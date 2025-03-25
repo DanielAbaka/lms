@@ -8,6 +8,7 @@ class ScheduleTemplate(models.Model):
     _description = 'Schedule Template'
 
     name = fields.Char(string='Name', required=True)
+    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', required=True)
     course_id = fields.Many2one('lms.course', string='Course', required=True)
