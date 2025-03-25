@@ -9,7 +9,7 @@ class QuizAttempt(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
-    quiz_id = fields.Many2one('lms.quiz', string='Quiz', required=True)
+    quiz_id = fields.Many2one('lms.quiz', string='Quiz', required=True, ondelete='cascade')
     student_id = fields.Many2one('lms.student', string='Student', required=True)
     enrollment_id = fields.Many2one('lms.enrollment', string='Enrollment', required=True)
     course_id = fields.Many2one('slide.channel', string='Course', related='enrollment_id.course_id', store=True)

@@ -8,7 +8,7 @@ class QuizQuestion(models.Model):
     _order = 'sequence, id'
 
     name = fields.Char(string='Question', required=True)
-    quiz_id = fields.Many2one('lms.quiz', string='Quiz', required=True)
+    quiz_id = fields.Many2one('lms.quiz', string='Quiz', required=True, ondelete='cascade')
     sequence = fields.Integer(string='Sequence', default=10)
     question_type = fields.Selection([
         ('multiple_choice', 'Multiple Choice'),
