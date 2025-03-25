@@ -5,10 +5,9 @@ class LMSTranscript(models.Model):
     _description = 'Student Transcript'
 
     student_id = fields.Many2one(
-        'res.users',
+        'lms.student',
         string="Student",
-        required=True,
-        domain=[('is_student', '=', True)]
+        required=True
     )
     academic_year_id = fields.Many2one('lms.academic.year', string="Academic Year")
     semester_id = fields.Many2one('lms.semester', string="Semester")
