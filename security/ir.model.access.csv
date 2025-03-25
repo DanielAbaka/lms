@@ -11,10 +11,6 @@ access_lms_semester_admin,LMS Semester Admin,model_lms_semester,base.group_syste
 access_lms_semester_manager,LMS Semester Manager,model_lms_semester,group_lms_manager,1,1,1,1
 access_lms_semester_user,LMS Semester User,model_lms_semester,group_lms_user,1,0,0,0
 
-access_lms_teacher_admin,LMS Teacher Admin,model_res_users,base.group_system,1,1,1,1
-access_lms_teacher_manager,LMS Teacher Manager,model_res_users,group_lms_manager,1,1,1,1
-access_lms_teacher_user,LMS Teacher User,model_res_users,group_lms_user,1,0,0,0
-
 access_lms_course_planning_admin,LMS Course Planning Admin,model_lms_course_planning,base.group_system,1,1,1,1
 access_lms_course_planning_manager,LMS Course Planning Manager,model_lms_course_planning,group_lms_manager,1,1,1,1
 access_lms_course_planning_user,LMS Course Planning User,model_lms_course_planning,group_lms_user,1,0,0,0

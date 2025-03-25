@@ -15,7 +15,6 @@ from . import grade
 from . import transcript
 from . import document
 from . import messaging
-from . import res_users
 from . import administrator
 from . import attendance
 from . import course_material
