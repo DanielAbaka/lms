@@ -9,6 +9,7 @@ class Teacher(models.Model):
     # Existing fields
     is_teacher = fields.Boolean(string='Is Teacher', default=True)
     teacher_id = fields.Char(string='Teacher ID', required=True, copy=False)
+    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     specialization = fields.Char(string='Specialization')
     qualification = fields.Char(string='Qualification')
     joining_date = fields.Date(string='Joining Date')
