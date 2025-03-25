@@ -39,7 +39,6 @@ class Student(models.Model):
     attendance_ids = fields.One2many('lms.attendance', 'student_id', string='Attendance Records')
     grade_ids = fields.One2many('lms.grade', 'student_id', string='Grades')
     payment_ids = fields.One2many('lms.payment', 'student_id', string='Payments')
-    document_ids = fields.One2many('lms.document', 'student_id', string='Documents')
     message_ids = fields.One2many('mail.message', 'res_id', string='Messages', domain=[('model', '=', 'res.users')])
 
     @api.depends('grade_ids.grade')
