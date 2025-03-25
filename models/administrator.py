@@ -8,6 +8,7 @@ class Administrator(models.Model):
 
     # Existing fields
     is_admin = fields.Boolean(string='Is Administrator', default=True)
+    admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     administrator_code = fields.Char(string='Administrator Code', required=True, copy=False)
     department = fields.Char(string='Department')
     position = fields.Char(string='Position')
@@ -16,12 +17,12 @@ class Administrator(models.Model):
     office_hours = fields.Text(string='Office Hours')
 
     # Computed fields for related records
-    academic_year_ids = fields.One2many('lms.academic.year', 'admin_id', string='Academic Years', compute='_compute_related_records')
-    semester_ids = fields.One2many('lms.semester', 'admin_id', string='Semesters', compute='_compute_related_records')
-    student_ids = fields.One2many('lms.student', 'admin_id', string='Students', compute='_compute_related_records')
-    teacher_ids = fields.One2many('lms.teacher', 'admin_id', string='Teachers', compute='_compute_related_records')
-    revenue_ids = fields.One2many('lms.payment', 'admin_id', string='Revenue', compute='_compute_related_records', domain=[('state', '=', 'paid')])
-    pending_payment_ids = fields.One2many('lms.payment', 'admin_id', string='Pending Payments', compute='_compute_related_records', domain=[('state', '=', 'pending')])
+    academic_year_ids = fields.Many2many('lms.academic.year', compute='_compute_related_records', string='Academic Years')
+    semester_ids = fields.Many2many('lms.semester', compute='_compute_related_records', string='Semesters')
+    student_ids = fields.Many2many('lms.student', compute='_compute_related_records', string='Students')
+    teacher_ids = fields.Many2many('lms.teacher', compute='_compute_related_records', string='Teachers')
+    revenue_ids = fields.Many2many('lms.payment', compute='_compute_related_records', string='Revenue', domain=[('state', '=', 'paid')])
+    pending_payment_ids = fields.Many2many('lms.payment', compute='_compute_related_records', string='Pending Payments', domain=[('state', '=', 'pending')])
     
     # Computed fields for dashboard
     total_student_count = fields.Integer(compute='_compute_admin_stats', string='Total Students')
