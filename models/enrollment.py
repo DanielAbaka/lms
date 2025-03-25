@@ -12,6 +12,7 @@ class Enrollment(models.Model):
     course_id = fields.Many2one('slide.channel', string='Course', required=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', required=True)
+    schedule_id = fields.Many2one('lms.schedule', string='Schedule')
     enrollment_date = fields.Date(string='Enrollment Date', required=True, default=fields.Date.today)
     start_date = fields.Date(string='Start Date', required=True)
     end_date = fields.Date(string='End Date', required=True)
@@ -36,7 +37,6 @@ class Enrollment(models.Model):
     attendance_ids = fields.One2many('lms.attendance', 'enrollment_id', string='Attendance Records')
     notes = fields.Text(string='Notes')
     active = fields.Boolean(default=True)
-    schedule_id = fields.Many2one('lms.schedule', string='Schedule')
     teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment')
 
     @api.depends('total_fee', 'paid_amount')
