@@ -9,6 +9,7 @@ class Quiz(models.Model):
     _order = 'start_date desc, name'
 
     name = fields.Char(string='Name', required=True, tracking=True)
+    quiz_id = fields.Char(string='Quiz ID', required=True, copy=False)
     teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True)
     course_id = fields.Many2one('slide.channel', string='Course', related='teacher_assignment_id.course_id', store=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='teacher_assignment_id.academic_year_id', store=True)
