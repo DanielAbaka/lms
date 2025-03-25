@@ -8,6 +8,7 @@ class Administrator(models.Model):
 
     # Existing fields
     is_admin = fields.Boolean(string='Is Administrator', default=True)
+    administrator_code = fields.Char(string='Administrator Code', required=True, copy=False)
     department = fields.Char(string='Department')
     position = fields.Char(string='Position')
     joining_date = fields.Date(string='Joining Date')
@@ -173,8 +174,8 @@ class Administrator(models.Model):
             'domain': [],
         }
 
-    @api.constrains('admin_id')
-    def _check_admin_id(self):
+    @api.constrains('administrator_code')
+    def _check_administrator_code(self):
         for admin in self:
-            if self.search_count([('admin_id', '=', admin.admin_id.id), ('id', '!=', admin.id)]) > 0:
-                raise ValidationError("Administrator ID must be unique!") 
+            if self.search_count([('administrator_code', '=', admin.administrator_code), ('id', '!=', admin.id)]) > 0:
+                raise ValidationError("Administrator Code must be unique!") 
