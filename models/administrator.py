@@ -15,19 +15,29 @@ class Administrator(models.Model):
     office_location = fields.Char(string='Office Location')
     office_hours = fields.Text(string='Office Hours')
 
-    # New fields for administrator portal
-    academic_year_ids = fields.One2many('lms.academic.year', 'admin_id', string='Academic Years')
-    semester_ids = fields.One2many('lms.semester', 'admin_id', string='Semesters')
-    student_ids = fields.One2many('lms.student', 'admin_id', string='Students')
-    teacher_ids = fields.One2many('lms.teacher', 'admin_id', string='Teachers')
-    revenue_ids = fields.One2many('lms.payment', 'admin_id', string='Revenue', domain=[('state', '=', 'paid')])
-    pending_payment_ids = fields.One2many('lms.payment', 'admin_id', string='Pending Payments', domain=[('state', '=', 'pending')])
+    # Computed fields for related records
+    academic_year_ids = fields.One2many('lms.academic.year', 'admin_id', string='Academic Years', compute='_compute_related_records')
+    semester_ids = fields.One2many('lms.semester', 'admin_id', string='Semesters', compute='_compute_related_records')
+    student_ids = fields.One2many('lms.student', 'admin_id', string='Students', compute='_compute_related_records')
+    teacher_ids = fields.One2many('lms.teacher', 'admin_id', string='Teachers', compute='_compute_related_records')
+    revenue_ids = fields.One2many('lms.payment', 'admin_id', string='Revenue', compute='_compute_related_records', domain=[('state', '=', 'paid')])
+    pending_payment_ids = fields.One2many('lms.payment', 'admin_id', string='Pending Payments', compute='_compute_related_records', domain=[('state', '=', 'pending')])
     
     # Computed fields for dashboard
     total_student_count = fields.Integer(compute='_compute_admin_stats', string='Total Students')
     total_teacher_count = fields.Integer(compute='_compute_admin_stats', string='Total Teachers')
     total_course_count = fields.Integer(compute='_compute_admin_stats', string='Total Courses')
     total_revenue = fields.Float(compute='_compute_admin_stats', string='Total Revenue')
+
+    @api.depends('id')
+    def _compute_related_records(self):
+        for admin in self:
+            admin.academic_year_ids = self.env['lms.academic.year'].search([('admin_id', '=', admin.id)])
+            admin.semester_ids = self.env['lms.semester'].search([('admin_id', '=', admin.id)])
+            admin.student_ids = self.env['lms.student'].search([('admin_id', '=', admin.id)])
+            admin.teacher_ids = self.env['lms.teacher'].search([('admin_id', '=', admin.id)])
+            admin.revenue_ids = self.env['lms.payment'].search([('admin_id', '=', admin.id), ('state', '=', 'paid')])
+            admin.pending_payment_ids = self.env['lms.payment'].search([('admin_id', '=', admin.id), ('state', '=', 'pending')])
 
     @api.depends('student_ids', 'teacher_ids', 'revenue_ids')
     def _compute_admin_stats(self):
@@ -51,8 +61,8 @@ class Administrator(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'res.users',
             'view_mode': 'tree,form',
-            'domain': [('is_student', '=', True)],
-            'context': {'default_is_student': True},
+            'domain': [('is_student', '=', True), ('admin_id', '=', self.id)],
+            'context': {'default_is_student': True, 'default_admin_id': self.id},
         }
 
     def action_view_teachers(self):
@@ -62,8 +72,8 @@ class Administrator(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'res.users',
             'view_mode': 'tree,form',
-            'domain': [('is_teacher', '=', True)],
-            'context': {'default_is_teacher': True},
+            'domain': [('is_teacher', '=', True), ('admin_id', '=', self.id)],
+            'context': {'default_is_teacher': True, 'default_admin_id': self.id},
         }
 
     def action_view_courses(self):
@@ -73,7 +83,8 @@ class Administrator(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'slide.channel',
             'view_mode': 'tree,form',
-            'domain': [],
+            'domain': [('admin_id', '=', self.id)],
+            'context': {'default_admin_id': self.id},
         }
 
     def action_view_payments(self):
@@ -83,7 +94,8 @@ class Administrator(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'lms.payment',
             'view_mode': 'tree,form',
-            'domain': [],
+            'domain': [('admin_id', '=', self.id)],
+            'context': {'default_admin_id': self.id},
         }
 
     def action_generate_student_report(self):
@@ -171,7 +183,8 @@ class Administrator(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'lms.payment.plan',
             'view_mode': 'tree,form',
-            'domain': [],
+            'domain': [('admin_id', '=', self.id)],
+            'context': {'default_admin_id': self.id},
         }
 
     @api.constrains('administrator_code')
