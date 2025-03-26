@@ -28,6 +28,7 @@ class LMSCourse(models.Model):
         ('draft', 'Draft'),
         ('published', 'Published')
     ], string='Status', default='draft', required=True)
+    enrollment_ids = fields.One2many('lms.enrollment', 'course_id', string='Enrollments')
     enrollment_count = fields.Integer(compute='_compute_enrollment_count', string='Enrollment Count')
     assignment_count = fields.Integer(compute='_compute_assignment_count', string='Assignment Count')
 

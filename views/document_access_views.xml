@@ -13,6 +13,7 @@
                                 <field name="document_id" required="1"/>
                                 <field name="user_id" required="1"/>
                                 <field name="access_date" required="1"/>
+                                <field name="access_type" required="1"/>
                             </group>
                             <group>
                                 <field name="ip_address"/>
@@ -45,6 +46,7 @@
                     <field name="document_id"/>
                     <field name="user_id"/>
                     <field name="access_date"/>
+                    <field name="access_type"/>
                     <field name="ip_address"/>
                     <field name="user_agent"/>
                     <field name="duration"/>
@@ -64,6 +66,9 @@
                     <field name="ip_address"/>
                     <field name="user_agent"/>
                     <separator/>
+                    <filter string="View" name="view" domain="[('access_type', '=', 'view')]"/>
+                    <filter string="Download" name="download" domain="[('access_type', '=', 'download')]"/>
+                    <filter string="Print" name="print" domain="[('access_type', '=', 'print')]"/>
                     <filter string="Downloaded" name="downloaded" domain="[('is_downloaded', '=', True)]"/>
                     <filter string="Not Downloaded" name="not_downloaded" domain="[('is_downloaded', '=', False)]"/>
                     <group expand="0" string="Group By">

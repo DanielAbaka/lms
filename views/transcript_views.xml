@@ -62,8 +62,8 @@
                                 <field name="grade_ids">
                                     <tree>
                                         <field name="course_id"/>
-                                        <field name="grade"/>
                                         <field name="credits"/>
+                                        <field name="grade"/>
                                         <field name="grade_letter"/>
                                         <field name="grade_point"/>
                                         <field name="grade_status"/>

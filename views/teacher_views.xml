@@ -13,7 +13,7 @@
                             <field name="is_teacher"/>
                         </group>
                         <group>
-                            <field name="assigned_courses" widget="many2many_tags"/>
+                            <field name="assigned_course_ids" widget="many2many_tags"/>
                         </group>
                     </sheet>
                 </form>
@@ -28,7 +28,7 @@
                 <tree>
                     <field name="name"/>
                     <field name="is_teacher"/>
-                    <field name="assigned_courses" widget="many2many_tags"/>
+                    <field name="assigned_course_ids" widget="many2many_tags"/>
                 </tree>
             </field>
         </record>

@@ -16,10 +16,13 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
+                            <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="student_count" widget="statinfo" string="Students"/>
+                            </button>
                             <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
                                 <field name="course_count" widget="statinfo" string="Courses"/>
                             </button>
-                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
+                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-user-plus">
                                 <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
                             </button>
                             <button name="action_view_teachers" type="object" class="oe_stat_button" icon="fa-user-md">

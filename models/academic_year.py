@@ -37,14 +37,14 @@ class AcademicYear(models.Model):
     enrollment_count = fields.Integer(string='Enrollment Count', compute='_compute_statistics', store=True)
     semester_count = fields.Integer(string='Semester Count', compute='_compute_statistics', store=True)
 
-    @api.depends('enrollment_ids', 'course_ids', 'teacher_assignment_ids', 'semester_ids')
+    @api.depends('semester_ids', 'course_ids', 'enrollment_ids', 'teacher_assignment_ids')
     def _compute_statistics(self):
         for record in self:
+            record.semester_count = len(record.semester_ids)
             record.student_count = len(record.enrollment_ids.mapped('student_id'))
             record.course_count = len(record.course_ids)
             record.teacher_count = len(record.teacher_assignment_ids.mapped('teacher_id'))
             record.enrollment_count = len(record.enrollment_ids)
-            record.semester_count = len(record.semester_ids)
 
     @api.constrains('start_date', 'end_date')
     def _check_dates(self):

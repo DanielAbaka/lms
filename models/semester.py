@@ -89,6 +89,50 @@ class Semester(models.Model):
         if self.state == 'cancelled':
             self.write({'state': 'draft'})
 
+    def action_view_students(self):
+        self.ensure_one()
+        return {
+            'name': 'Students',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.student',
+            'view_mode': 'tree,form',
+            'domain': [('enrollment_ids.semester_id', '=', self.id)],
+            'context': {'default_semester': self.id},
+        }
+
+    def action_view_courses(self):
+        self.ensure_one()
+        return {
+            'name': 'Courses',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.course',
+            'view_mode': 'tree,form',
+            'domain': [('semester_id', '=', self.id)],
+            'context': {'default_semester_id': self.id},
+        }
+
+    def action_view_enrollments(self):
+        self.ensure_one()
+        return {
+            'name': 'Enrollments',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.enrollment',
+            'view_mode': 'tree,form',
+            'domain': [('semester_id', '=', self.id)],
+            'context': {'default_semester_id': self.id},
+        }
+
+    def action_view_teachers(self):
+        self.ensure_one()
+        return {
+            'name': 'Teachers',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.teacher',
+            'view_mode': 'tree,form',
+            'domain': [('teacher_assignment_ids.semester_id', '=', self.id)],
+            'context': {'default_semester': self.id},
+        }
+
     @api.model
     def set_current_semester(self, semester_id):
         self.search([]).write({'is_current': False})

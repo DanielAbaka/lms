@@ -13,6 +13,7 @@ class Attendance(models.Model):
     enrollment_id = fields.Many2one('lms.enrollment', string='Enrollment', required=True)
     schedule_id = fields.Many2one('lms.schedule', string='Schedule', required=True)
     course_id = fields.Many2one('slide.channel', string='Course', required=True)
+    teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='enrollment_id.academic_year_id', store=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', related='enrollment_id.semester_id', store=True)
     date = fields.Date(string='Date', required=True, default=fields.Date.context_today)

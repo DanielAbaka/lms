@@ -8,20 +8,12 @@
             <field name="arch" type="xml">
                 <form string="Quiz Question">
                     <header>
-                        <button name="action_activate" string="Activate" type="object" class="oe_highlight" states="draft"/>
-                        <button name="action_archive" string="Archive" type="object" states="active"/>
-                        <button name="action_unarchive" string="Unarchive" type="object" states="archived"/>
-                        <button name="action_reset_to_draft" string="Reset to Draft" type="object" states="archived"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button name="action_view_attempts" type="object" class="oe_stat_button" icon="fa-users">
-                                <field name="attempt_count" widget="statinfo" string="Attempts"/>
-                            </button>
-                            <button name="action_view_correct" type="object" class="oe_stat_button" icon="fa-check">
-                                <field name="correct_count" widget="statinfo" string="Correct"/>
-                            </button>
+                            <field name="attempt_count" widget="statinfo" string="Attempts"/>
+                            <field name="correct_count" widget="statinfo" string="Correct"/>
                         </div>
                         <notebook>
                             <page string="Question Details">
@@ -51,9 +43,6 @@
                                         <field name="explanation"/>
                                     </tree>
                                 </field>
-                                <group string="Correct Options">
-                                    <field name="correct_option_ids" widget="many2many_tags"/>
-                                </group>
                             </page>
                             <page string="Short Answer" attrs="{'invisible': [('question_type', '!=', 'short_answer')]}">
                                 <group>

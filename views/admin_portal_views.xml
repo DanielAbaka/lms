@@ -1,289 +1,339 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Administrator Portal Dashboard -->
-        <record id="view_admin_portal_dashboard" model="ir.ui.view">
-            <field name="name">admin.portal.dashboard</field>
+        <!-- Admin Portal Dashboard -->
+        <record id="admin_portal_dashboard" model="ir.ui.view">
+            <field name="name">Admin Portal Dashboard</field>
             <field name="model">res.users</field>
             <field name="arch" type="xml">
-                <form string="Administrator Dashboard">
-                    <div class="oe_title">
-                        <h1>Welcome, <field name="name"/></h1>
-                    </div>
-                    <div class="oe_stat_info">
-                        <div class="oe_stat_box">
-                            <field name="total_student_count" widget="statinfo" string="Total Students"/>
+                <form>
+                    <header>
+                        <button name="action_view_profile" string="View Profile" type="object" class="oe_highlight"/>
+                        <field name="admin_state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Welcome, <field name="name"/></h1>
                         </div>
-                        <div class="oe_stat_box">
-                            <field name="total_teacher_count" widget="statinfo" string="Total Teachers"/>
+                        <div class="oe_button_box" name="button_box">
+                            <field name="total_students_count" widget="statinfo" string="Total Students"/>
+                            <field name="total_teachers_count" widget="statinfo" string="Total Teachers"/>
+                            <field name="total_courses_count" widget="statinfo" string="Total Courses"/>
+                            <field name="total_payments_count" widget="statinfo" string="Total Payments"/>
                         </div>
-                        <div class="oe_stat_box">
-                            <field name="total_course_count" widget="statinfo" string="Total Courses"/>
-                        </div>
-                        <div class="oe_stat_box">
-                            <field name="total_revenue" widget="statinfo" string="Total Revenue"/>
-                        </div>
-                    </div>
-                    <div class="oe_button_box" name="button_box">
-                        <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
-                            <field name="total_student_count" widget="statinfo" string="Students"/>
-                        </button>
-                        <button name="action_view_teachers" type="object" class="oe_stat_button" icon="fa-user-md">
-                            <field name="total_teacher_count" widget="statinfo" string="Teachers"/>
-                        </button>
-                        <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
-                            <field name="total_course_count" widget="statinfo" string="Courses"/>
-                        </button>
-                        <button name="action_view_payments" type="object" class="oe_stat_button" icon="fa-money">
-                            <field name="total_revenue" widget="statinfo" string="Payments"/>
-                        </button>
-                    </div>
-                    <notebook>
-                        <page string="Academic Setup" name="academic_setup">
-                            <group>
-                                <group string="Academic Year">
-                                    <field name="academic_year_ids">
-                                        <tree>
-                                            <field name="name"/>
-                                            <field name="start_date"/>
-                                            <field name="end_date"/>
-                                            <field name="state"/>
-                                        </tree>
-                                    </field>
+                        <notebook>
+                            <page string="Quick Actions">
+                                <group>
+                                    <group>
+                                        <button name="action_add_student" string="Add Student" type="object" class="oe_highlight"/>
+                                        <button name="action_add_teacher" string="Add Teacher" type="object" class="oe_highlight"/>
+                                        <button name="action_add_course" string="Add Course" type="object" class="oe_highlight"/>
+                                    </group>
+                                    <group>
+                                        <button name="action_create_schedule" string="Create Schedule" type="object" class="oe_highlight"/>
+                                        <button name="action_assign_teachers" string="Assign Teachers" type="object" class="oe_highlight"/>
+                                        <button name="action_view_payments" string="View Payments" type="object" class="oe_highlight"/>
+                                    </group>
                                 </group>
-                                <group string="Semesters">
-                                    <field name="semester_ids">
-                                        <tree>
-                                            <field name="name"/>
-                                            <field name="academic_year_id"/>
-                                            <field name="start_date"/>
-                                            <field name="end_date"/>
-                                            <field name="state"/>
-                                        </tree>
-                                    </field>
-                                </group>
-                            </group>
-                        </page>
-                        <page string="User Management" name="user_management">
-                            <group>
-                                <group string="Students">
-                                    <field name="student_ids">
-                                        <tree>
-                                            <field name="student_id"/>
-                                            <field name="name"/>
-                                            <field name="enrolled_course_count"/>
-                                            <field name="attendance_rate"/>
-                                            <field name="average_grade"/>
-                                        </tree>
-                                    </field>
-                                </group>
-                                <group string="Teachers">
-                                    <field name="teacher_ids">
-                                        <tree>
-                                            <field name="teacher_id"/>
-                                            <field name="name"/>
-                                            <field name="current_course_count"/>
-                                            <field name="department"/>
-                                        </tree>
-                                    </field>
-                                </group>
-                            </group>
-                        </page>
-                        <page string="Financial Overview" name="financial_overview">
-                            <group>
-                                <group string="Revenue">
-                                    <field name="revenue_ids">
-                                        <tree>
-                                            <field name="date"/>
-                                            <field name="amount"/>
-                                            <field name="payment_method"/>
-                                            <field name="state"/>
-                                        </tree>
-                                    </field>
-                                </group>
-                                <group string="Pending Payments">
-                                    <field name="pending_payment_ids">
-                                        <tree>
-                                            <field name="student_id"/>
-                                            <field name="amount"/>
-                                            <field name="due_date"/>
-                                            <field name="state"/>
-                                        </tree>
-                                    </field>
-                                </group>
-                            </group>
-                        </page>
-                        <page string="Reports" name="reports">
-                            <group>
-                                <button name="action_generate_student_report" type="object" class="oe_stat_button" icon="fa-file-pdf-o">
-                                    Student Report
-                                </button>
-                                <button name="action_generate_teacher_report" type="object" class="oe_stat_button" icon="fa-file-pdf-o">
-                                    Teacher Report
-                                </button>
-                                <button name="action_generate_financial_report" type="object" class="oe_stat_button" icon="fa-file-pdf-o">
-                                    Financial Report
-                                </button>
-                                <button name="action_generate_attendance_report" type="object" class="oe_stat_button" icon="fa-file-pdf-o">
-                                    Attendance Report
-                                </button>
-                            </group>
-                        </page>
-                    </notebook>
+                            </page>
+                            <page string="Recent Activities">
+                                <field name="recent_activities">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="type"/>
+                                        <field name="description"/>
+                                        <field name="user_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
                 </form>
             </field>
         </record>
 
-        <!-- Administrator Portal Action -->
-        <record id="action_admin_portal" model="ir.actions.act_window">
-            <field name="name">Administrator Portal</field>
-            <field name="res_model">res.users</field>
-            <field name="view_mode">form</field>
-            <field name="target">current</field>
-            <field name="domain">[('id', '=', user.id)]</field>
-            <field name="context">{'form_view_initial_mode': 'edit'}</field>
-        </record>
-
-        <!-- Administrator Portal Menu -->
-        <menuitem id="menu_admin_portal"
-                  name="Administrator Portal"
-                  parent="lms_module.menu_root"
-                  action="action_admin_portal"
-                  sequence="3"/>
-
-        <!-- Administrator Form View -->
-        <record id="view_admin_form_portal" model="ir.ui.view">
-            <field name="name">admin.form.portal</field>
-            <field name="model">res.users</field>
+        <!-- Academic Year Management -->
+        <record id="admin_portal_academic_year" model="ir.ui.view">
+            <field name="name">Academic Year Management</field>
+            <field name="model">lms.academic.year</field>
             <field name="arch" type="xml">
-                <form string="Administrator">
+                <form>
+                    <header>
+                        <button name="action_create_semester" string="Create Semester" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
                     <sheet>
+                        <div class="oe_title">
+                            <h1>Academic Year: <field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="is_current"/>
+                            </group>
+                            <group>
+                                <field name="total_students"/>
+                                <field name="total_teachers"/>
+                                <field name="total_courses"/>
+                            </group>
+                        </group>
                         <notebook>
-                            <page string="System Overview" name="system_overview">
-                                <group>
-                                    <field name="total_student_count" widget="statinfo" string="Total Students"/>
-                                    <field name="total_teacher_count" widget="statinfo" string="Total Teachers"/>
-                                    <field name="total_course_count" widget="statinfo" string="Total Courses"/>
-                                    <field name="total_revenue" widget="statinfo" string="Total Revenue"/>
-                                </group>
+                            <page string="Semesters">
+                                <field name="semester_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="is_current"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
                             </page>
-                            <page string="Academic Management" name="academic_management">
+                            <page string="Statistics">
                                 <group>
-                                    <group string="Academic Year">
-                                        <field name="academic_year_ids">
-                                            <tree>
-                                                <field name="name"/>
-                                                <field name="start_date"/>
-                                                <field name="end_date"/>
-                                                <field name="state"/>
-                                            </tree>
-                                        </field>
+                                    <group string="Enrollment Statistics">
+                                        <field name="total_enrollments"/>
+                                        <field name="active_enrollments"/>
+                                        <field name="completed_enrollments"/>
                                     </group>
-                                    <group string="Semesters">
-                                        <field name="semester_ids">
-                                            <tree>
-                                                <field name="name"/>
-                                                <field name="academic_year_id"/>
-                                                <field name="start_date"/>
-                                                <field name="end_date"/>
-                                                <field name="state"/>
-                                            </tree>
-                                        </field>
-                                    </group>
-                                </group>
-                            </page>
-                            <page string="User Management" name="user_management">
-                                <group>
-                                    <group string="Students">
-                                        <field name="student_ids">
-                                            <tree>
-                                                <field name="student_id"/>
-                                                <field name="name"/>
-                                                <field name="enrolled_course_count"/>
-                                                <field name="attendance_rate"/>
-                                                <field name="average_grade"/>
-                                            </tree>
-                                        </field>
-                                    </group>
-                                    <group string="Teachers">
-                                        <field name="teacher_ids">
-                                            <tree>
-                                                <field name="teacher_id"/>
-                                                <field name="name"/>
-                                                <field name="current_course_count"/>
-                                                <field name="department"/>
-                                            </tree>
-                                        </field>
-                                    </group>
-                                </group>
-                            </page>
-                            <page string="Financial Management" name="financial_management">
-                                <group>
-                                    <group string="Revenue">
-                                        <field name="revenue_ids">
-                                            <tree>
-                                                <field name="date"/>
-                                                <field name="amount"/>
-                                                <field name="payment_method"/>
-                                                <field name="state"/>
-                                            </tree>
-                                        </field>
-                                    </group>
-                                    <group string="Pending Payments">
-                                        <field name="pending_payment_ids">
-                                            <tree>
-                                                <field name="student_id"/>
-                                                <field name="amount"/>
-                                                <field name="due_date"/>
-                                                <field name="state"/>
-                                            </tree>
-                                        </field>
+                                    <group string="Financial Statistics">
+                                        <field name="total_revenue"/>
+                                        <field name="pending_payments"/>
+                                        <field name="total_scholarships"/>
                                     </group>
                                 </group>
                             </page>
                         </notebook>
                     </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids"/>
-                        <field name="activity_ids"/>
-                        <field name="message_ids"/>
-                    </div>
                 </form>
             </field>
         </record>
 
-        <!-- Administrator Tree View -->
-        <record id="view_admin_tree_portal" model="ir.ui.view">
-            <field name="name">admin.tree.portal</field>
-            <field name="model">res.users</field>
+        <!-- Course Management -->
+        <record id="admin_portal_course_management" model="ir.ui.view">
+            <field name="name">Course Management</field>
+            <field name="model">lms.course</field>
             <field name="arch" type="xml">
-                <tree decoration-info="total_revenue > 0">
-                    <field name="name"/>
-                    <field name="total_student_count"/>
-                    <field name="total_teacher_count"/>
-                    <field name="total_course_count"/>
-                    <field name="total_revenue"/>
-                </tree>
+                <form>
+                    <header>
+                        <button name="action_create_schedule" string="Create Schedule" type="object" class="oe_highlight"/>
+                        <button name="action_assign_teacher" string="Assign Teacher" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Course: <field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="credits"/>
+                                <field name="cost_per_credit"/>
+                                <field name="total_cost"/>
+                            </group>
+                            <group>
+                                <field name="teacher_id"/>
+                                <field name="max_students"/>
+                                <field name="enrolled_students"/>
+                                <field name="available_slots"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Schedule">
+                                <field name="schedule_ids">
+                                    <tree>
+                                        <field name="day"/>
+                                        <field name="start_time"/>
+                                        <field name="end_time"/>
+                                        <field name="room_id"/>
+                                        <field name="teacher_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Enrolled Students">
+                                <field name="enrolled_student_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="name"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="payment_status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Course Materials">
+                                <field name="material_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="upload_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
             </field>
         </record>
 
-        <!-- Administrator Search View -->
-        <record id="view_admin_search_portal" model="ir.ui.view">
-            <field name="name">admin.search.portal</field>
-            <field name="model">res.users</field>
+        <!-- Payment Management -->
+        <record id="admin_portal_payment_management" model="ir.ui.view">
+            <field name="name">Payment Management</field>
+            <field name="model">lms.payment</field>
             <field name="arch" type="xml">
-                <search>
-                    <field name="name"/>
-                    <field name="login"/>
-                    <separator/>
-                    <filter string="High Revenue" name="high_revenue" domain="[('total_revenue', '>', 10000)]"/>
-                    <filter string="Low Student Count" name="low_students" domain="[('total_student_count', '&lt;', 100)]"/>
-                    <group expand="0" string="Group By">
-                        <filter string="User Type" name="group_by_type" context="{'group_by': 'is_admin:is_teacher:is_student'}"/>
-                        <filter string="Revenue Range" name="group_by_revenue" context="{'group_by': 'total_revenue'}"/>
-                    </group>
-                </search>
+                <form>
+                    <header>
+                        <button name="action_confirm_payment" string="Confirm Payment" type="object" class="oe_highlight"/>
+                        <button name="action_refund_payment" string="Refund Payment" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Payment Details</h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="student_id"/>
+                                <field name="course_id"/>
+                                <field name="amount"/>
+                                <field name="payment_date"/>
+                            </group>
+                            <group>
+                                <field name="payment_method"/>
+                                <field name="transaction_id"/>
+                                <field name="payment_plan"/>
+                                <field name="refund_status"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Payment History">
+                                <field name="payment_history_ids">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="amount"/>
+                                        <field name="status"/>
+                                        <field name="transaction_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Payment Reports">
+                                <group>
+                                    <group string="Daily Summary">
+                                        <field name="daily_total"/>
+                                        <field name="daily_count"/>
+                                        <field name="daily_pending"/>
+                                    </group>
+                                    <group string="Monthly Summary">
+                                        <field name="monthly_total"/>
+                                        <field name="monthly_count"/>
+                                        <field name="monthly_pending"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
             </field>
+        </record>
+
+        <!-- Schedule Management -->
+        <record id="admin_portal_schedule_management" model="ir.ui.view">
+            <field name="name">Schedule Management</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_assign_room" string="Assign Room" type="object" class="oe_highlight"/>
+                        <button name="action_assign_teacher" string="Assign Teacher" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Schedule: <field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="course_id"/>
+                                <field name="teacher_id"/>
+                                <field name="room_id"/>
+                                <field name="day"/>
+                            </group>
+                            <group>
+                                <field name="start_time"/>
+                                <field name="end_time"/>
+                                <field name="capacity"/>
+                                <field name="enrolled_count"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Room Availability">
+                                <field name="room_availability_ids">
+                                    <tree>
+                                        <field name="room_id"/>
+                                        <field name="day"/>
+                                        <field name="start_time"/>
+                                        <field name="end_time"/>
+                                        <field name="is_available"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Teacher Schedule">
+                                <field name="teacher_schedule_ids">
+                                    <tree>
+                                        <field name="teacher_id"/>
+                                        <field name="day"/>
+                                        <field name="start_time"/>
+                                        <field name="end_time"/>
+                                        <field name="course_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Portal Actions -->
+        <record id="action_admin_portal_dashboard" model="ir.actions.act_window">
+            <field name="name">Admin Dashboard</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_dashboard"/>
+            <field name="target">current</field>
+            <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+        </record>
+
+        <record id="action_admin_portal_academic_year" model="ir.actions.act_window">
+            <field name="name">Academic Year Management</field>
+            <field name="res_model">lms.academic.year</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_academic_year"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_admin_portal_course_management" model="ir.actions.act_window">
+            <field name="name">Course Management</field>
+            <field name="res_model">lms.course</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_course_management"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_admin_portal_payment_management" model="ir.actions.act_window">
+            <field name="name">Payment Management</field>
+            <field name="res_model">lms.payment</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_payment_management"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_admin_portal_schedule_management" model="ir.actions.act_window">
+            <field name="name">Schedule Management</field>
+            <field name="res_model">lms.schedule</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_schedule_management"/>
+            <field name="target">current</field>
         </record>
     </data>
 </odoo> 

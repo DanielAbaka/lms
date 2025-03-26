@@ -116,8 +116,7 @@
                     <field name="credits"/>
                     <field name="max_students"/>
                     <field name="enrollment_count"/>
-                    <field name="quiz_count"/>
-                    <field name="document_count"/>
+                    <field name="assignment_count"/>
                     <field name="state"/>
                 </tree>
             </field>

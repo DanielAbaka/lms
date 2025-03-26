@@ -30,6 +30,11 @@ class LMSPayment(models.Model):
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled')
     ], string='Status', default='draft', tracking=True)
+    payment_status = fields.Selection([
+        ('unpaid', 'Unpaid'),
+        ('partial', 'Partial'),
+        ('paid', 'Paid')
+    ], string='Payment Status', compute='_compute_payment_status', store=True)
     notes = fields.Text(string='Notes')
     receipt_number = fields.Char(string='Receipt Number', copy=False)
     payment_date = fields.Datetime(string='Payment Date', readonly=True)
@@ -85,3 +90,17 @@ class LMSPayment(models.Model):
                 total_paid = record.enrollment_id.paid_amount - record.amount
                 if total_paid + record.amount > record.enrollment_id.total_fee:
                     raise ValidationError("Payment amount exceeds the total fee!")
+
+    @api.depends('state', 'amount', 'enrollment_id.paid_amount', 'enrollment_id.total_fee')
+    def _compute_payment_status(self):
+        for record in self:
+            if record.state == 'completed':
+                total_paid = record.enrollment_id.paid_amount
+                if total_paid >= record.enrollment_id.total_fee:
+                    record.payment_status = 'paid'
+                elif total_paid > 0:
+                    record.payment_status = 'partial'
+                else:
+                    record.payment_status = 'unpaid'
+            else:
+                record.payment_status = 'unpaid'

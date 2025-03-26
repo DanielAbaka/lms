@@ -39,6 +39,7 @@ class Document(models.Model):
 
     # Statistics
     access_count = fields.Integer(string='Access Count', compute='_compute_statistics', store=True)
+    download_count = fields.Integer(string='Download Count', compute='_compute_statistics', store=True)
     last_accessed = fields.Datetime(string='Last Accessed', compute='_compute_statistics', store=True)
 
     @api.depends('file_name')
@@ -67,10 +68,11 @@ class Document(models.Model):
             else:
                 record.file_size = 0
 
-    @api.depends('access_log_ids')
+    @api.depends('access_log_ids', 'access_log_ids.action')
     def _compute_statistics(self):
         for record in self:
             record.access_count = len(record.access_log_ids)
+            record.download_count = len(record.access_log_ids.filtered(lambda x: x.action == 'download'))
             if record.access_log_ids:
                 record.last_accessed = max(record.access_log_ids.mapped('access_date'))
             else:

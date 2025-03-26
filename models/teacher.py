@@ -21,7 +21,7 @@ class Teacher(models.Model):
     assigned_course_ids = fields.One2many('lms.teacher.assignment', 'teacher_id', string='Assigned Courses')
     course_material_ids = fields.One2many('lms.course.material', 'teacher_ids', string='Course Materials')
     attendance_ids = fields.One2many('lms.attendance', 'marked_by', string='Attendance Records')
-    quiz_ids = fields.One2many('lms.quiz', 'teacher_assignment_id', string='Quizzes', domain=[('teacher_assignment_id.teacher_id', '=', lambda self: self.id)])
+    quiz_ids = fields.Many2many('lms.quiz', compute='_compute_quiz_ids', string='Quizzes', store=True)
     
     # Computed fields for dashboard
     current_course_count = fields.Integer(compute='_compute_teacher_stats', string='Current Courses')
@@ -50,6 +50,11 @@ class Teacher(models.Model):
 
             # Count pending gradings
             teacher.pending_gradings = len(teacher.quiz_ids.filtered(lambda q: q.state == 'submitted'))
+
+    @api.depends('assigned_course_ids.quiz_ids')
+    def _compute_quiz_ids(self):
+        for teacher in self:
+            teacher.quiz_ids = teacher.assigned_course_ids.mapped('quiz_ids')
 
     def action_view_courses(self):
         self.ensure_one()

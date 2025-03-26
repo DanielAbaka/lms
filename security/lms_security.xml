@@ -281,5 +281,97 @@
             <field name="domain_force">[]</field>
         </record>
 
+        <!-- Course Material Record Rules -->
+        <record id="rule_course_material_teacher" model="ir.rule">
+            <field name="name">Teachers can only access materials for their courses</field>
+            <field name="model_id" ref="model_lms_course_material"/>
+            <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_course_material_student" model="ir.rule">
+            <field name="name">Students can only view materials for their enrolled courses</field>
+            <field name="model_id" ref="model_lms_course_material"/>
+            <field name="domain_force">[('course_id', 'in', user.enrolled_course_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Attendance Record Rules -->
+        <record id="rule_attendance_teacher" model="ir.rule">
+            <field name="name">Teachers can only access attendance for their courses</field>
+            <field name="model_id" ref="model_lms_attendance"/>
+            <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_attendance_student" model="ir.rule">
+            <field name="name">Students can only view their own attendance records</field>
+            <field name="model_id" ref="model_lms_attendance"/>
+            <field name="domain_force">[('student_attendance_ids.student_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Quiz Record Rules -->
+        <record id="rule_quiz_teacher" model="ir.rule">
+            <field name="name">Teachers can only access quizzes for their courses</field>
+            <field name="model_id" ref="model_lms_quiz"/>
+            <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_quiz_student" model="ir.rule">
+            <field name="name">Students can only access quizzes for their enrolled courses</field>
+            <field name="model_id" ref="model_lms_quiz"/>
+            <field name="domain_force">[('course_id', 'in', user.enrolled_course_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Schedule Record Rules -->
+        <record id="rule_schedule_teacher" model="ir.rule">
+            <field name="name">Teachers can only access schedules for their courses</field>
+            <field name="model_id" ref="model_lms_schedule"/>
+            <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_schedule_student" model="ir.rule">
+            <field name="name">Students can only view schedules for their enrolled courses</field>
+            <field name="model_id" ref="model_lms_schedule"/>
+            <field name="domain_force">[('course_id', 'in', user.enrolled_course_ids.ids)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
     </data>
 </odoo>

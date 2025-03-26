@@ -1,64 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- ✅ Student Profile Form View -->
+        <!-- Student Profile Form View -->
         <record id="view_lms_student_form" model="ir.ui.view">
             <field name="name">lms.student.form</field>
-            <field name="model">res.users</field>
+            <field name="model">lms.student</field>
             <field name="arch" type="xml">
                 <form string="Student Profile">
                     <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
                         <group>
-                            <field name="name" required="1"/>
-                            <field name="student_id" required="1"/>
+                            <group>
+                                <field name="student_id" required="1"/>
+                                <field name="email"/>
+                                <field name="phone"/>
+                                <field name="address"/>
+                            </group>
+                            <group>
+                                <field name="grade_letter"/>
+                                <field name="grade_point"/>
+                                <field name="grade_status"/>
+                                <field name="total_courses"/>
+                                <field name="courses_completed"/>
+                                <field name="courses_in_progress"/>
+                                <field name="courses_failed"/>
+                            </group>
                         </group>
-                        <group>
-                            <field name="enrolled_courses" widget="many2many_tags"/>
-                        </group>
+                        <notebook>
+                            <page string="Enrollments">
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="status"/>
+                                        <field name="grade_letter"/>
+                                        <field name="grade_point"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Grades">
+                                <field name="grade_ids">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="grade_type"/>
+                                        <field name="score"/>
+                                        <field name="grade_letter"/>
+                                        <field name="grade_point"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Attendance">
+                                <field name="attendance_ids">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="date"/>
+                                        <field name="status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
 
-        <!-- ✅ Student Profile List View (Tree) -->
+        <!-- Student Profile List View (Tree) -->
         <record id="view_lms_student_tree" model="ir.ui.view">
             <field name="name">lms.student.tree</field>
-            <field name="model">res.users</field>
+            <field name="model">lms.student</field>
             <field name="arch" type="xml">
                 <tree>
                     <field name="name"/>
                     <field name="student_id"/>
+                    <field name="grade_letter"/>
+                    <field name="grade_point"/>
+                    <field name="grade_status"/>
+                    <field name="total_courses"/>
                 </tree>
             </field>
         </record>
 
-        <!-- ✅ Student Profile Search View -->
+        <!-- Student Profile Search View -->
         <record id="view_lms_student_search" model="ir.ui.view">
             <field name="name">lms.student.search</field>
-            <field name="model">res.users</field>
+            <field name="model">lms.student</field>
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
-                    <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
+                    <field name="student_id"/>
+                    <field name="email"/>
+                    <filter name="filter_by_grade_status" string="Grade Status" context="{'group_by': 'grade_status'}"/>
+                    <filter name="filter_by_total_courses" string="Total Courses" context="{'group_by': 'total_courses'}"/>
                 </search>
             </field>
         </record>
 
-        <!-- 
-            ✅ Student Profile Action
-            - domain=[('is_student','=',True)] so only students are shown
-            - context="{'default_is_student': True}" so any new record defaults to a student
-        -->
+        <!-- Student Profile Action -->
         <record id="action_lms_students" model="ir.actions.act_window">
             <field name="name">Students</field>
-            <field name="res_model">res.users</field>
+            <field name="res_model">lms.student</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_lms_student_search"/>
-            <field name="domain">[('is_student', '=', True)]</field>
-            <field name="context">{'default_is_student': True}</field>  <!-- ✅ Mark new records as students -->
         </record>
 
-        <!-- ✅ Add Menu Item for Students -->
+        <!-- Add Menu Item for Students -->
         <menuitem id="menu_lms_students" name="Students"
                   parent="lms_module.menu_root"
                   action="action_lms_students"

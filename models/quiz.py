@@ -34,7 +34,7 @@ class Quiz(models.Model):
     # Related Records
     question_ids = fields.One2many('lms.quiz.question', 'quiz_id', string='Questions')
     attempt_ids = fields.One2many('lms.quiz.attempt', 'quiz_id', string='Attempts')
-    grade_ids = fields.One2many('lms.grade', 'quiz_id', string='Grades')
+    grade_id = fields.Many2one('lms.grade', string='Grade')
 
     # Statistics
     question_count = fields.Integer(string='Question Count', compute='_compute_statistics', store=True)
@@ -42,7 +42,7 @@ class Quiz(models.Model):
     average_score = fields.Float(string='Average Score', compute='_compute_statistics', store=True)
     pass_rate = fields.Float(string='Pass Rate', compute='_compute_statistics', store=True)
 
-    @api.depends('question_ids', 'attempt_ids', 'grade_ids')
+    @api.depends('question_ids', 'attempt_ids', 'grade_id')
     def _compute_statistics(self):
         for record in self:
             record.question_count = len(record.question_ids)

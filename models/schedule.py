@@ -170,6 +170,12 @@ class Schedule(models.Model):
     enrolled_students_count = fields.Integer(string='Enrolled Students', compute='_compute_enrollment_count', store=True)
     available_slots = fields.Integer(string='Available Slots', compute='_compute_available_slots', store=True)
     is_full = fields.Boolean(string='Is Full', compute='_compute_is_full', store=True)
+    teacher_assignment_count = fields.Integer(string='Teacher Assignments', compute='_compute_teacher_assignment_count', store=True)
+
+    @api.depends('teacher_assignment_id')
+    def _compute_teacher_assignment_count(self):
+        for record in self:
+            record.teacher_assignment_count = 1 if record.teacher_assignment_id else 0
 
     @api.depends('enrollment_ids')
     def _compute_enrollment_count(self):

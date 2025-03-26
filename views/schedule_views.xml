@@ -15,11 +15,6 @@
                             attrs="{'invisible': [('state', 'in', ['completed', 'cancelled'])]}"/>
                     <button name="action_reset_to_draft" string="Reset to Draft" type="object"
                             attrs="{'invisible': [('state', '!=', 'cancelled')]}"/>
-                    <button name="action_check_room_availability" 
-                            string="Check Room Availability" 
-                            type="object" 
-                            class="oe_highlight"
-                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,completed"/>
                 </header>
                 <sheet>
@@ -50,7 +45,6 @@
                                     <field name="date"/>
                                     <field name="student_id"/>
                                     <field name="status"/>
-                                    <field name="marked_by"/>
                                 </tree>
                             </field>
                         </page>
@@ -79,7 +73,7 @@
         <field name="name">lms.schedule.tree</field>
         <field name="model">lms.schedule</field>
         <field name="arch" type="xml">
-            <tree decoration-danger="is_full" decoration-info="state == 'draft'" decoration-success="state == 'active'">
+            <tree decoration-info="state == 'draft'" decoration-success="state == 'active'">
                 <field name="name"/>
                 <field name="academic_year_id"/>
                 <field name="semester_id"/>
@@ -94,13 +88,6 @@
                 <field name="available_slots"/>
                 <field name="state"/>
             </tree>
-            <header>
-                <button name="action_bulk_create" 
-                        string="Bulk Create" 
-                        type="object" 
-                        class="oe_highlight"
-                        attrs="{'invisible': [('state', '!=', 'draft')]}"/>
-            </header>
         </field>
     </record>
 
@@ -159,7 +146,6 @@
                       color="teacher_assignment_id"
                       quick_add="False"
                       event_open_popup="True"
-                      decoration-danger="is_full"
                       decoration-info="state == 'draft'"
                       decoration-success="state == 'active'">
                 <field name="name"/>

@@ -38,8 +38,6 @@
                                         <field name="state"/>
                                     </group>
                                     <group>
-                                        <field name="schedule"/>
-                                        <field name="classroom"/>
                                         <field name="max_students"/>
                                         <field name="active"/>
                                     </group>

@@ -41,6 +41,21 @@ class Student(models.Model):
     payment_ids = fields.One2many('lms.payment', 'student_id', string='Payments')
     message_ids = fields.One2many('mail.message', 'res_id', string='Messages', domain=[('model', '=', 'res.users')])
 
+    # Course Statistics
+    total_courses = fields.Integer(string='Total Courses', compute='_compute_course_statistics', store=True)
+    courses_completed = fields.Integer(string='Courses Completed', compute='_compute_course_statistics', store=True)
+    courses_in_progress = fields.Integer(string='Courses In Progress', compute='_compute_course_statistics', store=True)
+    courses_failed = fields.Integer(string='Courses Failed', compute='_compute_course_statistics', store=True)
+
+    # Grade Statistics
+    grade_letter = fields.Char(string='Grade Letter', compute='_compute_grade_statistics', store=True)
+    grade_point = fields.Float(string='Grade Point', compute='_compute_grade_statistics', store=True)
+    grade_status = fields.Selection([
+        ('pass', 'Pass'),
+        ('fail', 'Fail'),
+        ('incomplete', 'Incomplete')
+    ], string='Grade Status', compute='_compute_grade_statistics', store=True)
+
     @api.depends('grade_ids.grade')
     def _compute_gpa(self):
         for student in self:
@@ -87,6 +102,41 @@ class Student(models.Model):
     def _compute_payment_stats(self):
         for student in self:
             student.pending_payments = sum(student.payment_ids.filtered(lambda p: p.state == 'pending').mapped('amount'))
+
+    @api.depends('enrollment_ids.state', 'enrollment_ids.grade')
+    def _compute_course_statistics(self):
+        for record in self:
+            enrollments = record.enrollment_ids
+            record.total_courses = len(enrollments)
+            record.courses_completed = len(enrollments.filtered(lambda e: e.state == 'completed' and e.grade >= 60))
+            record.courses_in_progress = len(enrollments.filtered(lambda e: e.state == 'active'))
+            record.courses_failed = len(enrollments.filtered(lambda e: e.state == 'completed' and e.grade < 60))
+
+    @api.depends('grade_ids.grade', 'grade_ids.state')
+    def _compute_grade_statistics(self):
+        for record in self:
+            grades = record.grade_ids.filtered(lambda g: g.state == 'completed')
+            if grades:
+                avg_grade = sum(grades.mapped('grade')) / len(grades)
+                record.grade_point = avg_grade
+                record.grade_letter = self._get_grade_letter(avg_grade)
+                record.grade_status = 'pass' if avg_grade >= 60 else 'fail'
+            else:
+                record.grade_point = 0.0
+                record.grade_letter = 'N/A'
+                record.grade_status = 'incomplete'
+
+    def _get_grade_letter(self, grade):
+        if grade >= 90:
+            return 'A'
+        elif grade >= 80:
+            return 'B'
+        elif grade >= 70:
+            return 'C'
+        elif grade >= 60:
+            return 'D'
+        else:
+            return 'F'
 
     def action_view_enrollments(self):
         self.ensure_one()

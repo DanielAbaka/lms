@@ -9,6 +9,11 @@ class DocumentAccess(models.Model):
     document_id = fields.Many2one('lms.document', string='Document', required=True)
     user_id = fields.Many2one('res.users', string='User', required=True)
     access_date = fields.Datetime(string='Access Date', required=True, default=fields.Datetime.now)
+    access_type = fields.Selection([
+        ('view', 'View'),
+        ('download', 'Download'),
+        ('print', 'Print')
+    ], string='Access Type', required=True, default='view')
     ip_address = fields.Char(string='IP Address')
     user_agent = fields.Char(string='User Agent')
     duration = fields.Integer(string='Duration (seconds)')
