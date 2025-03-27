@@ -112,23 +112,23 @@
         <!-- Admin can only see their own students -->
         <record id="rule_lms_admin_students" model="ir.rule">
             <field name="name">Admin Student Access</field>
-            <field name="model_id" ref="model_lms_student"/>
+            <field name="model_id" ref="model_res_users"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
-            <field name="domain_force">[('admin_id', '=', user.id)]</field>
+            <field name="domain_force">[('admin_id', '=', user.id), ('is_student', '=', True)]</field>
         </record>
 
         <!-- Admin can only see their own teachers -->
         <record id="rule_lms_admin_teachers" model="ir.rule">
             <field name="name">Admin Teacher Access</field>
-            <field name="model_id" ref="model_lms_teacher"/>
+            <field name="model_id" ref="model_res_users"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
-            <field name="domain_force">[('admin_id', '=', user.id)]</field>
+            <field name="domain_force">[('admin_id', '=', user.id), ('is_teacher', '=', True)]</field>
         </record>
 
         <!-- Admin can only see their own courses -->
         <record id="rule_lms_admin_courses" model="ir.rule">
             <field name="name">Admin Course Access</field>
-            <field name="model_id" ref="model_slide_channel"/>
+            <field name="model_id" ref="model_lms_course"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
             <field name="domain_force">[('admin_id', '=', user.id)]</field>
         </record>

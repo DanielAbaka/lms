@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_lms_course_admin,lms.course.admin,model_lms_course,lms_module.group_lms_admin,1,1,1,1
+access_lms_course_admin,lms.course.admin,model_lms_course,lms_module.group_lms_manager,1,1,1,1
 access_lms_course_teacher,lms.course.teacher,model_lms_course,lms_module.group_lms_teacher,1,1,1,0
 access_lms_course_student,lms.course.student,model_lms_course,lms_module.group_lms_student,1,0,0,0
 access_lms_student_admin,lms.student.admin,model_lms_student,lms_module.group_lms_admin,1,1,1,1
@@ -8,61 +8,63 @@ access_lms_student_student,lms.student.student,model_lms_student,lms_module.grou
 access_lms_teacher_admin,lms.teacher.admin,model_lms_teacher,lms_module.group_lms_admin,1,1,1,1
 access_lms_teacher_teacher,lms.teacher.teacher,model_lms_teacher,lms_module.group_lms_teacher,1,1,1,0
 access_lms_teacher_student,lms.teacher.student,model_lms_teacher,lms_module.group_lms_student,1,0,0,0
-access_lms_course_material_admin,lms.course.material.admin,model_lms_course_material,lms_module.group_lms_admin,1,1,1,1
+access_lms_course_material_admin,lms.course.material.admin,model_lms_course_material,lms_module.group_lms_manager,1,1,1,1
 access_lms_course_material_teacher,lms.course.material.teacher,model_lms_course_material,lms_module.group_lms_teacher,1,1,1,0
 access_lms_course_material_student,lms.course.material.student,model_lms_course_material,lms_module.group_lms_student,1,0,0,0
-access_lms_attendance_admin,lms.attendance.admin,model_lms_attendance,lms_module.group_lms_admin,1,1,1,1
+access_lms_attendance_admin,lms.attendance.admin,model_lms_attendance,lms_module.group_lms_manager,1,1,1,1
 access_lms_attendance_teacher,lms.attendance.teacher,model_lms_attendance,lms_module.group_lms_teacher,1,1,1,0
 access_lms_attendance_student,lms.attendance.student,model_lms_attendance,lms_module.group_lms_student,1,0,0,0
-access_lms_quiz_admin,lms.quiz.admin,model_lms_quiz,lms_module.group_lms_admin,1,1,1,1
+access_lms_quiz_admin,lms.quiz.admin,model_lms_quiz,lms_module.group_lms_manager,1,1,1,1
 access_lms_quiz_teacher,lms.quiz.teacher,model_lms_quiz,lms_module.group_lms_teacher,1,1,1,0
 access_lms_quiz_student,lms.quiz.student,model_lms_quiz,lms_module.group_lms_student,1,1,0,0
-access_lms_quiz_question_admin,lms.quiz.question.admin,model_lms_quiz_question,lms_module.group_lms_admin,1,1,1,1
+access_lms_quiz_question_admin,lms.quiz.question.admin,model_lms_quiz_question,lms_module.group_lms_manager,1,1,1,1
 access_lms_quiz_question_teacher,lms.quiz.question.teacher,model_lms_quiz_question,lms_module.group_lms_teacher,1,1,1,0
 access_lms_quiz_question_student,lms.quiz.question.student,model_lms_quiz_question,lms_module.group_lms_student,1,0,0,0
-access_lms_quiz_option_admin,lms.quiz.option.admin,model_lms_quiz_option,lms_module.group_lms_admin,1,1,1,1
+access_lms_quiz_option_admin,lms.quiz.option.admin,model_lms_quiz_option,lms_module.group_lms_manager,1,1,1,1
 access_lms_quiz_option_teacher,lms.quiz.option.teacher,model_lms_quiz_option,lms_module.group_lms_teacher,1,1,1,0
 access_lms_quiz_option_student,lms.quiz.option.student,model_lms_quiz_option,lms_module.group_lms_student,1,0,0,0
-access_lms_quiz_attempt_admin,lms.quiz.attempt.admin,model_lms_quiz_attempt,lms_module.group_lms_admin,1,1,1,1
+access_lms_quiz_attempt_admin,lms.quiz.attempt.admin,model_lms_quiz_attempt,lms_module.group_lms_manager,1,1,1,1
 access_lms_quiz_attempt_teacher,lms.quiz.attempt.teacher,model_lms_quiz_attempt,lms_module.group_lms_teacher,1,1,1,0
 access_lms_quiz_attempt_student,lms.quiz.attempt.student,model_lms_quiz_attempt,lms_module.group_lms_student,1,1,1,0
-access_lms_quiz_question_attempt_admin,lms.quiz.question.attempt.admin,model_lms_quiz_question_attempt,lms_module.group_lms_admin,1,1,1,1
+access_lms_quiz_question_attempt_admin,lms.quiz.question.attempt.admin,model_lms_quiz_question_attempt,lms_module.group_lms_manager,1,1,1,1
 access_lms_quiz_question_attempt_teacher,lms.quiz.question.attempt.teacher,model_lms_quiz_question_attempt,lms_module.group_lms_teacher,1,1,1,0
 access_lms_quiz_question_attempt_student,lms.quiz.question.attempt.student,model_lms_quiz_question_attempt,lms_module.group_lms_student,1,1,1,0
-access_lms_schedule_admin,lms.schedule.admin,model_lms_schedule,lms_module.group_lms_admin,1,1,1,1
+access_lms_schedule_admin,lms.schedule.admin,model_lms_schedule,lms_module.group_lms_manager,1,1,1,1
 access_lms_schedule_teacher,lms.schedule.teacher,model_lms_schedule,lms_module.group_lms_teacher,1,1,1,0
 access_lms_schedule_student,lms.schedule.student,model_lms_schedule,lms_module.group_lms_student,1,0,0,0
 
 # Schedule Access Rules
 access_lms_schedule_admin,LMS Schedule Admin,model_lms_schedule,base.group_system,1,1,1,1
-access_lms_schedule_manager,LMS Schedule Manager,model_lms_schedule,group_lms_manager,1,1,1,1
-access_lms_schedule_teacher,LMS Schedule Teacher,model_lms_schedule,group_lms_teacher,1,1,1,0
-access_lms_schedule_student,LMS Schedule Student,model_lms_schedule,group_lms_student,1,0,0,0
+access_lms_schedule_manager,LMS Schedule Manager,model_lms_schedule,lms_module.group_lms_manager,1,1,1,1
+access_lms_schedule_teacher,LMS Schedule Teacher,model_lms_schedule,lms_module.group_lms_teacher,1,1,1,0
+access_lms_schedule_student,LMS Schedule Student,model_lms_schedule,lms_module.group_lms_student,1,0,0,0
 
 # Schedule Template Access Rules
 access_lms_schedule_template_admin,LMS Schedule Template Admin,model_lms_schedule_template,base.group_system,1,1,1,1
-access_lms_schedule_template_manager,LMS Schedule Template Manager,model_lms_schedule_template,group_lms_manager,1,1,1,1
-access_lms_schedule_template_teacher,LMS Schedule Template Teacher,model_lms_schedule_template,group_lms_teacher,1,1,1,0
-access_lms_schedule_template_student,LMS Schedule Template Student,model_lms_schedule_template,group_lms_student,1,0,0,0
+access_lms_schedule_template_manager,LMS Schedule Template Manager,model_lms_schedule_template,lms_module.group_lms_manager,1,1,1,1
+access_lms_schedule_template_teacher,LMS Schedule Template Teacher,model_lms_schedule_template,lms_module.group_lms_teacher,1,1,1,0
+access_lms_schedule_template_student,LMS Schedule Template Student,model_lms_schedule_template,lms_module.group_lms_student,1,0,0,0
 
 # Attendance Access Rules
 access_lms_attendance_admin,LMS Attendance Admin,model_lms_attendance,base.group_system,1,1,1,1
-access_lms_attendance_manager,LMS Attendance Manager,model_lms_attendance,group_lms_manager,1,1,1,1
-access_lms_attendance_teacher,LMS Attendance Teacher,model_lms_attendance,group_lms_teacher,1,1,1,1
-access_lms_attendance_student,LMS Attendance Student,model_lms_attendance,group_lms_student,1,1,0,0
+access_lms_attendance_manager,LMS Attendance Manager,model_lms_attendance,lms_module.group_lms_manager,1,1,1,1
+access_lms_attendance_teacher,LMS Attendance Teacher,model_lms_attendance,lms_module.group_lms_teacher,1,1,1,1
+access_lms_attendance_student,LMS Attendance Student,model_lms_attendance,lms_module.group_lms_student,1,1,0,0
 
 # Course Material Access Rules
-access_lms_course_material_admin,LMS Course Material Admin,model_lms_course_material,lms_module.group_lms_admin,1,1,1,1
-access_lms_course_material_manager,LMS Course Material Manager,model_lms_course_material,group_lms_manager,1,1,1,1
+access_lms_course_material_admin,LMS Course Material Admin,model_lms_course_material,base.group_system,1,1,1,1
+access_lms_course_material_manager,LMS Course Material Manager,model_lms_course_material,lms_module.group_lms_manager,1,1,1,1
 access_lms_course_material_teacher,LMS Course Material Teacher,model_lms_course_material,lms_module.group_lms_teacher,1,1,1,0
 access_lms_course_material_student,LMS Course Material Student,model_lms_course_material,lms_module.group_lms_student,1,0,0,0
 
 # Payment Plan Access Rules
 access_lms_payment_plan_admin,LMS Payment Plan Admin,model_lms_payment_plan,base.group_system,1,1,1,1
-access_lms_payment_plan_manager,LMS Payment Plan Manager,model_lms_payment_plan,group_lms_manager,1,1,1,1
-access_lms_payment_plan_teacher,LMS Payment Plan Teacher,model_lms_payment_plan,group_lms_teacher,1,0,0,0
-access_lms_payment_plan_student,LMS Payment Plan Student,model_lms_payment_plan,group_lms_student,1,0,0,0
+access_lms_payment_plan_manager,LMS Payment Plan Manager,model_lms_payment_plan,lms_module.group_lms_manager,1,1,1,1
+access_lms_payment_plan_teacher,LMS Payment Plan Teacher,model_lms_payment_plan,lms_module.group_lms_teacher,1,0,0,0
+access_lms_payment_plan_student,LMS Payment Plan Student,model_lms_payment_plan,lms_module.group_lms_student,1,0,0,0
 
-access_lms_admin_admin,LMS Admin Admin,model_res_users,base.group_system,1,1,1,1
-access_lms_admin_manager,LMS Admin Manager,model_res_users,group_lms_manager,1,1,1,0
-access_lms_admin_user,LMS Admin User,model_res_users,group_lms_user,1,0,0,0
+# Admin access to users - already handled by base module
+# Uncomment if specific additional access is needed
+#access_lms_admin_admin,LMS Admin Admin,model_res_users,base.group_system,1,1,1,1
+#access_lms_admin_manager,LMS Admin Manager,model_res_users,lms_module.group_lms_manager,1,1,1,0
+#access_lms_admin_user,LMS Admin User,model_res_users,lms_module.group_lms_user,1,0,0,0
