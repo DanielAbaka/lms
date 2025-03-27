@@ -105,7 +105,7 @@ class Semester(models.Model):
         return {
             'name': 'Courses',
             'type': 'ir.actions.act_window',
-            'res_model': 'lms.course',
+            'res_model': 'slide.channel',
             'view_mode': 'tree,form',
             'domain': [('semester_id', '=', self.id)],
             'context': {'default_semester_id': self.id},

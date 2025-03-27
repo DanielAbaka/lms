@@ -42,7 +42,6 @@
         'views/quiz_question_attempt_views.xml',
         'views/course_views.xml',
         'views/messaging_views.xml',
-        'views/enhanced_views.xml',
     ],
     'demo': [
         'demo/lms_demo.xml',

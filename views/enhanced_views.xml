@@ -124,7 +124,7 @@
             <field name="name">lms.course.tree.enhanced</field>
             <field name="model">slide.channel</field>
             <field name="arch" type="xml">
-                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'" default_order="academic_year_id desc">
+                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'">
                     <field name="name"/>
                     <field name="code"/>
                     <field name="academic_year_id"/>

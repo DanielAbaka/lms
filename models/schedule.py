@@ -11,7 +11,7 @@ class ScheduleTemplate(models.Model):
     admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', required=True)
-    course_id = fields.Many2one('lms.course', string='Course', required=True)
+    course_id = fields.Many2one('slide.channel', string='Course', required=True)
     day_of_week = fields.Selection([
         ('monday', 'Monday'),
         ('tuesday', 'Tuesday'),
@@ -129,12 +129,12 @@ class Schedule(models.Model):
     _name = 'lms.schedule'
     _description = 'Schedule'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'academic_year_id desc, semester_id desc, day_of_week, start_time'
+    _order = 'date desc, start_time'
 
     name = fields.Char(string='Name', required=True, tracking=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True, tracking=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', required=True, tracking=True)
-    course_id = fields.Many2one('lms.course', string='Course', required=True, tracking=True)
+    course_id = fields.Many2one('slide.channel', string='Course', required=True, tracking=True)
     teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True, tracking=True)
     
     # Schedule Details
