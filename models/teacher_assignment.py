@@ -36,6 +36,7 @@ class TeacherAssignment(models.Model):
     grade_ids = fields.One2many('lms.grade', 'teacher_assignment_id', string='Grades')
     quiz_ids = fields.One2many('lms.quiz', 'teacher_assignment_id', string='Quizzes')
     document_ids = fields.One2many('lms.document', 'teacher_assignment_id', string='Documents')
+    schedule_ids = fields.One2many('lms.schedule', 'teacher_assignment_id', string='Schedules')
 
     # Statistics
     student_count = fields.Integer(string='Student Count', compute='_compute_statistics', store=True)
