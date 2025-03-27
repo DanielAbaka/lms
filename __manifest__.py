@@ -18,7 +18,7 @@
     """,
     'author': 'Your Company',
     'website': 'https://www.yourcompany.com',
-    'depends': ['base', 'mail', 'portal', 'web'],
+    'depends': ['base', 'mail', 'portal', 'web', 'website_slides'],
     'data': [
         # Security
         'security/lms_security.xml',
