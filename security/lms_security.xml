@@ -142,55 +142,74 @@
 
         <!-- Student can only see quizzes for courses they are enrolled in -->
         <record id="rule_lms_quiz_student" model="ir.rule">
-            <field name="name">Student Quiz Access</field>
+            <field name="name">Quiz: Students can access quizzes for their enrolled courses</field>
             <field name="model_id" ref="model_lms_quiz"/>
+            <field name="domain_force">[('teacher_assignment_id.enrollment_ids.student_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
-            <!-- Checking the chain: quiz -> teacher_assignment -> course -> enrollment -> student -->
-            <field name="domain_force">[('teacher_assignment_id.course_id.enrollment_ids.student_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
         </record>
 
         <!-- Teacher can manage quizzes for their assigned courses -->
         <record id="rule_lms_quiz_teacher" model="ir.rule">
-            <field name="name">Teacher Quiz Access</field>
+            <field name="name">Quiz: Teachers can manage their own quizzes</field>
             <field name="model_id" ref="model_lms_quiz"/>
-            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
         </record>
 
         <!-- Student can only see questions for courses they are enrolled in -->
         <record id="rule_lms_quiz_question_student" model="ir.rule">
-            <field name="name">Student Quiz Question Access</field>
+            <field name="name">Quiz Questions: Students can access questions for their enrolled courses</field>
             <field name="model_id" ref="model_lms_quiz_question"/>
+            <field name="domain_force">[('quiz_id.teacher_assignment_id.enrollment_ids.student_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
-            <field name="domain_force">
-                [
-                  ('quiz_id.teacher_assignment_id.course_id.enrollment_ids.student_id', '=', user.id)
-                ]
-            </field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
         </record>
 
         <!-- Teacher can manage questions for their assigned courses -->
         <record id="rule_lms_quiz_question_teacher" model="ir.rule">
-            <field name="name">Teacher Quiz Question Access</field>
+            <field name="name">Quiz Questions: Teachers can manage their own quiz questions</field>
             <field name="model_id" ref="model_lms_quiz_question"/>
-            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
         </record>
 
         <!-- Student can only see their own attempts -->
         <record id="rule_lms_quiz_attempt_student" model="ir.rule">
-            <field name="name">Student Quiz Attempt Access</field>
+            <field name="name">Quiz Attempts: Students can manage their own quiz attempts</field>
             <field name="model_id" ref="model_lms_quiz_attempt"/>
+            <field name="domain_force">['|', ('student_id', '=', user.id), ('quiz_id.teacher_assignment_id.enrollment_ids.student_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
-            <field name="domain_force">[('student_id', '=', user.id)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
         </record>
 
         <!-- Teacher can see attempts for their assigned courses -->
         <record id="rule_lms_quiz_attempt_teacher" model="ir.rule">
-            <field name="name">Teacher Quiz Attempt Access</field>
+            <field name="name">Quiz Attempts: Teachers can manage quiz attempts for their courses</field>
             <field name="model_id" ref="model_lms_quiz_attempt"/>
-            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
         </record>
 
         <!-- Student can only access documents for courses they are enrolled in -->
@@ -334,7 +353,7 @@
         <record id="rule_quiz_teacher" model="ir.rule">
             <field name="name">Teachers can only access quizzes for their courses</field>
             <field name="model_id" ref="model_lms_quiz"/>
-            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
+            <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
