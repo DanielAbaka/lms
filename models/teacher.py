@@ -3,7 +3,6 @@ from odoo.exceptions import ValidationError
 from datetime import datetime, timedelta
 
 class Teacher(models.Model):
-    _name = 'lms.teacher'
     _inherit = 'res.users'
     _description = 'Teacher'
 
