@@ -37,16 +37,26 @@ class TeacherAssignment(models.Model):
     quiz_ids = fields.One2many('lms.quiz', 'teacher_assignment_id', string='Quizzes')
     document_ids = fields.One2many('lms.document', 'teacher_assignment_id', string='Documents')
     schedule_ids = fields.One2many('lms.schedule', 'teacher_assignment_id', string='Schedules')
+    student_ids = fields.Many2many('lms.student', compute='_compute_student_ids', string='Students', store=True)
 
     # Statistics
     student_count = fields.Integer(string='Student Count', compute='_compute_statistics', store=True)
+    quiz_count = fields.Integer(string='Quiz Count', compute='_compute_statistics', store=True)
+    document_count = fields.Integer(string='Document Count', compute='_compute_statistics', store=True)
     attendance_rate = fields.Float(string='Attendance Rate', compute='_compute_statistics', store=True)
     average_grade = fields.Float(string='Average Grade', compute='_compute_statistics', store=True)
 
-    @api.depends('enrollment_ids', 'attendance_ids', 'grade_ids')
+    @api.depends('enrollment_ids.student_id')
+    def _compute_student_ids(self):
+        for record in self:
+            record.student_ids = record.enrollment_ids.mapped('student_id')
+
+    @api.depends('enrollment_ids', 'attendance_ids', 'grade_ids', 'quiz_ids', 'document_ids')
     def _compute_statistics(self):
         for record in self:
             record.student_count = len(record.enrollment_ids)
+            record.quiz_count = len(record.quiz_ids)
+            record.document_count = len(record.document_ids)
             
             # Calculate attendance rate
             total_sessions = len(record.attendance_ids)
@@ -87,6 +97,38 @@ class TeacherAssignment(models.Model):
             ]
             if self.search_count(domain) > 0:
                 raise ValidationError("This teacher is already assigned to this course for the selected academic year and semester!")
+
+    def action_view_quizzes(self):
+        self.ensure_one()
+        return {
+            'name': 'Quizzes',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.quiz',
+            'view_mode': 'tree,form',
+            'domain': [('teacher_assignment_id', '=', self.id)],
+            'context': {'default_teacher_assignment_id': self.id},
+        }
+
+    def action_view_documents(self):
+        self.ensure_one()
+        return {
+            'name': 'Documents',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.document',
+            'view_mode': 'tree,form',
+            'domain': [('teacher_assignment_id', '=', self.id)],
+            'context': {'default_teacher_assignment_id': self.id},
+        }
+
+    def action_view_students(self):
+        self.ensure_one()
+        return {
+            'name': 'Students',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.student',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', self.student_ids.ids)],
+        }
 
     def action_assign(self):
         self.ensure_one()
