@@ -44,7 +44,7 @@ class ScheduleBulkWizard(models.TransientModel):
     start_date = fields.Date(string='Start Date', required=True)
     end_date = fields.Date(string='End Date', required=True)
     classroom = fields.Char(string='Classroom', required=True)
-    teacher_assignment_ids = fields.One2many('lms.teacher.assignment', 'bulk_wizard_id', string='Teacher Assignments')
+    teacher_id = fields.Many2one('res.users', string='Teacher', domain=[('is_teacher', '=', True)])
 
     def action_create_schedules(self):
         self.ensure_one()
