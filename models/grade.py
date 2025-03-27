@@ -7,18 +7,54 @@ class LMSGrade(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'date desc, student_id'
 
-    name = fields.Char(string='Grade Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
-    student_id = fields.Many2one('res.users', string='Student', required=True,
-                                 domain=[('is_student','=',True)])
-    enrollment_id = fields.Many2one('lms.enrollment', string='Enrollment', required=True)
-    course_id = fields.Many2one('slide.channel', string='Course', required=True)
-    quiz_id = fields.Many2one('lms.quiz', string='Quiz')
-    teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment')
-    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', 
-                                       related='enrollment_id.academic_year_id', store=True)
-    semester_id = fields.Many2one('lms.semester', string='Semester', 
-                                  related='enrollment_id.semester_id', store=True)
-    date = fields.Date(string='Date', required=True, default=fields.Date.context_today)
+    name = fields.Char(
+        string='Grade Reference',
+        required=True,
+        copy=False,
+        readonly=True,
+        default=lambda self: 'New'
+    )
+    student_id = fields.Many2one(
+        'res.users',
+        string='Student',
+        required=True,
+        domain=[('is_student', '=', True)]
+    )
+    enrollment_id = fields.Many2one(
+        'lms.enrollment',
+        string='Enrollment',
+        required=True
+    )
+    course_id = fields.Many2one(
+        'slide.channel',
+        string='Course',
+        required=True
+    )
+    quiz_id = fields.Many2one(
+        'lms.quiz',
+        string='Quiz'
+    )
+    teacher_assignment_id = fields.Many2one(
+        'lms.teacher.assignment',
+        string='Teacher Assignment'
+    )
+    academic_year_id = fields.Many2one(
+        'lms.academic.year',
+        string='Academic Year',
+        related='enrollment_id.academic_year_id',
+        store=True
+    )
+    semester_id = fields.Many2one(
+        'lms.semester',
+        string='Semester',
+        related='enrollment_id.semester_id',
+        store=True
+    )
+    date = fields.Date(
+        string='Date',
+        required=True,
+        default=fields.Date.context_today
+    )
     grade = fields.Float(string='Final Grade', required=True)
     credits = fields.Integer(string='Credits', required=True)
     grade_type = fields.Selection([
@@ -26,12 +62,24 @@ class LMSGrade(models.Model):
         ('quiz', 'Quiz'),
         ('exam', 'Examination'),
         ('project', 'Project'),
-        ('participation', 'Participation')
+        ('participation', 'Participation'),
     ], string='Grade Type', required=True)
     remarks = fields.Text(string='Teacher Comments')
     is_final = fields.Boolean(string='Is Final Grade', default=False)
-    graded_by = fields.Many2one('res.users', string='Graded By', readonly=True, default=lambda self: self.env.user)
+    graded_by = fields.Many2one(
+        'res.users',
+        string='Graded By',
+        readonly=True,
+        default=lambda self: self.env.user
+    )
     grading_date = fields.Datetime(string='Grading Date', readonly=True)
+
+    # NEW: Add a "state" field so that references to grade_ids.state won't fail
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('submitted', 'Submitted'),
+        ('confirmed', 'Confirmed'),  # or whatever states you need
+    ], string='Status', default='draft', tracking=True)
 
     @api.model
     def create(self, vals):
@@ -40,11 +88,13 @@ class LMSGrade(models.Model):
         return super(LMSGrade, self).create(vals)
 
     def action_submit_grade(self):
+        """Example of setting the grading_date and maybe updating state."""
         self.ensure_one()
         if not self.grading_date:
             self.write({
                 'grading_date': fields.Datetime.now(),
-                'graded_by': self.env.user.id
+                'graded_by': self.env.user.id,
+                'state': 'submitted',  # if you want to track a submission
             })
 
     def action_reset_grade(self):
@@ -52,7 +102,8 @@ class LMSGrade(models.Model):
         if self.grading_date:
             self.write({
                 'grading_date': False,
-                'graded_by': False
+                'graded_by': False,
+                'state': 'draft',  # reset back to draft if you like
             })
 
     @api.constrains('grade')
