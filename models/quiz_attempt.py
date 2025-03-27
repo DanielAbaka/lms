@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class QuizAttempt(models.Model):
     _name = 'lms.quiz.attempt'
     _description = 'Quiz Attempt'
@@ -10,7 +9,8 @@ class QuizAttempt(models.Model):
 
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
     quiz_id = fields.Many2one('lms.quiz', string='Quiz', required=True, ondelete='cascade')
-    student_id = fields.Many2one('lms.student', string='Student', required=True)
+    student_id = fields.Many2one('res.users', string='Student', required=True,
+                                 domain=[('is_student','=',True)])
     enrollment_id = fields.Many2one('lms.enrollment', string='Enrollment', required=True)
     course_id = fields.Many2one('slide.channel', string='Course', related='enrollment_id.course_id', store=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='enrollment_id.academic_year_id', store=True)
@@ -29,7 +29,6 @@ class QuizAttempt(models.Model):
     ], string='Status', default='in_progress', tracking=True)
     active = fields.Boolean(default=True, tracking=True)
 
-    # Question Attempts
     question_attempt_ids = fields.One2many('lms.quiz.question.attempt', 'attempt_id', string='Question Attempts')
     grade_id = fields.Many2one('lms.grade', string='Grade')
 
@@ -37,8 +36,8 @@ class QuizAttempt(models.Model):
     def _compute_duration(self):
         for record in self:
             if record.start_date and record.end_date:
-                duration = (record.end_date - record.start_date).total_seconds() / 60
-                record.duration = round(duration)
+                duration_minutes = (record.end_date - record.start_date).total_seconds() / 60
+                record.duration = round(duration_minutes)
             else:
                 record.duration = 0
 
@@ -47,10 +46,7 @@ class QuizAttempt(models.Model):
         for record in self:
             record.score = sum(record.question_attempt_ids.mapped('score'))
             record.max_score = sum(record.question_attempt_ids.mapped('max_score'))
-            if record.max_score > 0:
-                record.percentage = (record.score / record.max_score) * 100
-            else:
-                record.percentage = 0.0
+            record.percentage = (record.score / record.max_score) * 100 if record.max_score else 0.0
 
     @api.model
     def create(self, vals):
@@ -83,7 +79,6 @@ class QuizAttempt(models.Model):
                 'state': 'completed',
                 'end_date': fields.Datetime.now()
             })
-            # Create grade record
             self._create_grade()
 
     def action_timeout(self):
@@ -93,7 +88,6 @@ class QuizAttempt(models.Model):
                 'state': 'timeout',
                 'end_date': fields.Datetime.now()
             })
-            # Create grade record
             self._create_grade()
 
     def action_cancel(self):
@@ -115,4 +109,4 @@ class QuizAttempt(models.Model):
                 'grading_date': fields.Datetime.now(),
                 'graded_by': self.env.user.id
             }
-            self.grade_id = self.env['lms.grade'].create(grade_vals) 
+            self.grade_id = self.env['lms.grade'].create(grade_vals)

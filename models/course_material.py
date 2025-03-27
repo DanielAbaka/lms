@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class CourseMaterial(models.Model):
     _name = 'lms.course.material'
     _description = 'Course Material'
@@ -29,9 +28,24 @@ class CourseMaterial(models.Model):
     is_published = fields.Boolean(string='Published', default=False, tracking=True)
     published_date = fields.Datetime(string='Published Date', readonly=True)
     published_by = fields.Many2one('res.users', string='Published By', readonly=True)
-    student_ids = fields.Many2many('lms.student', 'student_material_rel', 'material_id', 'student_id', string='Students')
-    teacher_ids = fields.Many2many('res.users', 'teacher_material_rel', 'material_id', 'teacher_id', 
-                                 string='Teachers', domain=[('is_teacher', '=', True)])
+
+    # We rename the many2many that points to "students" so it references res.users with is_student
+    student_ids = fields.Many2many(
+        'res.users',
+        'lms_material_student_rel',  # custom table name to avoid collisions
+        'material_id',               # this field name in the rel table
+        'student_user_id',           # the other side field in the rel table
+        string='Students',
+        domain=[('is_student', '=', True)]
+    )
+    teacher_ids = fields.Many2many(
+        'res.users',
+        'teacher_material_rel',
+        'material_id',
+        'teacher_id',
+        string='Teachers',
+        domain=[('is_teacher', '=', True)]
+    )
     view_count = fields.Integer(string='View Count', compute='_compute_view_count', store=True)
     last_viewed = fields.Datetime(string='Last Viewed', compute='_compute_view_count', store=True)
     category = fields.Selection([
@@ -44,7 +58,7 @@ class CourseMaterial(models.Model):
     tags = fields.Many2many('lms.material.tag', string='Tags')
     is_required = fields.Boolean(string='Required', default=False, tracking=True)
     prerequisites = fields.Many2many('lms.course.material', 'material_prerequisite_rel', 
-                                   'material_id', 'prerequisite_id', string='Prerequisites')
+                                     'material_id', 'prerequisite_id', string='Prerequisites')
 
     @api.depends('student_ids')
     def _compute_view_count(self):
@@ -107,4 +121,4 @@ class MaterialTag(models.Model):
 
     name = fields.Char(string='Name', required=True)
     color = fields.Integer(string='Color Index')
-    material_ids = fields.Many2many('lms.course.material', string='Materials') 
+    material_ids = fields.Many2many('lms.course.material', string='Materials')

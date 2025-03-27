@@ -1,8 +1,8 @@
 from odoo import models, fields, api, tools
 from odoo.exceptions import ValidationError
 
-
 class LMSCourse(models.Model):
+    _name = 'lms.course'
     _inherit = 'slide.channel'  # Inherits from the eLearning module
     _description = 'LMS Course'
 
@@ -10,7 +10,7 @@ class LMSCourse(models.Model):
     semester_id = fields.Many2one('lms.semester', string="Semester")
     prerequisite_course_ids = fields.Many2many(
         'slide.channel', 
-        'lms_course_prerequisite_rel',  # Explicit table name
+        'lms_course_prerequisite_rel',
         'course_id', 
         'prerequisite_id', 
         string="Prerequisites"
@@ -18,7 +18,6 @@ class LMSCourse(models.Model):
     credits = fields.Integer(string="Credits", default=3)
     teacher_assignment_ids = fields.One2many('lms.teacher.assignment', 'course_id', string="Assigned Teachers")
 
-    # New fields for enhanced views
     code = fields.Char(string="Course Code", required=True, copy=False)
     admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     max_students = fields.Integer(string="Maximum Students", default=30)
@@ -31,6 +30,7 @@ class LMSCourse(models.Model):
     enrollment_ids = fields.One2many('lms.enrollment', 'course_id', string='Enrollments')
     enrollment_count = fields.Integer(compute='_compute_enrollment_count', string='Enrollment Count')
     assignment_count = fields.Integer(compute='_compute_assignment_count', string='Assignment Count')
+    cost_per_credit = fields.Float(string='Cost per Credit', default=100.0)  # Example additional field for cost
 
     @api.depends('enrollment_ids')
     def _compute_enrollment_count(self):

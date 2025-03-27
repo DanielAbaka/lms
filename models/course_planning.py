@@ -6,7 +6,7 @@ class LMSCoursePlanning(models.Model):
     _description = 'Student Course Planning'
 
     name = fields.Char(string='Course Planning Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
-    student_id = fields.Many2one('lms.student', string='Student', required=True)
+    student_id = fields.Many2one('res.users', string='Student', required=True, domain=[('is_student','=',True)])
     semester_id = fields.Many2one('lms.semester', string="Semester", required=True)
     course_ids = fields.Many2many('slide.channel', string="Planned Courses")
     total_credits = fields.Integer(string="Total Credits", compute="_compute_total_credits", store=True)
@@ -29,12 +29,18 @@ class LMSCoursePlanning(models.Model):
         for record in self:
             record.is_enrolled = bool(record.enrollment_id)
 
+    @api.model
+    def create(self, vals):
+        if vals.get('name', 'New') == 'New':
+            vals['name'] = self.env['ir.sequence'].next_by_code('lms.course.planning') or 'New'
+        return super(LMSCoursePlanning, self).create(vals)
+
     def enroll_student(self):
         enrollment = self.env['lms.enrollment'].create({
             'student_id': self.student_id.id,
             'course_id': [(6, 0, self.course_ids.ids)],
             'enrollment_date': fields.Date.today(),
             'payment_status': 'pending',
-            'total_cost': self.total_cost,
+            'total_fee': self.total_cost,
         })
         self.enrollment_id = enrollment.id

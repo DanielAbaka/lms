@@ -1,6 +1,5 @@
 from odoo import models, fields, api
 
-
 class DocumentAccess(models.Model):
     _name = 'lms.document.access'
     _description = 'Document Access Log'
@@ -18,4 +17,4 @@ class DocumentAccess(models.Model):
     user_agent = fields.Char(string='User Agent')
     duration = fields.Integer(string='Duration (seconds)')
     is_downloaded = fields.Boolean(string='Downloaded', default=False)
-    notes = fields.Text(string='Notes') 
+    notes = fields.Text(string='Notes')

@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class TeacherAssignment(models.Model):
     _name = 'lms.teacher.assignment'
     _description = 'Teacher Course Assignment'
@@ -9,7 +8,8 @@ class TeacherAssignment(models.Model):
     _order = 'academic_year_id desc, semester_id desc, teacher_id'
 
     name = fields.Char(string='Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
-    teacher_id = fields.Many2one('res.users', string='Teacher', required=True, domain=[('is_teacher', '=', True)])
+    teacher_id = fields.Many2one('res.users', string='Teacher', required=True,
+                                 domain=[('is_teacher', '=', True)])
     admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     course_id = fields.Many2one('slide.channel', string='Course', required=True)
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True)
@@ -28,7 +28,6 @@ class TeacherAssignment(models.Model):
     ], string='Status', default='draft', tracking=True)
     active = fields.Boolean(default=True, tracking=True)
 
-    # Related Records
     schedule_template_id = fields.Many2one('lms.schedule.template', string='Schedule Template')
     enrollment_ids = fields.One2many('lms.enrollment', 'teacher_assignment_id', string='Enrollments')
     attendance_ids = fields.One2many('lms.attendance', 'teacher_assignment_id', string='Attendance')
@@ -36,9 +35,15 @@ class TeacherAssignment(models.Model):
     quiz_ids = fields.One2many('lms.quiz', 'teacher_assignment_id', string='Quizzes')
     document_ids = fields.One2many('lms.document', 'teacher_assignment_id', string='Documents')
     schedule_ids = fields.One2many('lms.schedule', 'teacher_assignment_id', string='Schedules')
-    student_ids = fields.Many2many('lms.student', compute='_compute_student_ids', string='Students', store=True)
 
-    # Statistics
+    student_ids = fields.Many2many(
+        'res.users',
+        compute='_compute_student_ids',
+        string='Students',
+        store=True,
+        domain=[('is_student','=',True)]
+    )
+
     student_count = fields.Integer(string='Student Count', compute='_compute_statistics', store=True)
     quiz_count = fields.Integer(string='Quiz Count', compute='_compute_statistics', store=True)
     document_count = fields.Integer(string='Document Count', compute='_compute_statistics', store=True)
@@ -56,8 +61,6 @@ class TeacherAssignment(models.Model):
             record.student_count = len(record.enrollment_ids)
             record.quiz_count = len(record.quiz_ids)
             record.document_count = len(record.document_ids)
-            
-            # Calculate attendance rate
             total_sessions = len(record.attendance_ids)
             if total_sessions > 0:
                 present_sessions = len(record.attendance_ids.filtered(lambda x: x.status == 'present'))
@@ -65,12 +68,8 @@ class TeacherAssignment(models.Model):
             else:
                 record.attendance_rate = 0.0
 
-            # Calculate average grade
             grades = record.grade_ids.mapped('grade')
-            if grades:
-                record.average_grade = sum(grades) / len(grades)
-            else:
-                record.average_grade = 0.0
+            record.average_grade = (sum(grades) / len(grades)) if grades else 0.0
 
     @api.model
     def create(self, vals):
@@ -95,7 +94,7 @@ class TeacherAssignment(models.Model):
                 ('id', '!=', record.id)
             ]
             if self.search_count(domain) > 0:
-                raise ValidationError("This teacher is already assigned to this course for the selected academic year and semester!")
+                raise ValidationError("This teacher is already assigned to this course for that academic year and semester!")
 
     def action_view_quizzes(self):
         self.ensure_one()
@@ -124,9 +123,9 @@ class TeacherAssignment(models.Model):
         return {
             'name': 'Students',
             'type': 'ir.actions.act_window',
-            'res_model': 'lms.student',
+            'res_model': 'res.users',
             'view_mode': 'tree,form',
-            'domain': [('id', 'in', self.student_ids.ids)],
+            'domain': [('id', 'in', self.student_ids.ids), ('is_student','=',True)],
         }
 
     def action_assign(self):

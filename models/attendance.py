@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class Attendance(models.Model):
     _name = 'lms.attendance'
     _description = 'Student Attendance'
@@ -9,13 +8,16 @@ class Attendance(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='Attendance Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
-    student_id = fields.Many2one('lms.student', string='Student', required=True)
+    student_id = fields.Many2one('res.users', string='Student', required=True,
+                                 domain=[('is_student', '=', True)])
     enrollment_id = fields.Many2one('lms.enrollment', string='Enrollment', required=True)
     schedule_id = fields.Many2one('lms.schedule', string='Schedule', required=True)
     course_id = fields.Many2one('slide.channel', string='Course', required=True)
     teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True)
-    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='enrollment_id.academic_year_id', store=True)
-    semester_id = fields.Many2one('lms.semester', string='Semester', related='enrollment_id.semester_id', store=True)
+    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year',
+                                       related='enrollment_id.academic_year_id', store=True)
+    semester_id = fields.Many2one('lms.semester', string='Semester',
+                                  related='enrollment_id.semester_id', store=True)
     date = fields.Date(string='Date', required=True, default=fields.Date.context_today)
     status = fields.Selection([
         ('present', 'Present'),
@@ -93,4 +95,4 @@ class Attendance(models.Model):
     def _check_enrollment_student(self):
         for record in self:
             if record.enrollment_id.student_id != record.student_id:
-                raise ValidationError("Student must match the enrollment record!") 
+                raise ValidationError("Student must match the enrollment record!")

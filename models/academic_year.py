@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class AcademicYear(models.Model):
     _name = 'lms.academic.year'
     _description = 'Academic Year'

@@ -2,7 +2,6 @@ from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 from datetime import datetime, timedelta
 
-
 class ScheduleTemplate(models.Model):
     _name = 'lms.schedule.template'
     _description = 'Schedule Template'
@@ -63,6 +62,7 @@ class ScheduleBulkWizard(models.TransientModel):
                     'classroom': self.classroom,
                     'capacity': self.template_id.capacity,
                     'date': current_date,
+                    'teacher_assignment_id': False,
                 }
                 schedules.append(schedule_vals)
             current_date += timedelta(days=1)
@@ -91,8 +91,6 @@ class RoomAvailabilityWizard(models.TransientModel):
     def _onchange_room_availability(self):
         if not all([self.classroom, self.date, self.start_time, self.end_time]):
             return
-
-        # Get conflicting schedules
         conflicting_schedules = self.env['lms.schedule'].search([
             ('classroom', '=', self.classroom),
             ('date', '=', self.date),
@@ -104,11 +102,9 @@ class RoomAvailabilityWizard(models.TransientModel):
             ('start_time', '<', self.end_time),
             ('end_time', '>=', self.end_time),
         ])
-
-        # Create availability records
         self.available_rooms = [(0, 0, {
             'name': self.classroom,
-            'capacity': 30,  # Default capacity, can be made configurable
+            'capacity': 30,
             'is_available': not bool(conflicting_schedules),
             'conflicting_schedules': ', '.join(conflicting_schedules.mapped('name')),
         })]
@@ -136,8 +132,7 @@ class Schedule(models.Model):
     semester_id = fields.Many2one('lms.semester', string='Semester', required=True, tracking=True)
     course_id = fields.Many2one('slide.channel', string='Course', required=True, tracking=True)
     teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True, tracking=True)
-    
-    # Schedule Details
+
     day_of_week = fields.Selection([
         ('monday', 'Monday'),
         ('tuesday', 'Tuesday'),
@@ -152,8 +147,7 @@ class Schedule(models.Model):
     classroom = fields.Char(string='Classroom', required=True, tracking=True)
     capacity = fields.Integer(string='Capacity', required=True, tracking=True)
     date = fields.Date(string='Date', required=True, tracking=True)
-    
-    # Status
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('active', 'Active'),
@@ -162,11 +156,9 @@ class Schedule(models.Model):
     ], string='Status', default='draft', tracking=True)
     active = fields.Boolean(default=True, tracking=True)
 
-    # Related Records
     attendance_ids = fields.One2many('lms.attendance', 'schedule_id', string='Attendance Records')
     enrollment_ids = fields.One2many('lms.enrollment', 'schedule_id', string='Enrollments')
 
-    # Computed Fields
     enrolled_students_count = fields.Integer(string='Enrolled Students', compute='_compute_enrollment_count', store=True)
     available_slots = fields.Integer(string='Available Slots', compute='_compute_available_slots', store=True)
     is_full = fields.Boolean(string='Is Full', compute='_compute_is_full', store=True)
@@ -280,4 +272,4 @@ class Schedule(models.Model):
                 'default_start_time': self.start_time,
                 'default_end_time': self.end_time,
             }
-        } 
+        }

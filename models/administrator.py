@@ -1,12 +1,13 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class Administrator(models.Model):
+    _name = 'lms.administrator'
     _inherit = 'res.users'
     _description = 'Administrator'
 
-    # Existing fields
+    # We do NOT redefine groups_id here. We simply add our fields.
+
     is_admin = fields.Boolean(string='Is Administrator', default=True)
     admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     administrator_code = fields.Char(string='Administrator Code', required=True, copy=False)
@@ -19,10 +20,14 @@ class Administrator(models.Model):
     # Computed fields for related records
     academic_year_ids = fields.Many2many('lms.academic.year', compute='_compute_related_records', string='Academic Years')
     semester_ids = fields.Many2many('lms.semester', compute='_compute_related_records', string='Semesters')
-    student_ids = fields.Many2many('lms.student', compute='_compute_related_records', string='Students')
-    teacher_ids = fields.Many2many('lms.teacher', compute='_compute_related_records', string='Teachers')
-    revenue_ids = fields.Many2many('lms.payment', compute='_compute_related_records', string='Revenue', domain=[('state', '=', 'paid')])
-    pending_payment_ids = fields.Many2many('lms.payment', compute='_compute_related_records', string='Pending Payments', domain=[('state', '=', 'pending')])
+    student_ids = fields.Many2many('res.users', compute='_compute_related_records',
+                                   string='Students', domain=[('is_student', '=', True)])
+    teacher_ids = fields.Many2many('res.users', compute='_compute_related_records',
+                                   string='Teachers', domain=[('is_teacher', '=', True)])
+    revenue_ids = fields.Many2many('lms.payment', compute='_compute_related_records',
+                                   string='Revenue', domain=[('state', '=', 'paid')])
+    pending_payment_ids = fields.Many2many('lms.payment', compute='_compute_related_records',
+                                           string='Pending Payments', domain=[('state', '=', 'pending')])
     
     # Computed fields for dashboard
     total_student_count = fields.Integer(compute='_compute_admin_stats', string='Total Students')
@@ -35,24 +40,17 @@ class Administrator(models.Model):
         for admin in self:
             admin.academic_year_ids = self.env['lms.academic.year'].search([('admin_id', '=', admin.id)])
             admin.semester_ids = self.env['lms.semester'].search([('admin_id', '=', admin.id)])
-            admin.student_ids = self.env['lms.student'].search([('admin_id', '=', admin.id)])
-            admin.teacher_ids = self.env['lms.teacher'].search([('admin_id', '=', admin.id)])
+            admin.student_ids = self.env['res.users'].search([('is_student', '=', True), ('admin_id', '=', admin.id)])
+            admin.teacher_ids = self.env['res.users'].search([('is_teacher', '=', True), ('admin_id', '=', admin.id)])
             admin.revenue_ids = self.env['lms.payment'].search([('admin_id', '=', admin.id), ('state', '=', 'paid')])
             admin.pending_payment_ids = self.env['lms.payment'].search([('admin_id', '=', admin.id), ('state', '=', 'pending')])
 
     @api.depends('student_ids', 'teacher_ids', 'revenue_ids')
     def _compute_admin_stats(self):
         for admin in self:
-            # Count total students
             admin.total_student_count = len(admin.student_ids)
-
-            # Count total teachers
             admin.total_teacher_count = len(admin.teacher_ids)
-
-            # Count total courses
             admin.total_course_count = len(admin.student_ids.mapped('enrolled_courses'))
-
-            # Calculate total revenue
             admin.total_revenue = sum(admin.revenue_ids.mapped('amount'))
 
     def action_view_students(self):
@@ -192,4 +190,4 @@ class Administrator(models.Model):
     def _check_administrator_code(self):
         for admin in self:
             if self.search_count([('administrator_code', '=', admin.administrator_code), ('id', '!=', admin.id)]) > 0:
-                raise ValidationError("Administrator Code must be unique!") 
+                raise ValidationError("Administrator Code must be unique!")

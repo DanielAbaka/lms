@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class Quiz(models.Model):
     _name = 'lms.quiz'
     _description = 'Course Quiz'
@@ -10,10 +9,13 @@ class Quiz(models.Model):
 
     name = fields.Char(string='Name', required=True, tracking=True)
     code = fields.Char(string='Quiz Code', required=True, copy=False)
-    teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True, ondelete='cascade')
+    teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment',
+                                            required=True, ondelete='cascade')
     course_id = fields.Many2one('slide.channel', string='Course', related='teacher_assignment_id.course_id', store=True)
-    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='teacher_assignment_id.academic_year_id', store=True)
-    semester_id = fields.Many2one('lms.semester', string='Semester', related='teacher_assignment_id.semester_id', store=True)
+    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year',
+                                       related='teacher_assignment_id.academic_year_id', store=True)
+    semester_id = fields.Many2one('lms.semester', string='Semester',
+                                  related='teacher_assignment_id.semester_id', store=True)
     description = fields.Text(string='Description')
     start_date = fields.Datetime(string='Start Date', required=True)
     end_date = fields.Datetime(string='End Date', required=True)
@@ -31,12 +33,10 @@ class Quiz(models.Model):
     ], string='Status', default='draft', tracking=True)
     active = fields.Boolean(default=True, tracking=True)
 
-    # Related Records
     question_ids = fields.One2many('lms.quiz.question', 'quiz_id', string='Questions')
     attempt_ids = fields.One2many('lms.quiz.attempt', 'quiz_id', string='Attempts')
     grade_id = fields.Many2one('lms.grade', string='Grade')
 
-    # Statistics
     question_count = fields.Integer(string='Question Count', compute='_compute_statistics', store=True)
     attempt_count = fields.Integer(string='Attempt Count', compute='_compute_statistics', store=True)
     average_score = fields.Float(string='Average Score', compute='_compute_statistics', store=True)
@@ -47,8 +47,6 @@ class Quiz(models.Model):
         for record in self:
             record.question_count = len(record.question_ids)
             record.attempt_count = len(record.attempt_ids)
-            
-            # Calculate average score and pass rate
             if record.attempt_count > 0:
                 scores = record.attempt_ids.mapped('score')
                 record.average_score = sum(scores) / len(scores)

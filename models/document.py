@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class Document(models.Model):
     _name = 'lms.document'
     _description = 'Course Document'
@@ -11,8 +10,10 @@ class Document(models.Model):
     name = fields.Char(string='Name', required=True, tracking=True)
     teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment', required=True)
     course_id = fields.Many2one('slide.channel', string='Course', related='teacher_assignment_id.course_id', store=True)
-    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='teacher_assignment_id.academic_year_id', store=True)
-    semester_id = fields.Many2one('lms.semester', string='Semester', related='teacher_assignment_id.semester_id', store=True)
+    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year',
+                                       related='teacher_assignment_id.academic_year_id', store=True)
+    semester_id = fields.Many2one('lms.semester', string='Semester',
+                                  related='teacher_assignment_id.semester_id', store=True)
     description = fields.Text(string='Description')
     date = fields.Date(string='Date', required=True, default=fields.Date.context_today)
     file = fields.Binary(string='File', required=True, attachment=True)
@@ -34,7 +35,6 @@ class Document(models.Model):
     ], string='Status', default='draft', tracking=True)
     active = fields.Boolean(default=True, tracking=True)
 
-    # Related Records
     access_log_ids = fields.One2many('lms.document.access', 'document_id', string='Access Logs')
 
     # Statistics
@@ -63,16 +63,13 @@ class Document(models.Model):
     @api.depends('file')
     def _compute_file_size(self):
         for record in self:
-            if record.file:
-                record.file_size = len(record.file)
-            else:
-                record.file_size = 0
+            record.file_size = len(record.file) if record.file else 0
 
-    @api.depends('access_log_ids', 'access_log_ids.action')
+    @api.depends('access_log_ids', 'access_log_ids.access_type')
     def _compute_statistics(self):
         for record in self:
             record.access_count = len(record.access_log_ids)
-            record.download_count = len(record.access_log_ids.filtered(lambda x: x.action == 'download'))
+            record.download_count = len(record.access_log_ids.filtered(lambda x: x.access_type == 'download'))
             if record.access_log_ids:
                 record.last_accessed = max(record.access_log_ids.mapped('access_date'))
             else:

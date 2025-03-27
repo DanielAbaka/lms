@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class LMSGrade(models.Model):
     _name = 'lms.grade'
     _description = 'LMS Student Grades'
@@ -9,13 +8,16 @@ class LMSGrade(models.Model):
     _order = 'date desc, student_id'
 
     name = fields.Char(string='Grade Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
-    student_id = fields.Many2one('lms.student', string='Student', required=True)
+    student_id = fields.Many2one('res.users', string='Student', required=True,
+                                 domain=[('is_student','=',True)])
     enrollment_id = fields.Many2one('lms.enrollment', string='Enrollment', required=True)
     course_id = fields.Many2one('slide.channel', string='Course', required=True)
     quiz_id = fields.Many2one('lms.quiz', string='Quiz')
     teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment')
-    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='enrollment_id.academic_year_id', store=True)
-    semester_id = fields.Many2one('lms.semester', string='Semester', related='enrollment_id.semester_id', store=True)
+    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', 
+                                       related='enrollment_id.academic_year_id', store=True)
+    semester_id = fields.Many2one('lms.semester', string='Semester', 
+                                  related='enrollment_id.semester_id', store=True)
     date = fields.Date(string='Date', required=True, default=fields.Date.context_today)
     grade = fields.Float(string='Final Grade', required=True)
     credits = fields.Integer(string='Credits', required=True)

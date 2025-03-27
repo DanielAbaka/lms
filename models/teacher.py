@@ -7,7 +7,8 @@ class Teacher(models.Model):
     _inherit = 'res.users'
     _description = 'Teacher'
 
-    # Existing fields
+    # Again, do NOT redefine groups_id
+
     is_teacher = fields.Boolean(string='Is Teacher', default=True)
     teacher_id = fields.Char(string='Teacher ID', required=True, copy=False)
     admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
@@ -18,44 +19,42 @@ class Teacher(models.Model):
     office_location = fields.Char(string='Office Location')
     office_hours = fields.Text(string='Office Hours')
 
-    # New fields for teacher portal
     assigned_course_ids = fields.One2many('lms.teacher.assignment', 'teacher_id', string='Assigned Courses')
     course_material_ids = fields.One2many('lms.course.material', 'teacher_ids', string='Course Materials')
     attendance_ids = fields.One2many('lms.attendance', 'marked_by', string='Attendance Records')
+
+    # Quizzes that belong to teacher's assigned courses
     quiz_ids = fields.Many2many('lms.quiz', compute='_compute_quiz_ids', string='Quizzes', store=True)
-    
-    # Computed fields for dashboard
+
+    # Computed fields for teacher dashboard
     current_course_count = fields.Integer(compute='_compute_teacher_stats', string='Current Courses')
     total_student_count = fields.Integer(compute='_compute_teacher_stats', string='Total Students')
     average_attendance_rate = fields.Float(compute='_compute_teacher_stats', string='Average Attendance')
     pending_gradings = fields.Integer(compute='_compute_teacher_stats', string='Pending Gradings')
 
+    @api.depends('assigned_course_ids.quiz_ids')
+    def _compute_quiz_ids(self):
+        for teacher in self:
+            teacher.quiz_ids = teacher.assigned_course_ids.mapped('quiz_ids')
+
     @api.depends('assigned_course_ids', 'attendance_ids', 'quiz_ids')
     def _compute_teacher_stats(self):
         for teacher in self:
-            # Count current courses
             teacher.current_course_count = len(teacher.assigned_course_ids.filtered(
                 lambda a: a.state == 'active' and a.end_date >= fields.Date.today()
             ))
-
-            # Count total students
-            teacher.total_student_count = len(teacher.assigned_course_ids.mapped('course_id').mapped('enrollment_ids').mapped('student_id'))
-
-            # Calculate average attendance rate
+            teacher.total_student_count = len(
+                teacher.assigned_course_ids.mapped('course_id.enrollment_ids.student_id')
+            )
             attendances = teacher.attendance_ids.filtered(lambda a: a.date >= fields.Date.today() - timedelta(days=30))
             if attendances:
                 present_count = len(attendances.filtered(lambda a: a.status == 'present'))
                 teacher.average_attendance_rate = (present_count / len(attendances)) * 100
             else:
                 teacher.average_attendance_rate = 0.0
-
-            # Count pending gradings
-            teacher.pending_gradings = len(teacher.quiz_ids.filtered(lambda q: q.state == 'submitted'))
-
-    @api.depends('assigned_course_ids.quiz_ids')
-    def _compute_quiz_ids(self):
-        for teacher in self:
-            teacher.quiz_ids = teacher.assigned_course_ids.mapped('quiz_ids')
+            # For "pending_gradings," presumably you'd want to filter quizzes or assignments
+            # that are waiting for a grade. This is just a placeholder logic:
+            teacher.pending_gradings = 0  # or implement your logic
 
     def action_view_courses(self):
         self.ensure_one()
@@ -75,8 +74,10 @@ class Teacher(models.Model):
             'type': 'ir.actions.act_window',
             'res_model': 'res.users',
             'view_mode': 'tree,form',
-            'domain': [('is_student', '=', True), 
-                      ('enrollment_ids.course_id', 'in', self.assigned_course_ids.mapped('course_id').ids)],
+            'domain': [
+                ('is_student', '=', True),
+                ('enrollment_ids.course_id', 'in', self.assigned_course_ids.mapped('course_id').ids)
+            ],
         }
 
     def action_view_attendance(self):
@@ -208,12 +209,10 @@ class Teacher(models.Model):
 
     @api.model
     def create(self, vals):
-        """When creating a user with is_teacher=True, add them to the teacher group."""
+        """When creating a user with is_teacher=True, add them to the teacher group if desired."""
+        user = super(Teacher, self).create(vals)
         if vals.get('is_teacher'):
             teacher_group = self.env.ref('lms_module.group_lms_teacher', raise_if_not_found=False)
             if teacher_group:
-                # Add the user to the teacher group
-                # If there's an existing groups_id, we append (4, group_id)
-                existing_groups = vals.get('groups_id', [])
-                vals['groups_id'] = existing_groups + [(4, teacher_group.id)]
-        return super().create(vals)
+                user.write({'groups_id': [(4, teacher_group.id)]})
+        return user

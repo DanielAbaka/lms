@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class BulkEnrollment(models.TransientModel):
     _name = 'lms.bulk.enrollment'
     _description = 'Bulk Student Enrollment'
@@ -11,7 +10,9 @@ class BulkEnrollment(models.TransientModel):
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', required=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', required=True)
     course_ids = fields.Many2many('slide.channel', string='Courses', required=True)
-    student_ids = fields.Many2many('res.users', string='Students', domain=[('is_student', '=', True)], required=True)
+    student_ids = fields.Many2many('res.users', string='Students', 
+                                   domain=[('is_student', '=', True)],
+                                   required=True)
     start_date = fields.Date(string='Start Date', required=True)
     end_date = fields.Date(string='End Date', required=True)
     state = fields.Selection([
@@ -50,4 +51,4 @@ class BulkEnrollment(models.TransientModel):
             self.write({
                 'state': 'failed',
                 'error_message': str(e)
-            }) 
+            })

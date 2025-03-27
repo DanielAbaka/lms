@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class PaymentPlan(models.Model):
     _name = 'lms.payment.plan'
     _description = 'Payment Plan'
@@ -44,4 +43,4 @@ class PaymentPlan(models.Model):
         self.write({'state': 'active'})
 
     def action_archive(self):
-        self.write({'state': 'archived'}) 
+        self.write({'state': 'archived'})

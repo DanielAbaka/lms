@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class LMSPayment(models.Model):
     _name = 'lms.payment'
     _description = 'LMS Payment'
@@ -9,7 +8,7 @@ class LMSPayment(models.Model):
     _order = 'date desc, student_id'
 
     name = fields.Char(string='Payment Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')
-    student_id = fields.Many2one('lms.student', string='Student', required=True)
+    student_id = fields.Many2one('res.users', string='Student', required=True, domain=[('is_student','=',True)])
     enrollment_id = fields.Many2one('lms.enrollment', string='Enrollment', required=True)
     admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
     course_id = fields.Many2one('slide.channel', string='Course', related='enrollment_id.course_id', store=True)

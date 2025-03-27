@@ -1,7 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
-
 class QuizQuestion(models.Model):
     _name = 'lms.quiz.question'
     _description = 'Quiz Question'
@@ -25,9 +24,10 @@ class QuizQuestion(models.Model):
     ], string='Status', default='draft', tracking=True)
     active = fields.Boolean(default=True, tracking=True)
 
-    # Question Options
     option_ids = fields.One2many('lms.quiz.option', 'question_id', string='Options')
-    correct_option_ids = fields.Many2many('lms.quiz.option', 'question_correct_option_rel', 'question_id', 'option_id', string='Correct Options')
+    correct_option_ids = fields.Many2many('lms.quiz.option', 'question_correct_option_rel',
+                                          'question_id', 'option_id',
+                                          string='Correct Options')
     correct_answer = fields.Text(string='Correct Answer')
     keywords = fields.Text(string='Keywords (for Short Answer)')
 
@@ -43,10 +43,7 @@ class QuizQuestion(models.Model):
             record.attempt_count = len(attempts)
             correct_attempts = attempts.filtered(lambda x: x.is_correct)
             record.correct_count = len(correct_attempts)
-            if record.attempt_count > 0:
-                record.average_score = (record.correct_count / record.attempt_count) * 100
-            else:
-                record.average_score = 0.0
+            record.average_score = (record.correct_count / record.attempt_count * 100) if record.attempt_count else 0.0
 
     @api.constrains('question_type', 'option_ids')
     def _check_options(self):
@@ -94,4 +91,4 @@ class QuizQuestion(models.Model):
     def action_reset_to_draft(self):
         self.ensure_one()
         if self.state in ['active', 'archived']:
-            self.write({'state': 'draft'}) 
+            self.write({'state': 'draft'})

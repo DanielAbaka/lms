@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
-
+from datetime import datetime, timedelta
 
 class Semester(models.Model):
     _name = 'lms.semester'
@@ -26,8 +26,7 @@ class Semester(models.Model):
         ('cancelled', 'Cancelled')
     ], string='Status', default='draft', tracking=True)
     active = fields.Boolean(default=True, tracking=True)
-    
-    # Related Records
+
     enrollment_ids = fields.One2many('lms.enrollment', 'semester_id', string='Enrollments')
     course_ids = fields.One2many('slide.channel', 'semester_id', string='Courses')
     teacher_assignment_ids = fields.One2many('lms.teacher.assignment', 'semester_id', string='Teacher Assignments')
@@ -35,7 +34,6 @@ class Semester(models.Model):
     grade_ids = fields.One2many('lms.grade', 'semester_id', string='Grades')
     document_ids = fields.One2many('lms.document', 'semester_id', string='Documents')
 
-    # Statistics
     student_count = fields.Integer(string='Student Count', compute='_compute_statistics', store=True)
     course_count = fields.Integer(string='Course Count', compute='_compute_statistics', store=True)
     teacher_count = fields.Integer(string='Teacher Count', compute='_compute_statistics', store=True)
@@ -94,9 +92,12 @@ class Semester(models.Model):
         return {
             'name': 'Students',
             'type': 'ir.actions.act_window',
-            'res_model': 'lms.student',
+            'res_model': 'res.users',
             'view_mode': 'tree,form',
-            'domain': [('enrollment_ids.semester_id', '=', self.id)],
+            'domain': [
+                ('is_student', '=', True),
+                ('enrollment_ids.semester_id', '=', self.id)
+            ],
             'context': {'default_semester': self.id},
         }
 
@@ -127,9 +128,12 @@ class Semester(models.Model):
         return {
             'name': 'Teachers',
             'type': 'ir.actions.act_window',
-            'res_model': 'lms.teacher',
+            'res_model': 'res.users',
             'view_mode': 'tree,form',
-            'domain': [('teacher_assignment_ids.semester_id', '=', self.id)],
+            'domain': [
+                ('is_teacher', '=', True),
+                ('assigned_course_ids.semester_id', '=', self.id)
+            ],
             'context': {'default_semester': self.id},
         }
 

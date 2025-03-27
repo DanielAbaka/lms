@@ -7,6 +7,8 @@ class Student(models.Model):
     _inherit = 'res.users'
     _description = 'Student'
 
+    # DO NOT redefine groups_id here. We only add fields.
+
     is_student = fields.Boolean(string='Is Student', default=True)
     student_id = fields.Char(string='Student ID', required=True, copy=False)
     admin_id = fields.Many2one('res.users', string='Administrator', domain=[('is_admin', '=', True)])
@@ -40,7 +42,8 @@ class Student(models.Model):
     attendance_ids = fields.One2many('lms.attendance', 'student_id', string='Attendance Records')
     grade_ids = fields.One2many('lms.grade', 'student_id', string='Grades')
     payment_ids = fields.One2many('lms.payment', 'student_id', string='Payments')
-    message_ids = fields.One2many('mail.message', 'res_id', string='Messages', domain=[('model', '=', 'res.users')])
+    message_ids = fields.One2many('mail.message', 'res_id',
+                                  string='Messages', domain=[('model', '=', 'res.users')])
 
     # Course Statistics
     total_courses = fields.Integer(string='Total Courses', compute='_compute_course_statistics', store=True)
@@ -104,19 +107,23 @@ class Student(models.Model):
         for student in self:
             student.pending_payments = sum(student.payment_ids.filtered(lambda p: p.state == 'pending').mapped('amount'))
 
-    @api.depends('enrollment_ids.state', 'enrollment_ids.grade')
+    @api.depends('enrollment_ids.state')
     def _compute_course_statistics(self):
         for record in self:
             enrollments = record.enrollment_ids
             record.total_courses = len(enrollments)
-            record.courses_completed = len(enrollments.filtered(lambda e: e.state == 'completed' and e.grade >= 60))
+            record.courses_completed = len(
+                enrollments.filtered(lambda e: e.state == 'completed' and getattr(e, 'grade', 100) >= 60)
+            )
             record.courses_in_progress = len(enrollments.filtered(lambda e: e.state == 'active'))
-            record.courses_failed = len(enrollments.filtered(lambda e: e.state == 'completed' and e.grade < 60))
+            record.courses_failed = len(
+                enrollments.filtered(lambda e: e.state == 'completed' and getattr(e, 'grade', 100) < 60)
+            )
 
     @api.depends('grade_ids.grade', 'grade_ids.state')
     def _compute_grade_statistics(self):
         for record in self:
-            grades = record.grade_ids.filtered(lambda g: g.state == 'completed')
+            grades = record.grade_ids.filtered(lambda g: g.grade is not None and g.grade >= 0)
             if grades:
                 avg_grade = sum(grades.mapped('grade')) / len(grades)
                 record.grade_point = avg_grade
@@ -216,12 +223,11 @@ class Student(models.Model):
 
     @api.model
     def create(self, vals):
-        """When creating a user with is_student=True, add them to the student group."""
+        """When creating a user with is_student=True, add them to the student group if desired."""
+        # Suppose we have a group_lms_student in your module data:
+        user = super(Student, self).create(vals)
         if vals.get('is_student'):
             student_group = self.env.ref('lms_module.group_lms_student', raise_if_not_found=False)
             if student_group:
-                # Add the user to the student group
-                # If there's an existing groups_id, we append (4, group_id)
-                existing_groups = vals.get('groups_id', [])
-                vals['groups_id'] = existing_groups + [(4, student_group.id)]
-        return super().create(vals)
+                user.write({'groups_id': [(4, student_group.id)]})
+        return user
