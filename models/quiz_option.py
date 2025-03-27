@@ -1,6 +1,5 @@
 from odoo import models, fields, api
 
-
 class QuizOption(models.Model):
     _name = 'lms.quiz.option'
     _description = 'Quiz Question Option'
@@ -13,6 +12,15 @@ class QuizOption(models.Model):
     explanation = fields.Text(string='Explanation')
     active = fields.Boolean(default=True, tracking=True)
 
+    # Add the missing Many2many that references lms.quiz.question.attempt
+    attempt_ids = fields.Many2many(
+        'lms.quiz.question.attempt',
+        'question_attempt_option_rel',  # must match your existing relation table
+        'option_id',                    # local FK (to lms.quiz.option)
+        'attempt_id',                   # remote FK (to lms.quiz.question.attempt)
+        string='Question Attempts'
+    )
+
     # Statistics
     attempt_count = fields.Integer(string='Attempt Count', compute='_compute_statistics', store=True)
     selection_count = fields.Integer(string='Selection Count', compute='_compute_statistics', store=True)
@@ -23,4 +31,4 @@ class QuizOption(models.Model):
         for record in self:
             record.attempt_count = len(record.attempt_ids)
             record.selection_count = len(record.attempt_ids.filtered(lambda x: x.selected))
-            record.correct_count = len(record.attempt_ids.filtered(lambda x: x.is_correct)) 
+            record.correct_count = len(record.attempt_ids.filtered(lambda x: x.is_correct))
