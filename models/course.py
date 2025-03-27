@@ -2,7 +2,6 @@ from odoo import models, fields, api, tools
 from odoo.exceptions import ValidationError
 
 class LMSCourse(models.Model):
-    _name = 'lms.course'
     _inherit = 'slide.channel'  # Inherits from the eLearning module
     _description = 'LMS Course'
 
