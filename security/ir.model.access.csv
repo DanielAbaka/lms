@@ -1,13 +1,8 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_lms_course_admin,lms.course.admin,model_lms_course,lms_module.group_lms_manager,1,1,1,1
-access_lms_course_teacher,lms.course.teacher,model_lms_course,lms_module.group_lms_teacher,1,1,1,0
-access_lms_course_student,lms.course.student,model_lms_course,lms_module.group_lms_student,1,0,0,0
-access_lms_student_admin,lms.student.admin,model_lms_student,lms_module.group_lms_admin,1,1,1,1
-access_lms_student_teacher,lms.student.teacher,model_lms_student,lms_module.group_lms_teacher,1,1,1,0
-access_lms_student_student,lms.student.student,model_lms_student,lms_module.group_lms_student,1,0,0,0
-access_lms_teacher_admin,lms.teacher.admin,model_lms_teacher,lms_module.group_lms_admin,1,1,1,1
-access_lms_teacher_teacher,lms.teacher.teacher,model_lms_teacher,lms_module.group_lms_teacher,1,1,1,0
-access_lms_teacher_student,lms.teacher.student,model_lms_teacher,lms_module.group_lms_student,1,0,0,0
+access_lms_course_admin,lms.course.admin,website_slides.model_slide_channel,lms_module.group_lms_manager,1,1,1,1
+access_lms_course_teacher,lms.course.teacher,website_slides.model_slide_channel,lms_module.group_lms_teacher,1,1,1,0
+access_lms_course_student,lms.course.student,website_slides.model_slide_channel,lms_module.group_lms_student,1,0,0,0
+# Student and Teacher models inherit from res.users, so we don't need special access rules here
 access_lms_course_material_admin,lms.course.material.admin,model_lms_course_material,lms_module.group_lms_manager,1,1,1,1
 access_lms_course_material_teacher,lms.course.material.teacher,model_lms_course_material,lms_module.group_lms_teacher,1,1,1,0
 access_lms_course_material_student,lms.course.material.student,model_lms_course_material,lms_module.group_lms_student,1,0,0,0

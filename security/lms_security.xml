@@ -128,7 +128,7 @@
         <!-- Admin can only see their own courses -->
         <record id="rule_lms_admin_courses" model="ir.rule">
             <field name="name">Admin Course Access</field>
-            <field name="model_id" ref="model_lms_course"/>
+            <field name="model_id" ref="website_slides.model_slide_channel"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
             <field name="domain_force">[('admin_id', '=', user.id)]</field>
         </record>
