@@ -2,7 +2,6 @@ from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 
 class Administrator(models.Model):
-    _name = 'lms.administrator'
     _inherit = 'res.users'
     _description = 'Administrator'
 
