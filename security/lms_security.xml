@@ -6,6 +6,7 @@
         <record id="rule_lms_enrollment_student" model="ir.rule">
             <field name="name">Student Enrollment Access</field>
             <field name="model_id" ref="model_lms_enrollment"/>
+            <!-- Note: referencing the group from groups.xml with module prefix -->
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
@@ -15,7 +16,6 @@
             <field name="name">Teacher Enrollment Access</field>
             <field name="model_id" ref="model_lms_enrollment"/>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
-            <!-- Checking if the teacher is assigned to that course -->
             <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -56,7 +56,6 @@
             <field name="name">Student Document Access</field>
             <field name="model_id" ref="model_lms_document"/>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
-            <!-- We see if the user is enrolled in the document's course -->
             <field name="domain_force">[('course_id.enrollment_ids.student_id', '=', user.id)]</field>
         </record>
 
@@ -81,7 +80,6 @@
             <field name="name">Student Payment Access</field>
             <field name="model_id" ref="model_payment_transaction"/>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
-            <!-- This is valid if partner_id is user.partner_id -->
             <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
         </record>
 
@@ -112,6 +110,7 @@
         <!-- Admin can only see their own students -->
         <record id="rule_lms_admin_students" model="ir.rule">
             <field name="name">Admin Student Access</field>
+            <!-- Student = user, so just model_res_users if you do `_inherit='res.users'` -->
             <field name="model_id" ref="model_res_users"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
             <field name="domain_force">[('admin_id', '=', user.id), ('is_student', '=', True)]</field>
@@ -125,9 +124,10 @@
             <field name="domain_force">[('admin_id', '=', user.id), ('is_teacher', '=', True)]</field>
         </record>
 
-        <!-- Admin can only see their own courses -->
+        <!-- Admin can only see their own courses (slide.channel) -->
         <record id="rule_lms_admin_courses" model="ir.rule">
             <field name="name">Admin Course Access</field>
+            <!-- If the model is from website_slides, we reference website_slides.model_slide_channel -->
             <field name="model_id" ref="website_slides.model_slide_channel"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
             <field name="domain_force">[('admin_id', '=', user.id)]</field>
@@ -142,7 +142,7 @@
 
         <!-- Student can only see quizzes for courses they are enrolled in -->
         <record id="rule_lms_quiz_student" model="ir.rule">
-            <field name="name">Quiz: Students can access quizzes for their enrolled courses</field>
+            <field name="name">Quiz: Students for their enrolled courses</field>
             <field name="model_id" ref="model_lms_quiz"/>
             <field name="domain_force">[('teacher_assignment_id.enrollment_ids.student_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
@@ -154,7 +154,7 @@
 
         <!-- Teacher can manage quizzes for their assigned courses -->
         <record id="rule_lms_quiz_teacher" model="ir.rule">
-            <field name="name">Quiz: Teachers can manage their own quizzes</field>
+            <field name="name">Quiz: Teachers for their assigned courses</field>
             <field name="model_id" ref="model_lms_quiz"/>
             <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
@@ -166,7 +166,7 @@
 
         <!-- Student can only see questions for courses they are enrolled in -->
         <record id="rule_lms_quiz_question_student" model="ir.rule">
-            <field name="name">Quiz Questions: Students can access questions for their enrolled courses</field>
+            <field name="name">Quiz Questions: Students for their courses</field>
             <field name="model_id" ref="model_lms_quiz_question"/>
             <field name="domain_force">[('quiz_id.teacher_assignment_id.enrollment_ids.student_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
@@ -178,7 +178,7 @@
 
         <!-- Teacher can manage questions for their assigned courses -->
         <record id="rule_lms_quiz_question_teacher" model="ir.rule">
-            <field name="name">Quiz Questions: Teachers can manage their own quiz questions</field>
+            <field name="name">Quiz Questions: Teachers for their assigned courses</field>
             <field name="model_id" ref="model_lms_quiz_question"/>
             <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
@@ -190,7 +190,7 @@
 
         <!-- Student can only see their own attempts -->
         <record id="rule_lms_quiz_attempt_student" model="ir.rule">
-            <field name="name">Quiz Attempts: Students can manage their own quiz attempts</field>
+            <field name="name">Quiz Attempts: Students see their own</field>
             <field name="model_id" ref="model_lms_quiz_attempt"/>
             <field name="domain_force">['|', ('student_id', '=', user.id), ('quiz_id.teacher_assignment_id.enrollment_ids.student_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
@@ -202,7 +202,7 @@
 
         <!-- Teacher can see attempts for their assigned courses -->
         <record id="rule_lms_quiz_attempt_teacher" model="ir.rule">
-            <field name="name">Quiz Attempts: Teachers can manage quiz attempts for their courses</field>
+            <field name="name">Quiz Attempts: Teachers for their courses</field>
             <field name="model_id" ref="model_lms_quiz_attempt"/>
             <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
@@ -217,9 +217,7 @@
             <field name="name">Student Document Access</field>
             <field name="model_id" ref="model_lms_document"/>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
-            <field name="domain_force">
-                [('teacher_assignment_id.course_id.enrollment_ids.student_id', '=', user.id)]
-            </field>
+            <field name="domain_force">[('teacher_assignment_id.course_id.enrollment_ids.student_id', '=', user.id)]</field>
         </record>
 
         <!-- Teacher can manage documents for their assigned courses -->
@@ -317,7 +315,6 @@
         <record id="rule_course_material_student" model="ir.rule">
             <field name="name">Students can only view materials for their enrolled courses</field>
             <field name="model_id" ref="model_lms_course_material"/>
-            <!-- Checking if user is a student in that course -->
             <field name="domain_force">[('course_id.enrollment_ids.student_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="perm_read" eval="True"/>
