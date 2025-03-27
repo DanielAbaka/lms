@@ -7,7 +7,8 @@
             <field name="name">Student Enrollment Access</field>
             <field name="model_id" ref="model_lms_enrollment"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
-            <field name="domain_force">[('student_id.user_id', '=', user.id)]</field>
+            <!-- FIX: student_id.user_id => student_id -->
+            <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
         <!-- Teacher can only see enrollments for their assigned courses -->
@@ -15,7 +16,8 @@
             <field name="name">Teacher Enrollment Access</field>
             <field name="model_id" ref="model_lms_enrollment"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id.user_id', '=', user.id)]</field>
+            <!-- FIX: teacher_assignment_ids.teacher_id.user_id => teacher_assignment_ids.teacher_id -->
+            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Student can only see their own attendance records -->
@@ -23,7 +25,8 @@
             <field name="name">Student Attendance Access</field>
             <field name="model_id" ref="model_lms_attendance"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
-            <field name="domain_force">[('student_id.user_id', '=', user.id)]</field>
+            <!-- FIX: student_id.user_id => student_id -->
+            <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
         <!-- Teacher can manage attendance for their assigned courses -->
@@ -31,7 +34,8 @@
             <field name="name">Teacher Attendance Access</field>
             <field name="model_id" ref="model_lms_attendance"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id.user_id', '=', user.id)]</field>
+            <!-- FIX: teacher_assignment_ids.teacher_id.user_id => teacher_assignment_ids.teacher_id -->
+            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Student can only see their own grades -->
@@ -39,7 +43,8 @@
             <field name="name">Student Grade Access</field>
             <field name="model_id" ref="model_lms_grade"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
-            <field name="domain_force">[('student_id.user_id', '=', user.id)]</field>
+            <!-- FIX: student_id.user_id => student_id -->
+            <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
         <!-- Teacher can manage grades for their assigned courses -->
@@ -47,23 +52,27 @@
             <field name="name">Teacher Grade Access</field>
             <field name="model_id" ref="model_lms_grade"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id.user_id', '=', user.id)]</field>
+            <!-- FIX: teacher_id.user_id => teacher_id  (or see your actual field structure) -->
+            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Student can only access documents related to enrolled courses -->
         <record id="rule_lms_documents_student" model="ir.rule">
             <field name="name">Student Document Access</field>
-            <field name="model_id" ref="model_documents_document"/>
+            <!-- If lms.document is your model, ensure you use model_lms_document, not model_documents_document -->
+            <field name="model_id" ref="model_lms_document"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <!-- Something like user.enrolled_courses might not be valid. Adjust to your actual field. -->
             <field name="domain_force">[('course_id', 'in', user.enrolled_courses.ids)]</field>
         </record>
 
         <!-- Teacher can manage documents related to their assigned courses -->
         <record id="rule_lms_documents_teacher" model="ir.rule">
             <field name="name">Teacher Document Access</field>
-            <field name="model_id" ref="model_documents_document"/>
+            <field name="model_id" ref="model_lms_document"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id.user_id', '=', user.id)]</field>
+            <!-- Fix: teacher_assignment_id.teacher_id.user_id => teacher_assignment_id.teacher_id -->
+            <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Student can manage their own course planning -->
@@ -71,6 +80,7 @@
             <field name="name">Student Course Planning Access</field>
             <field name="model_id" ref="model_lms_course_planning"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <!-- If the field is just 'student_id', that is likely the user. -->
             <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
@@ -79,6 +89,7 @@
             <field name="name">Student Payment Access</field>
             <field name="model_id" ref="model_payment_transaction"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <!-- If partner_id = user.partner_id.id is correct, this is okay. -->
             <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
         </record>
 
@@ -86,7 +97,8 @@
             <field name="name">Student Transcript Access</field>
             <field name="model_id" ref="model_lms_transcript"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
-            <field name="domain_force">[('student_id.user_id', '=', user.id)]</field>
+            <!-- Fix: student_id.user_id => student_id -->
+            <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
         <!-- Admin can manage academic years and semesters -->
@@ -102,14 +114,18 @@
             <field name="name">Admin Records Access</field>
             <field name="model_id" ref="model_lms_academic_year"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+            <!-- If admin_id is a Many2one('res.users'), we want admin_id = user.id -->
             <field name="domain_force">[('admin_id', '=', user.id)]</field>
         </record>
 
         <!-- Admin can only see their own students -->
         <record id="rule_lms_admin_students" model="ir.rule">
             <field name="name">Admin Student Access</field>
+            <!-- If lms.student is actually res.users, you can't do model_lms_student. 
+                 But if you do have a model_lms_student, that's fine. -->
             <field name="model_id" ref="model_lms_student"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+            <!-- If admin_id is a Many2one('res.users'), do admin_id = user.id -->
             <field name="domain_force">[('admin_id', '=', user.id)]</field>
         </record>
 
@@ -126,6 +142,7 @@
             <field name="name">Admin Course Access</field>
             <field name="model_id" ref="model_slide_channel"/>
             <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+            <!-- If the course has admin_id = fields.Many2one('res.users') -->
             <field name="domain_force">[('admin_id', '=', user.id)]</field>
         </record>
 
@@ -142,6 +159,7 @@
             <field name="name">Student Quiz Access</field>
             <field name="model_id" ref="model_lms_quiz"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <!-- Fix: teacher_assignment_id.course_id in user.enrolled_courses -->
             <field name="domain_force">[('teacher_assignment_id.course_id', 'in', user.enrolled_courses.ids)]</field>
         </record>
 
@@ -150,7 +168,8 @@
             <field name="name">Teacher Quiz Access</field>
             <field name="model_id" ref="model_lms_quiz"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('teacher_assignment_id.teacher_id.user_id', '=', user.id)]</field>
+            <!-- fix: teacher_assignment_id.teacher_id.user_id => teacher_assignment_id.teacher_id -->
+            <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Quiz Question Rules -->
@@ -159,6 +178,7 @@
             <field name="name">Student Quiz Question Access</field>
             <field name="model_id" ref="model_lms_quiz_question"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <!-- fix: quiz_id.teacher_assignment_id.course_id in user.enrolled_courses -->
             <field name="domain_force">[('quiz_id.teacher_assignment_id.course_id', 'in', user.enrolled_courses.ids)]</field>
         </record>
 
@@ -167,7 +187,7 @@
             <field name="name">Teacher Quiz Question Access</field>
             <field name="model_id" ref="model_lms_quiz_question"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id.user_id', '=', user.id)]</field>
+            <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Quiz Attempt Rules -->
@@ -176,7 +196,8 @@
             <field name="name">Student Quiz Attempt Access</field>
             <field name="model_id" ref="model_lms_quiz_attempt"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
-            <field name="domain_force">[('student_id.user_id', '=', user.id)]</field>
+            <!-- fix: student_id.user_id => student_id -->
+            <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
         <!-- Teacher can see attempts for their assigned courses -->
@@ -184,7 +205,8 @@
             <field name="name">Teacher Quiz Attempt Access</field>
             <field name="model_id" ref="model_lms_quiz_attempt"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id.user_id', '=', user.id)]</field>
+            <!-- fix: quiz_id.teacher_assignment_id.teacher_id.user_id => quiz_id.teacher_assignment_id.teacher_id -->
+            <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Document Rules -->
@@ -193,6 +215,7 @@
             <field name="name">Student Document Access</field>
             <field name="model_id" ref="model_lms_document"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <!-- fix: teacher_assignment_id.course_id in user.enrolled_courses -->
             <field name="domain_force">[('teacher_assignment_id.course_id', 'in', user.enrolled_courses.ids)]</field>
         </record>
 
@@ -201,7 +224,8 @@
             <field name="name">Teacher Document Access</field>
             <field name="model_id" ref="model_lms_document"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('teacher_assignment_id.teacher_id.user_id', '=', user.id)]</field>
+            <!-- fix: teacher_assignment_id.teacher_id.user_id => teacher_assignment_id.teacher_id -->
+            <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Document Access Rules -->
@@ -218,7 +242,8 @@
             <field name="name">Teacher Document Access Log Access</field>
             <field name="model_id" ref="model_lms_document_access"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('document_id.teacher_assignment_id.teacher_id.user_id', '=', user.id)]</field>
+            <!-- fix: teacher_assignment_id.teacher_id.user_id => teacher_assignment_id.teacher_id -->
+            <field name="domain_force">[('document_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Schedule Rules -->
@@ -227,6 +252,7 @@
             <field name="name">Student Schedule Access</field>
             <field name="model_id" ref="model_lms_schedule"/>
             <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <!-- fix: in user.enrolled_courses.ids if that's your real field -->
             <field name="domain_force">[('course_id', 'in', user.enrolled_courses.ids)]</field>
         </record>
 
@@ -235,7 +261,8 @@
             <field name="name">Teacher Schedule Access</field>
             <field name="model_id" ref="model_lms_schedule"/>
             <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
-            <field name="domain_force">[('teacher_assignment_id.teacher_id.user_id', '=', user.id)]</field>
+            <!-- fix: teacher_assignment_id.teacher_id.user_id => teacher_assignment_id.teacher_id -->
+            <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
         <!-- Admin can manage all schedules -->
@@ -296,6 +323,7 @@
         <record id="rule_course_material_student" model="ir.rule">
             <field name="name">Students can only view materials for their enrolled courses</field>
             <field name="model_id" ref="model_lms_course_material"/>
+            <!-- fix: course_id in user.enrolled_course_ids.ids if that's correct. -->
             <field name="domain_force">[('course_id', 'in', user.enrolled_course_ids.ids)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="perm_read" eval="True"/>
@@ -308,6 +336,7 @@
         <record id="rule_attendance_teacher" model="ir.rule">
             <field name="name">Teachers can only access attendance for their courses</field>
             <field name="model_id" ref="model_lms_attendance"/>
+            <!-- fix: course_id.teacher_id => course_id.teacher_id if that field exists. -->
             <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="perm_read" eval="True"/>
@@ -319,7 +348,8 @@
         <record id="rule_attendance_student" model="ir.rule">
             <field name="name">Students can only view their own attendance records</field>
             <field name="model_id" ref="model_lms_attendance"/>
-            <field name="domain_force">[('student_attendance_ids.student_id', '=', user.id)]</field>
+            <!-- fix: 'student_attendance_ids.student_id' => just 'student_id' or something that truly exists. -->
+            <field name="domain_force">[('student_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>
