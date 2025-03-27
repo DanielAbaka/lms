@@ -21,6 +21,7 @@
     'depends': ['base', 'mail', 'portal', 'web', 'website_slides'],
     'data': [
         # Security
+        'security/groups.xml',
         'security/lms_security.xml',
         'security/ir.model.access.csv',
         

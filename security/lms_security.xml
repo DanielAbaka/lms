@@ -6,7 +6,7 @@
         <record id="rule_lms_enrollment_student" model="ir.rule">
             <field name="name">Student Enrollment Access</field>
             <field name="model_id" ref="model_lms_enrollment"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
@@ -14,7 +14,7 @@
         <record id="rule_lms_enrollment_teacher" model="ir.rule">
             <field name="name">Teacher Enrollment Access</field>
             <field name="model_id" ref="model_lms_enrollment"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <!-- Checking if the teacher is assigned to that course -->
             <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
         </record>
@@ -23,7 +23,7 @@
         <record id="rule_lms_attendance_student" model="ir.rule">
             <field name="name">Student Attendance Access</field>
             <field name="model_id" ref="model_lms_attendance"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
@@ -31,7 +31,7 @@
         <record id="rule_lms_attendance_teacher" model="ir.rule">
             <field name="name">Teacher Attendance Access</field>
             <field name="model_id" ref="model_lms_attendance"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -39,7 +39,7 @@
         <record id="rule_lms_grade_student" model="ir.rule">
             <field name="name">Student Grade Access</field>
             <field name="model_id" ref="model_lms_grade"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
@@ -47,7 +47,7 @@
         <record id="rule_lms_grade_teacher" model="ir.rule">
             <field name="name">Teacher Grade Access</field>
             <field name="model_id" ref="model_lms_grade"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -55,7 +55,7 @@
         <record id="rule_lms_documents_student" model="ir.rule">
             <field name="name">Student Document Access</field>
             <field name="model_id" ref="model_lms_document"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <!-- We see if the user is enrolled in the document's course -->
             <field name="domain_force">[('course_id.enrollment_ids.student_id', '=', user.id)]</field>
         </record>
@@ -64,7 +64,7 @@
         <record id="rule_lms_documents_teacher" model="ir.rule">
             <field name="name">Teacher Document Access</field>
             <field name="model_id" ref="model_lms_document"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -72,7 +72,7 @@
         <record id="rule_lms_course_planning_student" model="ir.rule">
             <field name="name">Student Course Planning Access</field>
             <field name="model_id" ref="model_lms_course_planning"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
@@ -80,7 +80,7 @@
         <record id="rule_lms_payment_student" model="ir.rule">
             <field name="name">Student Payment Access</field>
             <field name="model_id" ref="model_payment_transaction"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <!-- This is valid if partner_id is user.partner_id -->
             <field name="domain_force">[('partner_id', '=', user.partner_id.id)]</field>
         </record>
@@ -89,7 +89,7 @@
         <record id="rule_lms_transcript_student" model="ir.rule">
             <field name="name">Student Transcript Access</field>
             <field name="model_id" ref="model_lms_transcript"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
@@ -144,7 +144,7 @@
         <record id="rule_lms_quiz_student" model="ir.rule">
             <field name="name">Student Quiz Access</field>
             <field name="model_id" ref="model_lms_quiz"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <!-- Checking the chain: quiz -> teacher_assignment -> course -> enrollment -> student -->
             <field name="domain_force">[('teacher_assignment_id.course_id.enrollment_ids.student_id', '=', user.id)]</field>
         </record>
@@ -153,7 +153,7 @@
         <record id="rule_lms_quiz_teacher" model="ir.rule">
             <field name="name">Teacher Quiz Access</field>
             <field name="model_id" ref="model_lms_quiz"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -161,7 +161,7 @@
         <record id="rule_lms_quiz_question_student" model="ir.rule">
             <field name="name">Student Quiz Question Access</field>
             <field name="model_id" ref="model_lms_quiz_question"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">
                 [
                   ('quiz_id.teacher_assignment_id.course_id.enrollment_ids.student_id', '=', user.id)
@@ -173,7 +173,7 @@
         <record id="rule_lms_quiz_question_teacher" model="ir.rule">
             <field name="name">Teacher Quiz Question Access</field>
             <field name="model_id" ref="model_lms_quiz_question"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -181,7 +181,7 @@
         <record id="rule_lms_quiz_attempt_student" model="ir.rule">
             <field name="name">Student Quiz Attempt Access</field>
             <field name="model_id" ref="model_lms_quiz_attempt"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('student_id', '=', user.id)]</field>
         </record>
 
@@ -189,7 +189,7 @@
         <record id="rule_lms_quiz_attempt_teacher" model="ir.rule">
             <field name="name">Teacher Quiz Attempt Access</field>
             <field name="model_id" ref="model_lms_quiz_attempt"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('quiz_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -197,7 +197,7 @@
         <record id="rule_lms_document_student" model="ir.rule">
             <field name="name">Student Document Access</field>
             <field name="model_id" ref="model_lms_document"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">
                 [('teacher_assignment_id.course_id.enrollment_ids.student_id', '=', user.id)]
             </field>
@@ -207,7 +207,7 @@
         <record id="rule_lms_document_teacher" model="ir.rule">
             <field name="name">Teacher Document Access</field>
             <field name="model_id" ref="model_lms_document"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -215,7 +215,7 @@
         <record id="rule_lms_document_access_student" model="ir.rule">
             <field name="name">Student Document Access Log Access</field>
             <field name="model_id" ref="model_lms_document_access"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('user_id', '=', user.id)]</field>
         </record>
 
@@ -223,7 +223,7 @@
         <record id="rule_lms_document_access_teacher" model="ir.rule">
             <field name="name">Teacher Document Access Log Access</field>
             <field name="model_id" ref="model_lms_document_access"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('document_id.teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -231,7 +231,7 @@
         <record id="rule_lms_schedule_student" model="ir.rule">
             <field name="name">Student Schedule Access</field>
             <field name="model_id" ref="model_lms_schedule"/>
-            <field name="groups" eval="[(4, ref('group_lms_student'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
             <field name="domain_force">[('course_id.enrollment_ids.student_id', '=', user.id)]</field>
         </record>
 
@@ -239,7 +239,7 @@
         <record id="rule_lms_schedule_teacher" model="ir.rule">
             <field name="name">Teacher Schedule Access</field>
             <field name="model_id" ref="model_lms_schedule"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[('teacher_assignment_id.teacher_id', '=', user.id)]</field>
         </record>
 
@@ -271,7 +271,7 @@
         <record id="rule_lms_room_availability_teacher" model="ir.rule">
             <field name="name">Teacher Room Availability Access</field>
             <field name="model_id" ref="model_lms_room_availability_wizard"/>
-            <field name="groups" eval="[(4, ref('group_lms_teacher'))]"/>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="domain_force">[]</field>
         </record>
 
