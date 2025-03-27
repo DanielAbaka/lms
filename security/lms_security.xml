@@ -288,7 +288,7 @@
             <field name="name">Teachers can only access materials for their courses</field>
             <field name="model_id" ref="model_lms_course_material"/>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
-            <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
+            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
@@ -311,7 +311,7 @@
         <record id="rule_attendance_teacher" model="ir.rule">
             <field name="name">Teachers can only access attendance for their courses</field>
             <field name="model_id" ref="model_lms_attendance"/>
-            <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
+            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -334,7 +334,7 @@
         <record id="rule_quiz_teacher" model="ir.rule">
             <field name="name">Teachers can only access quizzes for their courses</field>
             <field name="model_id" ref="model_lms_quiz"/>
-            <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
+            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -357,7 +357,7 @@
         <record id="rule_schedule_teacher" model="ir.rule">
             <field name="name">Teachers can only access schedules for their courses</field>
             <field name="model_id" ref="model_lms_schedule"/>
-            <field name="domain_force">[('course_id.teacher_id', '=', user.id)]</field>
+            <field name="domain_force">[('course_id.teacher_assignment_ids.teacher_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('lms_module.group_lms_teacher'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
