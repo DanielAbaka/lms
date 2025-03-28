@@ -11,6 +11,7 @@ from . import semester
 from . import course_planning
 from . import enrollment
 from . import payment
+from . import payment_plan
 from . import grade
 from . import transcript
 from . import document

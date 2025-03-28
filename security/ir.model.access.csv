@@ -39,3 +39,11 @@ access_lms_payment_plan_admin,LMS Payment Plan Admin,model_lms_payment_plan,base
 access_lms_payment_plan_manager,LMS Payment Plan Manager,model_lms_payment_plan,lms_module.group_lms_manager,1,1,1,1
 access_lms_payment_plan_teacher,LMS Payment Plan Teacher,model_lms_payment_plan,lms_module.group_lms_teacher,1,0,0,0
 access_lms_payment_plan_student,LMS Payment Plan Student,model_lms_payment_plan,lms_module.group_lms_student,1,0,0,0
+access_lms_payment_transaction_admin,LMS Payment Transaction Admin,model_lms_payment_transaction,base.group_system,1,1,1,1
+access_lms_payment_transaction_manager,LMS Payment Transaction Manager,model_lms_payment_transaction,lms_module.group_lms_manager,1,1,1,1
+access_lms_payment_transaction_teacher,LMS Payment Transaction Teacher,model_lms_payment_transaction,lms_module.group_lms_teacher,1,0,0,0
+access_lms_payment_transaction_student,LMS Payment Transaction Student,model_lms_payment_transaction,lms_module.group_lms_student,1,0,0,0
+access_lms_payment_invoice_admin,LMS Payment Invoice Admin,model_lms_payment_invoice,base.group_system,1,1,1,1
+access_lms_payment_invoice_manager,LMS Payment Invoice Manager,model_lms_payment_invoice,lms_module.group_lms_manager,1,1,1,1
+access_lms_payment_invoice_teacher,LMS Payment Invoice Teacher,model_lms_payment_invoice,lms_module.group_lms_teacher,1,0,0,0
+access_lms_payment_invoice_student,LMS Payment Invoice Student,model_lms_payment_invoice,lms_module.group_lms_student,1,0,0,0

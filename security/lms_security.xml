@@ -264,5 +264,51 @@
             <field name="domain_force">[]</field>
         </record>
 
+        <!-- Payment Transaction Rules -->
+        <record id="rule_lms_payment_transaction_admin" model="ir.rule">
+            <field name="name">Payment Transaction: Admins can manage all payment transactions</field>
+            <field name="model_id" ref="model_lms_payment_transaction"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="rule_lms_payment_transaction_student" model="ir.rule">
+            <field name="name">Payment Transaction: Students can view their own payment transactions</field>
+            <field name="model_id" ref="model_lms_payment_transaction"/>
+            <field name="domain_force">[('payment_id.student_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Payment Invoice Rules -->
+        <record id="rule_lms_payment_invoice_admin" model="ir.rule">
+            <field name="name">Payment Invoice: Admins can manage all payment invoices</field>
+            <field name="model_id" ref="model_lms_payment_invoice"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="rule_lms_payment_invoice_student" model="ir.rule">
+            <field name="name">Payment Invoice: Students can view their own payment invoices</field>
+            <field name="model_id" ref="model_lms_payment_invoice"/>
+            <field name="domain_force">[('payment_id.student_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
     </data>
 </odoo>
