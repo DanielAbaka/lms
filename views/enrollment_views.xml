@@ -12,8 +12,7 @@
                         <button name="make_payment"
                                 type="object"
                                 string="Make Payment"
-                                class="btn-primary"
-                                attrs="{'invisible': [('payment_status','=', 'paid')]}" />
+                                class="btn-primary" />
                     </header>
                     <sheet>
                         <div class="oe_title">
