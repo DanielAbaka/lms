@@ -32,22 +32,31 @@
     <!-- Teacher Portal Dashboard View -->
     <record id="view_lms_teacher_dashboard" model="ir.ui.view">
         <field name="name">lms.teacher.dashboard</field>
-        <field name="model">lms.teacher</field>
+        <field name="model">res.users</field>
         <field name="arch" type="xml">
             <form string="Teacher Dashboard">
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <field name="assigned_course_count" widget="statinfo" string="Assigned Courses"/>
-                        <field name="student_count" widget="statinfo" string="Total Students"/>
-                        <field name="attendance_rate" widget="statinfo" string="Average Attendance"/>
-                        <field name="grade_count" widget="statinfo" string="Pending Grades"/>
+                        <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
+                            <field name="current_course_count" widget="statinfo" string="Assigned Courses"/>
+                        </button>
+                        <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="total_student_count" widget="statinfo" string="Total Students"/>
+                        </button>
+                        <button name="action_view_attendance" type="object" class="oe_stat_button" icon="fa-calendar-check-o">
+                            <field name="average_attendance_rate" widget="statinfo" string="Average Attendance"/>
+                        </button>
+                        <button name="action_view_materials" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="pending_gradings" widget="statinfo" string="Pending Grades"/>
+                        </button>
                     </div>
                     <notebook>
                         <page string="My Courses">
-                            <field name="course_ids">
+                            <field name="assigned_course_ids">
                                 <tree>
-                                    <field name="name"/>
-                                    <field name="student_count"/>
+                                    <field name="course_id"/>
+                                    <field name="academic_year_id"/>
+                                    <field name="semester_id"/>
                                     <field name="start_date"/>
                                     <field name="end_date"/>
                                     <field name="state"/>
@@ -55,22 +64,11 @@
                             </field>
                         </page>
                         <page string="Course Materials">
-                            <field name="document_ids">
+                            <field name="course_material_ids">
                                 <tree>
                                     <field name="name"/>
-                                    <field name="course_id"/>
+                                    <field name="teacher_assignment_id"/>
                                     <field name="type"/>
-                                    <field name="create_date"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Pending Grades">
-                            <field name="grade_ids">
-                                <tree>
-                                    <field name="student_id"/>
-                                    <field name="course_id"/>
-                                    <field name="grade"/>
-                                    <field name="status"/>
                                     <field name="create_date"/>
                                 </tree>
                             </field>
@@ -89,6 +87,19 @@
                 </sheet>
             </form>
         </field>
+        <field name="domain">[('is_teacher', '=', True)]</field>
+    </record>
+
+    <!-- Teacher Dashboard Action -->
+    <record id="action_lms_teacher_dashboard" model="ir.actions.act_window">
+        <field name="name">Teacher Dashboard</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_lms_teacher_dashboard"/>
+        <field name="domain">[('is_teacher', '=', True)]</field>
+        <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+        <field name="res_id" eval="uid"/>  <!-- This will open the current user's record -->
+        <field name="target">current</field>
     </record>
 
     <!-- Quiz Preview View -->
