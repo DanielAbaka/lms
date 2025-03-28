@@ -42,15 +42,15 @@
                         <!-- Buttons for state transitions -->
                         <button name="action_assign" string="Assign" type="object" 
                                 class="oe_highlight"
-                                attrs="{'invisible':[('state','!=','draft')]}"/>
+                                invisible="state != 'draft'"/>
                         <button name="action_start" string="Start" type="object"
-                                attrs="{'invisible':[('state','!=','assigned')]}"/>
+                                invisible="state != 'assigned'"/>
                         <button name="action_complete" string="Complete" type="object"
-                                attrs="{'invisible':[('state','!=','in_progress')]}"/>
+                                invisible="state != 'in_progress'"/>
                         <button name="action_cancel" string="Cancel" type="object"
-                                attrs="{'invisible':[('state','not in',['draft','assigned','in_progress'])]}"/>
+                                invisible="state not in ('draft', 'assigned', 'in_progress')"/>
                         <button name="action_reset_to_draft" string="Reset to Draft" type="object"
-                                attrs="{'invisible':[('state','!=','cancelled')]}" />
+                                invisible="state != 'cancelled'" />
 
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,assigned,in_progress,completed,cancelled"/>

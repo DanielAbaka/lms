@@ -40,11 +40,11 @@
                         <!-- Buttons referencing model methods -->
                         <button name="action_confirm_payment" string="Confirm Payment" type="object"
                                 class="oe_highlight"
-                                attrs="{'invisible':[('state','!=','draft')]}"/>
+                                invisible="state != 'draft'"/>
                         <button name="action_cancel_payment" string="Cancel" type="object"
-                                attrs="{'invisible':[('state','!=','draft')]}"/>
+                                invisible="state != 'draft'"/>
                         <button name="action_reset_to_draft" string="Reset to Draft" type="object"
-                                attrs="{'invisible':[('state','!=','cancelled')]}"/>
+                                invisible="state != 'cancelled'"/>
                         <field name="state" widget="statusbar"
                                statusbar_visible="draft,pending,completed,cancelled"/>
                     </header>

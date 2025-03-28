@@ -38,10 +38,9 @@
                         <!-- For verifying/unverifying attendance on a single record. -->
                         <button name="action_verify" type="object" string="Verify" 
                                 class="oe_highlight" 
-                                states="draft"
-                                invisible="is_verified == True"/>
+                                invisible="is_verified or status != 'draft'"/>
                         <button name="action_unverify" type="object" string="Unverify"
-                                invisible="is_verified == False"/>
+                                invisible="not is_verified"/>
                         
                         <!-- Possibly you want to mark statuses from form too,
                              but those are typically mass actions on multiple records in tree view. -->

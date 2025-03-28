@@ -41,9 +41,9 @@
                     <header>
                         <!-- Buttons to submit or reset grade, referencing your methods -->
                         <button name="action_submit_grade" string="Submit" type="object" class="oe_highlight"
-                                attrs="{'invisible':[('state','!=','draft')]}" />
+                                invisible="state != 'draft'" />
                         <button name="action_reset_grade" string="Reset" type="object" 
-                                attrs="{'invisible':[('state','!=','submitted')]}" />
+                                invisible="state != 'submitted'" />
                         <!-- Or possibly a confirm state if you want 'confirmed' after 'submitted' -->
 
                         <field name="state" widget="statusbar"
