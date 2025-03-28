@@ -83,7 +83,7 @@
         <!-- LMS Config Action -->
         <record id="action_lms_config" model="ir.actions.act_window">
             <field name="name">LMS Settings</field>
-            <field name="res_model">lms.config.settings</field>
+            <field name="res_model">res.config.settings</field>
             <field name="view_mode">form</field>
             <field name="target">inline</field>
             <field name="context">{'module': 'lms_module'}</field>
