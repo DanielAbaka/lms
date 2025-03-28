@@ -7,34 +7,84 @@
             <field name="model">lms.enrollment</field>
             <field name="arch" type="xml">
                 <form string="Enrollment">
+                    <header>
+                        <field name="payment_status" widget="statusbar" statusbar_visible="pending,partial,paid" clickable="True"/>
+                    </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_student" type="object" class="oe_stat_button" icon="fa-user-graduate">
+                                <div class="o_stat_info">
+                                    <span class="o_stat_text">Student</span>
+                                </div>
+                            </button>
+                            <button name="action_view_payment_history" type="object" class="oe_stat_button" icon="fa-money-bill">
+                                <field name="payment_count" widget="statinfo" string="Payments"/>
+                            </button>
+                            <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
+                                <field name="course_count" widget="statinfo" string="Courses"/>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Paid" attrs="{'invisible': [('payment_status', '!=', 'paid')]}"/>
+                        <widget name="web_ribbon" title="Pending" bg_color="bg-warning" attrs="{'invisible': [('payment_status', '!=', 'pending')]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1" placeholder="Enrollment Reference"/>
+                            </h1>
+                        </div>
                         <group>
-                            <field name="student_id" required="1"/>
-                            <field name="course_id" widget="many2many_tags" required="1"/>
-                            <field name="enrollment_date" required="1"/>
+                            <group string="Student Information">
+                                <field name="student_id" required="1" options="{'no_create': True}"/>
+                                <field name="enrollment_date" required="1"/>
+                                <field name="academic_year_id" readonly="1"/>
+                                <field name="semester_id" readonly="1"/>
+                            </group>
+                            <group string="Financial Information">
+                                <field name="total_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="remaining_balance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
                         </group>
-                        <group>
-                            <!-- 
-                                Using modifiers instead of attrs if needed for Odoo 17 
-                                But removing states as Odoo 17 no longer supports old states/attrs
-                            -->
-                            <field name="payment_status" widget="statusbar" options="{'clickable': '1'}"/>
-                            <field name="total_cost" readonly="1"/>
-                            <field name="remaining_balance" readonly="1"/>
-                        </group>
-                        <footer>
-                            <!-- 
-                                For Odoo 17, we use modifiers or remove the old attrs syntax.
-                                Example: modifiers="{'invisible': [('payment_status','=', 'paid')]}" 
-                                to hide the button if fully paid.
-                            -->
-                            <button name="make_payment"
-                                    type="object"
-                                    string="Make Payment"
-                                    class="btn-primary"
-                                    modifiers="{'invisible': [('payment_status','=', 'paid')]}" />
-                        </footer>
+                        <notebook>
+                            <page string="Courses" name="courses">
+                                <field name="course_id" widget="many2many" options="{'color_field': 'color'}" required="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="academic_year_id"/>
+                                        <field name="semester_id"/>
+                                        <field name="credits"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Payment History" name="payments">
+                                <field name="payment_ids">
+                                    <tree editable="bottom" decoration-success="state=='confirmed'" decoration-danger="state=='cancelled'" decoration-warning="state=='pending'">
+                                        <field name="payment_date"/>
+                                        <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="payment_method"/>
+                                        <field name="state"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                                <group class="mt-3">
+                                    <group>
+                                        <button name="make_payment" type="object" string="Register Payment" 
+                                                class="btn btn-primary" 
+                                                attrs="{'invisible': [('payment_status', '=', 'paid')]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="total_paid" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Notes" name="notes">
+                                <field name="notes" placeholder="Add any notes about this enrollment..." widget="html"/>
+                            </page>
+                        </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -44,14 +94,84 @@
             <field name="name">lms.enrollment.tree</field>
             <field name="model">lms.enrollment</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree decoration-success="payment_status=='paid'" decoration-warning="payment_status=='partial'" decoration-danger="payment_status=='pending'">
+                    <field name="name"/>
                     <field name="student_id"/>
                     <field name="course_id" widget="many2many_tags"/>
+                    <field name="enrollment_date"/>
+                    <field name="semester_id"/>
+                    <field name="payment_status"/>
+                    <field name="total_cost" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="remaining_balance" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ✅ Enrollment Kanban View -->
+        <record id="view_lms_enrollment_kanban" model="ir.ui.view">
+            <field name="name">lms.enrollment.kanban</field>
+            <field name="model">lms.enrollment</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" default_group_by="payment_status">
+                    <field name="name"/>
+                    <field name="student_id"/>
                     <field name="enrollment_date"/>
                     <field name="payment_status"/>
                     <field name="total_cost"/>
                     <field name="remaining_balance"/>
-                </tree>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                                <div class="o_kanban_record_top mb-0">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <span><field name="student_id"/></span>
+                                        </strong>
+                                        <small class="o_kanban_record_subtitle text-muted">
+                                            <field name="name"/>
+                                        </small>
+                                    </div>
+                                    <div class="o_dropdown_kanban dropdown">
+                                        <a class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Dropdown menu" role="button">
+                                            <span class="fa fa-ellipsis-v"/>
+                                        </a>
+                                        <div class="dropdown-menu" role="menu">
+                                            <t t-if="record.payment_status.raw_value != 'paid'">
+                                                <a name="make_payment" type="object" class="dropdown-item">Register Payment</a>
+                                            </t>
+                                            <a name="action_view_payment_history" type="object" class="dropdown-item">View Payments</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <strong>Date: </strong><field name="enrollment_date"/>
+                                        </div>
+                                        <div class="col-6">
+                                            <t t-if="record.payment_status.raw_value == 'paid'">
+                                                <span class="badge badge-success float-right">Paid</span>
+                                            </t>
+                                            <t t-elif="record.payment_status.raw_value == 'partial'">
+                                                <span class="badge badge-warning float-right">Partial</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge badge-danger float-right">Pending</span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="text-muted mt-2">
+                                        <strong>Total: </strong><field name="total_cost"/>
+                                    </div>
+                                    <div class="text-muted" t-if="record.payment_status.raw_value != 'paid'">
+                                        <strong>Balance: </strong><field name="remaining_balance"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
             </field>
         </record>
 
@@ -61,10 +181,23 @@
             <field name="model">lms.enrollment</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="name"/>
                     <field name="student_id"/>
                     <field name="course_id"/>
                     <field name="enrollment_date"/>
                     <field name="payment_status"/>
+                    <filter name="filter_my_enrollments" string="My Enrollments" domain="[('student_id.user_id', '=', uid)]"/>
+                    <filter name="filter_pending_payment" string="Pending Payment" domain="[('payment_status', '=', 'pending')]"/>
+                    <filter name="filter_partial_payment" string="Partial Payment" domain="[('payment_status', '=', 'partial')]"/>
+                    <filter name="filter_paid" string="Fully Paid" domain="[('payment_status', '=', 'paid')]"/>
+                    <filter name="filter_today" string="Today" domain="[('enrollment_date', '=', context_today())]"/>
+                    <filter name="filter_month" string="This Month" domain="[('enrollment_date', '&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d')), ('enrollment_date', '&lt;=', (context_today() + relativedelta(months=1, day=1, days=-1)).strftime('%Y-%m-%d'))]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Student" name="group_by_student" domain="[]" context="{'group_by': 'student_id'}"/>
+                        <filter string="Payment Status" name="group_by_payment_status" domain="[]" context="{'group_by': 'payment_status'}"/>
+                        <filter string="Semester" name="group_by_semester" domain="[]" context="{'group_by': 'semester_id'}"/>
+                        <filter string="Date" name="group_by_date" domain="[]" context="{'group_by': 'enrollment_date'}"/>
+                    </group>
                 </search>
             </field>
         </record>
@@ -73,8 +206,17 @@
         <record id="action_lms_enrollment" model="ir.actions.act_window">
             <field name="name">Enrollments</field>
             <field name="res_model">lms.enrollment</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="search_view_id" ref="view_lms_enrollment_search"/>
+            <field name="context">{'search_default_group_by_payment_status': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new enrollment
+                </p>
+                <p>
+                    Manage student enrollments in courses and track payments.
+                </p>
+            </field>
         </record>
 
         <!-- ✅ Menu Item under LMS Module -->
@@ -82,6 +224,7 @@
                   name="Enrollments"
                   parent="lms_module.menu_root"
                   action="action_lms_enrollment"
-                  sequence="8"/>
+                  sequence="8"
+                  icon="fa-user-plus"/>
     </data>
 </odoo>

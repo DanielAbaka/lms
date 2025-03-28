@@ -1,17 +1,172 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- ✅ Main Menu with App Icon -->
+    <menuitem id="lms_module.menu_root" 
+              name="LMS"
+              web_icon="lms_module,static/description/icon.png"
+              sequence="10"/>
+              
+    <!-- ✅ Dashboard Menu -->
+    <record id="action_lms_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard</field>
+        <field name="res_model">lms.dashboard</field>
+        <field name="view_mode">kanban</field>
+        <field name="target">inline</field>
+    </record>
+    
+    <menuitem id="menu_lms_dashboard" 
+              name="Dashboard"
+              parent="lms_module.menu_root"
+              action="action_lms_dashboard"
+              sequence="1"
+              icon="fa-tachometer-alt"/>
+              
+    <!-- ✅ Academic Menu Category -->
+    <menuitem id="menu_lms_academic" 
+              name="Academic"
+              parent="lms_module.menu_root"
+              sequence="10"/>
+    
+    <!-- Submenu items moved to Academic category -->
+    <menuitem id="menu_lms_courses" 
+              name="Courses"
+              parent="menu_lms_academic"
+              action="action_lms_courses"
+              sequence="11"
+              icon="fa-book"/>
+              
+    <menuitem id="menu_lms_course_planning" 
+              name="Course Planning"
+              parent="menu_lms_academic"
+              action="action_lms_course_planning"
+              sequence="12"
+              icon="fa-calendar-alt"/>
+    
+    <menuitem id="menu_lms_quiz" 
+              name="Quizzes"
+              parent="menu_lms_academic"
+              action="action_lms_quiz"
+              sequence="13"
+              icon="fa-question"/>
+    
+    <!-- ✅ People Menu Category -->
+    <menuitem id="menu_lms_people" 
+              name="People"
+              parent="lms_module.menu_root"
+              sequence="20"/>
+    
+    <!-- Submenu items moved to People category -->
+    <menuitem id="menu_lms_students" 
+              name="Students"
+              parent="menu_lms_people"
+              action="action_lms_students"
+              sequence="21"
+              icon="fa-user-graduate"/>
+              
+    <menuitem id="menu_lms_teachers" 
+              name="Teachers"
+              parent="menu_lms_people"
+              action="action_lms_teachers"
+              sequence="22"
+              icon="fa-chalkboard-teacher"/>
+              
+    <menuitem id="menu_lms_teacher_assignments" 
+              name="Teacher Assignments"
+              parent="menu_lms_people"
+              action="action_lms_teacher_assignments"
+              sequence="23"
+              icon="fa-user-check"/>
+    
+    <!-- ✅ Enrollments & Finance Menu Category -->
+    <menuitem id="menu_lms_finance" 
+              name="Enrollments &amp; Finance"
+              parent="lms_module.menu_root"
+              sequence="30"/>
+              
+    <!-- Submenu items moved to Finance category -->
+    <menuitem id="menu_lms_enrollment" 
+              name="Enrollments"
+              parent="menu_lms_finance"
+              action="action_lms_enrollment"
+              sequence="31"
+              icon="fa-user-plus"/>
+              
+    <menuitem id="menu_lms_payments" 
+              name="Payments"
+              parent="menu_lms_finance"
+              action="action_lms_payments"
+              sequence="32"
+              icon="fa-money-bill"/>
+    
+    <!-- ✅ Academic Records Menu Category -->
+    <menuitem id="menu_lms_records" 
+              name="Academic Records"
+              parent="lms_module.menu_root"
+              sequence="40"/>
+              
+    <!-- Submenu items moved to Academic Records category -->
+    <menuitem id="menu_lms_grades" 
+              name="Grades"
+              parent="menu_lms_records"
+              action="action_lms_grades"
+              sequence="41"
+              icon="fa-graduation-cap"/>
+              
+    <menuitem id="menu_lms_transcripts" 
+              name="Transcripts"
+              parent="menu_lms_records"
+              action="action_lms_transcripts"
+              sequence="42"
+              icon="fa-file-alt"/>
+              
+    <menuitem id="menu_lms_documents" 
+              name="Documents"
+              parent="menu_lms_records"
+              action="action_lms_documents"
+              sequence="43"
+              icon="fa-file"/>
+    
+    <!-- ✅ Communication Menu Category -->
+    <menuitem id="menu_lms_communication" 
+              name="Communication"
+              parent="lms_module.menu_root"
+              sequence="50"/>
+              
+    <!-- Submenu items moved to Communication category -->
+    <menuitem id="menu_lms_messaging" 
+              name="Messaging"
+              parent="menu_lms_communication"
+              action="action_lms_messaging"
+              sequence="51"
+              icon="fa-comments"/>
+    
+    <!-- ✅ Settings Menu Category -->
+    <menuitem id="menu_lms_settings" 
+              name="Configuration"
+              parent="lms_module.menu_root"
+              sequence="90"/>
+              
+    <!-- Submenu items for Settings -->
+    <menuitem id="menu_lms_academic_years" 
+              name="Academic Years"
+              parent="menu_lms_settings"
+              action="action_lms_academic_years"
+              sequence="91"
+              icon="fa-calendar"/>
+              
+    <menuitem id="menu_lms_semesters" 
+              name="Semesters"
+              parent="menu_lms_settings"
+              action="action_lms_semesters"
+              sequence="92"
+              icon="fa-calendar-week"/>
+
     <!-- ✅ Define the Action First -->
     <record id="action_lms_quiz" model="ir.actions.act_window">
         <field name="name">Quizzes</field>
         <field name="res_model">survey.survey</field>
         <field name="view_mode">tree,form</field>
     </record>
-
-    <!-- ✅ Define the Menu After the Action -->
-    <menuitem id="menu_lms_quiz" name="Quizzes"
-              parent="lms_module.menu_root"
-              action="action_lms_quiz"
-              sequence="20"/>
 
     <!-- ✅ Tree View for LMS Quiz (FIXED: Removed question_and_page_count) -->
     <record id="view_lms_quiz_tree" model="ir.ui.view">
