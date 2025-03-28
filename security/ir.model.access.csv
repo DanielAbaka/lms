@@ -33,7 +33,7 @@ access_lms_schedule_template_teacher,LMS Schedule Template Teacher,model_lms_sch
 access_lms_schedule_template_student,LMS Schedule Template Student,model_lms_schedule_template,lms_module.group_lms_student,1,0,0,0
 access_lms_attendance_manager,LMS Attendance Manager,model_lms_attendance,lms_module.group_lms_manager,1,1,1,1
 access_lms_attendance_teacher_upgrade,LMS Attendance Teacher Upgrade,model_lms_attendance,lms_module.group_lms_teacher,1,1,1,1
-access_lms_course_material_admin_upgrade,LMS Course Material Admin,model_lms_course_material,base.group_system,1,1,1,1
+access_lms_course_material_admin_upgrade,LMS Course Material Admin Upgrade,model_lms_course_material,base.group_system,1,1,1,1
 access_lms_course_material_manager,LMS Course Material Manager,model_lms_course_material,lms_module.group_lms_manager,1,1,1,1
 access_lms_payment_plan_admin,LMS Payment Plan Admin,model_lms_payment_plan,base.group_system,1,1,1,1
 access_lms_payment_plan_manager,LMS Payment Plan Manager,model_lms_payment_plan,lms_module.group_lms_manager,1,1,1,1
