@@ -33,10 +33,10 @@
                     <header>
                         <!-- Publish / Unpublish Buttons -->
                         <button name="action_publish" type="object" string="Publish" 
-                                attrs="{'invisible':[('is_published','=',True)]}" 
+                                invisible="is_published" 
                                 class="oe_highlight"/>
                         <button name="action_unpublish" type="object" string="Unpublish" 
-                                attrs="{'invisible':[('is_published','=',False)]}"/>
+                                invisible="not is_published"/>
                         
                         <!-- Statusbar approach if you want to display is_published or category -->
                         <!-- optional: <field name="category" widget="statusbar"/> -->
@@ -67,19 +67,19 @@
                             <page string="Content Details">
                                 <group>
                                     <group>
-                                        <field name="duration" attrs="{'invisible':[('material_type','!=','video')]}"
+                                        <field name="duration" invisible="material_type != 'video'"
                                                placeholder="Duration (minutes)"/>
-                                        <field name="due_date" attrs="{'invisible':[('material_type','not in',['assignment','quiz'])]}" 
+                                        <field name="due_date" invisible="material_type not in ('assignment', 'quiz')" 
                                                placeholder="Due date for assignments/quizzes"/>
-                                        <field name="max_score" attrs="{'invisible':[('material_type','not in',['assignment','quiz'])]}"
+                                        <field name="max_score" invisible="material_type not in ('assignment', 'quiz')"
                                                placeholder="Max score for quizzes/assignments"/>
                                     </group>
                                     <group>
                                         <field name="file" filename="file_name" invisible="0"/>
                                         <field name="file_name" invisible="1"/>
-                                        <field name="video_url" attrs="{'invisible':[('material_type','!=','video')]}"
+                                        <field name="video_url" invisible="material_type != 'video'"
                                                placeholder="URL for video content"/>
-                                        <field name="external_url" attrs="{'invisible':[('material_type','!=','link')]}"
+                                        <field name="external_url" invisible="material_type != 'link'"
                                                placeholder="External link if material_type=link"/>
                                     </group>
                                 </group>
@@ -88,7 +88,7 @@
                                 </group>
                             </page>
 
-                            <page string="Access & Statistics">
+                            <page string="Access &amp; Statistics">
                                 <group>
                                     <group>
                                         <field name="view_count" readonly="1"/>
