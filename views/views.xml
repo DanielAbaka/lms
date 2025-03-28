@@ -400,7 +400,7 @@
                   <tree>
                     <field name="date"/>
                     <field name="status"/>
-                    <field name="remarks"/>
+                    <field name="notes"/>
                   </tree>
                 </field>
               </page>
