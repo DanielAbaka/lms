@@ -15,7 +15,6 @@
                         <div class="row mt-4">
                             <div class="col-md-6">
                                 <group>
-                                    <field name="teacher_id" required="1" placeholder="Teacher ID"/>
                                     <field name="email" widget="email"/>
                                     <field name="phone" widget="phone"/>
                                 </group>
@@ -66,7 +65,6 @@
             <field name="arch" type="xml">
                 <tree class="lms_module o_list_view">
                     <field name="name"/>
-                    <field name="teacher_id"/>
                     <field name="email"/>
                     <field name="department_id"/>
                     <field name="specialization"/>
@@ -82,7 +80,6 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
-                    <field name="teacher_id"/>
                     <field name="department_id"/>
                     <field name="specialization"/>
                     <filter name="filter_teachers" string="Teachers" domain="[('is_teacher', '=', True)]"/>
@@ -101,7 +98,6 @@
                 <kanban class="lms_module o_kanban_view">
                     <field name="id"/>
                     <field name="name"/>
-                    <field name="teacher_id"/>
                     <field name="email"/>
                     <field name="department_id"/>
                     <field name="specialization"/>
