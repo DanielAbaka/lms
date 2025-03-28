@@ -28,9 +28,6 @@ Features include course management, student enrollment, teacher assignments, gra
         'security/ir.model.access.csv',
         'security/lms_security.xml',
         
-        # Assets
-        'static/src/lms_assets.xml',
-        
         # Views
         'views/views.xml',
         'views/menu.xml',
@@ -53,7 +50,7 @@ Features include course management, student enrollment, teacher assignments, gra
     
     'assets': {
         'web.assets_backend': [
-            'lms/static/src/scss/lms_style.scss',
+            '/lms_module/static/src/scss/lms_style.scss',
         ],
     },
     
