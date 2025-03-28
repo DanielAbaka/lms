@@ -14,7 +14,7 @@
     </record>
     
     <!-- ✅ Root Menu Item with Modern Styling -->
-    <menuitem id="menu_root" name="LMS" web_icon="lms,static/description/icon.png" sequence="10"/>
+    <menuitem id="menu_root" name="LMS" web_icon="lms_module,static/description/icon.png" sequence="10"/>
     
     <!-- ✅ Dashboard Menu -->
     <menuitem id="menu_lms_dashboard" name="Dashboard"
@@ -111,7 +111,7 @@
                                 <tree>
                                     <field name="title"/>
                                     <field name="question_type"/>
-                                    <field name="is_mandatory"/>
+                                    <field name="constr_mandatory" string="Required"/>
                                 </tree>
                             </field>
                         </page>
