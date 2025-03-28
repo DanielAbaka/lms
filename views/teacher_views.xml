@@ -21,32 +21,14 @@
                             </div>
                             <div class="col-md-6">
                                 <group>
-                                    <field name="department_id" options="{'no_create': True}"/>
-                                    <field name="specialization" placeholder="Area of expertise"/>
-                                    <field name="hire_date"/>
+                                    <field name="is_teacher" invisible="1"/>
+                                    <field name="company_id" groups="base.group_multi_company"/>
                                 </group>
                             </div>
                         </div>
                         <notebook>
                             <page string="Courses" name="assigned_courses">
-                                <field name="course_assignment_ids" widget="one2many">
-                                    <tree>
-                                        <field name="course_id"/>
-                                        <field name="academic_year_id"/>
-                                        <field name="semester_id"/>
-                                        <field name="start_date"/>
-                                        <field name="end_date"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Qualifications" name="qualifications">
-                                <field name="qualification_ids" widget="one2many">
-                                    <tree editable="bottom">
-                                        <field name="name"/>
-                                        <field name="institution"/>
-                                        <field name="year"/>
-                                    </tree>
-                                </field>
+                                <field name="assigned_courses" widget="many2many_tags"/>
                             </page>
                         </notebook>
                     </sheet>
@@ -66,9 +48,8 @@
                 <tree class="lms_module o_list_view">
                     <field name="name"/>
                     <field name="email"/>
-                    <field name="department_id"/>
-                    <field name="specialization"/>
                     <field name="phone"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
                 </tree>
             </field>
         </record>
@@ -80,11 +61,11 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
-                    <field name="department_id"/>
-                    <field name="specialization"/>
+                    <field name="email"/>
+                    <field name="phone"/>
                     <filter name="filter_teachers" string="Teachers" domain="[('is_teacher', '=', True)]"/>
                     <group expand="0" string="Group By">
-                        <filter name="group_by_department" string="Department" context="{'group_by': 'department_id'}"/>
+                        <filter name="group_by_company" string="Company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
                     </group>
                 </search>
             </field>
@@ -99,8 +80,7 @@
                     <field name="id"/>
                     <field name="name"/>
                     <field name="email"/>
-                    <field name="department_id"/>
-                    <field name="specialization"/>
+                    <field name="phone"/>
                     <field name="image_128"/>
                     <templates>
                         <t t-name="kanban-box">
@@ -110,14 +90,11 @@
                                     <strong class="o_kanban_record_title">
                                         <field name="name"/>
                                     </strong>
-                                    <div class="o_kanban_record_subtitle">
-                                        <field name="specialization"/>
-                                    </div>
-                                    <div>
-                                        <field name="department_id"/>
-                                    </div>
                                     <div>
                                         <field name="email" widget="email"/>
+                                    </div>
+                                    <div>
+                                        <field name="phone" widget="phone"/>
                                     </div>
                                 </div>
                             </div>
