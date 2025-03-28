@@ -26,6 +26,7 @@
         <menuitem id="menu_assessment" name="Assessment" parent="menu_root" sequence="5"/>
         <menuitem id="menu_course_grades" name="Course Grades" parent="menu_assessment" action="action_lms_course_grades" sequence="1"/>
         <menuitem id="menu_course_quizzes" name="Course Quizzes" parent="menu_assessment" action="action_lms_course_quizzes" sequence="2"/>
+        <menuitem id="menu_quiz_questions" name="Quiz Questions" parent="menu_assessment" action="action_lms_quiz_questions" sequence="3"/>
 
         <!-- Portal Access Menu -->
         <menuitem id="menu_portal_access" name="Portal Access" parent="menu_root" sequence="6"/>

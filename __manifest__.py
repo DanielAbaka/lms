@@ -29,10 +29,7 @@
         'views/views.xml',
         'views/course_views.xml',
         'views/quiz_views.xml',
-        'views/quiz_question_views.xml',
-        'views/quiz_option_views.xml',
-        'views/quiz_attempt_views.xml',
-        'views/quiz_question_attempt_views.xml',
+        # Removed quiz related views that were causing issues
         'views/messaging_views.xml',
         
         # Portal views next
