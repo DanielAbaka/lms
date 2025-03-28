@@ -591,86 +591,40 @@
       <field name="model">lms.transcript</field>
       <field name="arch" type="xml">
         <form string="Transcript">
-          <header>
-            <button name="action_activate" string="Activate" type="object" class="oe_highlight" invisible="state != 'draft'"/>
-            <button name="action_complete" string="Complete" type="object" class="oe_highlight" invisible="state != 'active'"/>
-            <button name="action_cancel" string="Cancel" type="object" invisible="state not in ('draft', 'active')"/>
-            <button name="action_reset_to_draft" string="Reset to Draft" type="object" invisible="state != 'cancelled'"/>
-            <field name="state" widget="statusbar"/>
-          </header>
           <sheet>
             <div class="oe_button_box" name="button_box">
-              <button name="action_view_grades" type="object" class="oe_stat_button" icon="fa-star">
-                <field name="grade_count" widget="statinfo" string="Grades"/>
-              </button>
-              <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
-                <field name="course_count" widget="statinfo" string="Courses"/>
+              <button name="%(action_lms_grade)d" type="action" class="oe_stat_button" icon="fa-star"
+                      domain="[('student_id', '=', student_id)]" context="{'default_student_id': student_id}">
+                <span>Grades</span>
               </button>
             </div>
+            <group>
+              <group>
+                <field name="student_id" required="1"/>
+                <field name="academic_year_id"/>
+                <field name="semester_id"/>
+              </group>
+              <group>
+                <field name="gpa"/>
+                <field name="total_credits"/>
+              </group>
+            </group>
             <notebook>
-              <page string="General Information">
-                <group>
-                  <group>
-                    <field name="student_id" required="1"/>
-                    <field name="academic_year_id" required="1"/>
-                    <field name="semester_id" required="1"/>
-                    <field name="state"/>
-                  </group>
-                  <group>
-                    <field name="gpa"/>
-                    <field name="total_credits"/>
-                    <field name="active"/>
-                  </group>
-                </group>
-              </page>
-              <page string="Academic Summary">
-                <group>
-                  <group>
-                    <field name="total_courses"/>
-                    <field name="courses_completed"/>
-                    <field name="courses_in_progress"/>
-                    <field name="courses_failed"/>
-                  </group>
-                  <group>
-                    <field name="total_credits_attempted"/>
-                    <field name="total_credits_earned"/>
-                    <field name="total_credits_in_progress"/>
-                    <field name="total_credits_failed"/>
-                  </group>
-                </group>
-              </page>
-              <page string="Notes">
-                <field name="notes"/>
-              </page>
-              <page string="Grades">
-                <field name="grade_ids">
-                  <tree>
-                    <field name="course_id"/>
-                    <field name="credits"/>
-                    <field name="grade"/>
-                    <field name="grade_type"/>
-                    <field name="is_final"/>
-                    <field name="state"/>
-                  </tree>
-                </field>
-              </page>
               <page string="Courses">
                 <field name="course_ids">
                   <tree>
                     <field name="name"/>
                     <field name="code"/>
                     <field name="credits"/>
-                    <field name="enrollment_count"/>
-                    <field name="state"/>
                   </tree>
                 </field>
               </page>
             </notebook>
           </sheet>
           <div class="oe_chatter">
-            <field name="message_follower_ids"/>
-            <field name="activity_ids"/>
-            <field name="message_ids"/>
+            <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+            <field name="activity_ids" widget="mail_activity"/>
+            <field name="message_ids" widget="mail_thread"/>
           </div>
         </form>
       </field>
@@ -681,19 +635,12 @@
       <field name="name">lms.transcript.tree</field>
       <field name="model">lms.transcript</field>
       <field name="arch" type="xml">
-        <tree decoration-info="state == 'draft'" decoration-success="state == 'active'" decoration-muted="state in ['completed', 'cancelled']">
+        <tree>
           <field name="student_id"/>
           <field name="academic_year_id"/>
           <field name="semester_id"/>
           <field name="gpa"/>
           <field name="total_credits"/>
-          <field name="total_courses"/>
-          <field name="courses_completed"/>
-          <field name="courses_in_progress"/>
-          <field name="courses_failed"/>
-          <field name="grade_count"/>
-          <field name="course_count"/>
-          <field name="state"/>
         </tree>
       </field>
     </record>
@@ -709,16 +656,10 @@
           <field name="semester_id"/>
           <field name="gpa"/>
           <field name="total_credits"/>
-          <separator/>
-          <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-          <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
-          <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
-          <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
           <group expand="0" string="Group By">
             <filter string="Student" name="group_by_student" context="{'group_by': 'student_id'}"/>
             <filter string="Academic Year" name="group_by_academic_year" context="{'group_by': 'academic_year_id'}"/>
             <filter string="Semester" name="group_by_semester" context="{'group_by': 'semester_id'}"/>
-            <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
           </group>
         </search>
       </field>
