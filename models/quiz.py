@@ -74,6 +74,13 @@ class Quiz(models.Model):
             if record.max_attempts < 1:
                 raise ValidationError("Maximum attempts must be at least 1!")
 
+    def action_view_attempts(self):
+        self.ensure_one()
+        action = self.env.ref('lms_module.action_lms_quiz_attempts').read()[0]
+        action['domain'] = [('quiz_id', '=', self.id)]
+        action['context'] = {'default_quiz_id': self.id}
+        return action
+
     def action_publish(self):
         self.ensure_one()
         if self.state == 'draft':

@@ -30,5 +30,5 @@ class QuizOption(models.Model):
     def _compute_statistics(self):
         for record in self:
             record.attempt_count = len(record.attempt_ids)
-            record.selection_count = len(record.attempt_ids.filtered(lambda x: x.selected))
+            record.selection_count = len(record.attempt_ids)
             record.correct_count = len(record.attempt_ids.filtered(lambda x: x.is_correct))

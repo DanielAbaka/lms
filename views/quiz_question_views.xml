@@ -8,6 +8,14 @@
             <field name="arch" type="xml">
                 <form string="Quiz Question">
                     <header>
+                        <button name="action_activate" string="Activate" type="object" class="oe_highlight"
+                               invisible="state != 'draft'"/>
+                        <button name="action_archive" string="Archive" type="object"
+                               invisible="state != 'active'"/>
+                        <button name="action_unarchive" string="Unarchive" type="object"
+                               invisible="state != 'archived'"/>
+                        <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                               invisible="state == 'draft'"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -73,7 +81,7 @@
             <field name="name">lms.quiz.question.tree</field>
             <field name="model">lms.quiz.question</field>
             <field name="arch" type="xml">
-                <tree decoration-info="state == 'draft'" decoration-success="state == 'active'">
+                <tree decoration-info="state == 'draft'" decoration-success="state == 'active'" decoration-muted="state == 'archived'">
                     <field name="sequence" widget="handle"/>
                     <field name="name"/>
                     <field name="quiz_id"/>

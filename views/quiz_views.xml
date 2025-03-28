@@ -77,7 +77,12 @@
                     </header>
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <field name="attempt_count" widget="statinfo" string="Attempts"/>
+                            <button name="%(action_lms_quiz_preview)d" type="action"
+                                   string="Preview" class="oe_stat_button" icon="fa-eye"/>
+                            <button type="object" class="oe_stat_button" icon="fa-pencil-square-o" 
+                                   name="action_view_attempts">
+                                <field name="attempt_count" widget="statinfo" string="Attempts"/>
+                            </button>
                             <field name="average_score" widget="statinfo" string="Avg Score"/>
                         </div>
                         <notebook>
@@ -85,14 +90,18 @@
                                 <group>
                                     <group>
                                         <field name="name" required="1"/>
-                                        <field name="course_id" required="1"/>
+                                        <field name="code" required="1"/>
+                                        <field name="teacher_assignment_id" required="1"/>
+                                        <field name="course_id" readonly="1"/>
                                         <field name="duration"/>
                                         <field name="passing_score"/>
                                     </group>
                                     <group>
+                                        <field name="total_points"/>
                                         <field name="max_attempts"/>
                                         <field name="start_date"/>
                                         <field name="end_date"/>
+                                        <field name="show_results"/>
                                         <field name="state"/>
                                     </group>
                                 </group>
@@ -114,10 +123,10 @@
                                 <field name="attempt_ids">
                                     <tree>
                                         <field name="student_id"/>
-                                        <field name="start_time"/>
-                                        <field name="end_time"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
                                         <field name="score"/>
-                                        <field name="status"/>
+                                        <field name="state"/>
                                     </tree>
                                 </field>
                             </page>
@@ -137,10 +146,15 @@
             <field name="name">lms.quiz.tree</field>
             <field name="model">lms.quiz</field>
             <field name="arch" type="xml">
-                <tree decoration-info="state == 'draft'" decoration-success="state == 'active'">
+                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'">
                     <field name="name"/>
+                    <field name="code"/>
                     <field name="course_id"/>
+                    <field name="teacher_assignment_id"/>
                     <field name="duration"/>
+                    <field name="total_points"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
                     <field name="attempt_count"/>
                     <field name="average_score"/>
                     <field name="state"/>
@@ -155,13 +169,18 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
+                    <field name="code"/>
                     <field name="course_id"/>
+                    <field name="teacher_assignment_id"/>
                     <separator/>
                     <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-                    <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
-                    <filter string="Archived" name="archived" domain="[('state', '=', 'archived')]"/>
+                    <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
+                    <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                     <group expand="0" string="Group By">
                         <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                        <filter string="Teacher Assignment" name="group_by_teacher" context="{'group_by': 'teacher_assignment_id'}"/>
                         <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
                     </group>
                 </search>
