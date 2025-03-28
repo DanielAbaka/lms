@@ -87,7 +87,7 @@
     <!-- Course Kanban View -->
     <record id="view_lms_course_kanban" model="ir.ui.view">
         <field name="name">lms.course.kanban</field>
-        <field name="model">lms.course</field>
+        <field name="model">slide.channel</field>
         <field name="arch" type="xml">
             <kanban class="oe_background_grey" sample="1">
                 <field name="image_1920" widget="image"/>
@@ -100,7 +100,7 @@
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
                             <div class="oe_kanban_image">
-                                <img t-att-src="kanban_image('lms.course', 'image_1920', record.id.raw_value)" alt="Course Image"/>
+                                <img t-att-src="kanban_image('slide.channel', 'image_1920', record.id.raw_value)" alt="Course Image"/>
                             </div>
                             <div class="oe_kanban_details">
                                 <strong class="oe_kanban_record_title">
@@ -131,7 +131,7 @@
     <!-- Course Views -->
     <record id="view_lms_course_form" model="ir.ui.view">
         <field name="name">lms.course.form</field>
-        <field name="model">lms.course</field>
+        <field name="model">slide.channel</field>
         <field name="arch" type="xml">
             <form string="Course">
                 <header>
@@ -194,7 +194,7 @@
 
     <record id="view_lms_course_tree" model="ir.ui.view">
         <field name="name">lms.course.tree</field>
-        <field name="model">lms.course</field>
+        <field name="model">slide.channel</field>
         <field name="arch" type="xml">
             <tree decoration-info="state == 'draft'" decoration-success="state == 'active'">
                 <field name="name"/>
@@ -210,7 +210,7 @@
 
     <record id="view_lms_course_search" model="ir.ui.view">
         <field name="name">lms.course.search</field>
-        <field name="model">lms.course</field>
+        <field name="model">slide.channel</field>
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
@@ -231,14 +231,14 @@
     <!-- Course Actions -->
     <record id="action_lms_courses" model="ir.actions.act_window">
         <field name="name">Courses</field>
-        <field name="res_model">lms.course</field>
+        <field name="res_model">slide.channel</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="search_view_id" ref="view_lms_course_search"/>
     </record>
 
     <record id="action_lms_courses_kanban" model="ir.actions.act_window">
         <field name="name">Course Overview</field>
-        <field name="res_model">lms.course</field>
+        <field name="res_model">slide.channel</field>
         <field name="view_mode">kanban</field>
         <field name="search_view_id" ref="view_lms_course_search"/>
     </record>

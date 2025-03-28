@@ -4,7 +4,7 @@
         <!-- Course Form View -->
         <record id="view_lms_course_form" model="ir.ui.view">
             <field name="name">lms.course.form</field>
-            <field name="model">lms.course</field>
+            <field name="model">slide.channel</field>
             <field name="arch" type="xml">
                 <form string="Course">
                     <header>
@@ -108,7 +108,7 @@
         <!-- Course Tree View -->
         <record id="view_lms_course_tree" model="ir.ui.view">
             <field name="name">lms.course.tree</field>
-            <field name="model">lms.course</field>
+            <field name="model">slide.channel</field>
             <field name="arch" type="xml">
                 <tree decoration-info="state == 'draft'" decoration-success="state == 'published'">
                     <field name="name"/>
@@ -127,7 +127,7 @@
         <!-- Course Search View -->
         <record id="view_lms_course_search" model="ir.ui.view">
             <field name="name">lms.course.search</field>
-            <field name="model">lms.course</field>
+            <field name="model">slide.channel</field>
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
@@ -150,7 +150,7 @@
         <!-- Course Action -->
         <record id="action_lms_course" model="ir.actions.act_window">
             <field name="name">Courses</field>
-            <field name="res_model">lms.course</field>
+            <field name="res_model">slide.channel</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_lms_course_search"/>
         </record>

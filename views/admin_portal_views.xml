@@ -113,7 +113,7 @@
         <!-- Course Management -->
         <record id="admin_portal_course_management" model="ir.ui.view">
             <field name="name">Course Management</field>
-            <field name="model">lms.course</field>
+            <field name="model">slide.channel</field>
             <field name="arch" type="xml">
                 <form>
                     <header>
@@ -314,7 +314,7 @@
 
         <record id="action_admin_portal_course_management" model="ir.actions.act_window">
             <field name="name">Course Management</field>
-            <field name="res_model">lms.course</field>
+            <field name="res_model">slide.channel</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="admin_portal_course_management"/>
             <field name="target">current</field>
@@ -334,6 +334,26 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="admin_portal_schedule_management"/>
             <field name="target">current</field>
+        </record>
+
+        <record id="view_lms_admin_course_form" model="ir.ui.view">
+            <field name="name">lms.admin.course.form</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <!-- ... existing view definition ... -->
+            </field>
+        </record>
+
+        <record id="action_lms_admin_course" model="ir.actions.act_window">
+            <field name="name">Courses</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course
+                </p>
+            </field>
         </record>
     </data>
 </odoo> 
