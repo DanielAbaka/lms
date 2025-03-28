@@ -130,43 +130,30 @@
                                 <field name="code"/>
                                 <field name="credits"/>
                                 <field name="cost_per_credit"/>
-                                <field name="total_cost"/>
                             </group>
                             <group>
-                                <field name="teacher_id"/>
                                 <field name="max_students"/>
-                                <field name="enrolled_students"/>
-                                <field name="available_slots"/>
+                                <field name="enrollment_count"/>
+                                <field name="assignment_count"/>
                             </group>
                         </group>
                         <notebook>
-                            <page string="Schedule">
-                                <field name="schedule_ids">
+                            <page string="Teacher Assignments">
+                                <field name="teacher_assignment_ids">
                                     <tree>
-                                        <field name="day"/>
-                                        <field name="start_time"/>
-                                        <field name="end_time"/>
-                                        <field name="room_id"/>
                                         <field name="teacher_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Enrolled Students">
-                                <field name="enrolled_student_ids">
+                            <page string="Enrollments">
+                                <field name="enrollment_ids">
                                     <tree>
                                         <field name="student_id"/>
-                                        <field name="name"/>
                                         <field name="enrollment_date"/>
-                                        <field name="payment_status"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Course Materials">
-                                <field name="material_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="type"/>
-                                        <field name="upload_date"/>
+                                        <field name="state"/>
                                     </tree>
                                 </field>
                             </page>
