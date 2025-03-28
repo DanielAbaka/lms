@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
+        <!-- Course Actions -->
+        <record id="action_lms_courses" model="ir.actions.act_window">
+            <field name="name">Courses</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_courses_kanban" model="ir.actions.act_window">
+            <field name="name">Course Overview</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">kanban</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course
+                </p>
+            </field>
+        </record>
+
         <!-- Course Schedules Action -->
         <record id="action_lms_course_schedules" model="ir.actions.act_window">
             <field name="name">Course Schedules</field>
@@ -116,6 +143,70 @@
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     Create your first attendance record
+                </p>
+            </field>
+        </record>
+
+        <!-- Teacher Portal Course Materials Action -->
+        <record id="action_teacher_portal_course_materials" model="ir.actions.act_window">
+            <field name="name">Course Materials</field>
+            <field name="res_model">lms.course.material</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('teacher_ids', 'in', [uid])]</field>
+            <field name="context">{'default_teacher_ids': [(4, uid)]}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course material
+                </p>
+            </field>
+        </record>
+
+        <!-- Teacher Dashboard Action -->
+        <record id="action_lms_teacher_dashboard" model="ir.actions.act_window">
+            <field name="name">Teacher Dashboard</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="lms_module.teacher_portal_dashboard"/>
+            <field name="domain">[('id', '=', uid), ('is_teacher', '=', True)]</field>
+            <field name="target">current</field>
+            <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+        </record>
+
+        <!-- Student Portal Action -->
+        <record id="action_lms_student_portal" model="ir.actions.act_window">
+            <field name="name">Student Portal</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="lms_module.student_portal_dashboard"/>
+            <field name="domain">[('id', '=', uid), ('is_student', '=', True)]</field>
+            <field name="target">current</field>
+            <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+        </record>
+        
+        <!-- Student Portal Course Materials Action -->
+        <record id="action_student_portal_course_materials" model="ir.actions.act_window">
+            <field name="name">My Course Materials</field>
+            <field name="res_model">lms.course.material</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('student_ids', 'in', [uid])]</field>
+            <field name="context">{'default_student_ids': [(4, uid)]}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No course materials available yet
+                </p>
+            </field>
+        </record>
+        
+        <!-- Student Portal Attendance Action -->
+        <record id="action_student_portal_attendance" model="ir.actions.act_window">
+            <field name="name">My Attendance</field>
+            <field name="res_model">lms.attendance</field>
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="domain">[('student_attendance_ids.student_id', '=', uid)]</field>
+            <field name="context">{'search_default_my_attendance': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No attendance records available yet
                 </p>
             </field>
         </record>

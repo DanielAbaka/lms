@@ -233,20 +233,5 @@
         </field>
     </record>
 
-    <!-- Course Actions -->
-    <record id="action_lms_courses" model="ir.actions.act_window">
-        <field name="name">Courses</field>
-        <field name="res_model">slide.channel</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="search_view_id" ref="view_lms_course_search"/>
-    </record>
-
-    <record id="action_lms_courses_kanban" model="ir.actions.act_window">
-        <field name="name">Course Overview</field>
-        <field name="res_model">slide.channel</field>
-        <field name="view_mode">kanban</field>
-        <field name="search_view_id" ref="view_lms_course_search"/>
-    </record>
-
   </data>
 </odoo>

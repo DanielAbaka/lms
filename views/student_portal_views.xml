@@ -174,12 +174,7 @@
         </record>
 
         <!-- Student Portal Action -->
-        <record id="action_lms_student_portal" model="ir.actions.act_window">
-            <field name="name">Student Portals</field>
-            <field name="res_model">lms.student</field>
-            <field name="view_mode">tree,form</field>
-            <field name="search_view_id" ref="view_lms_student_portal_search"/>
-        </record>
+        
 
         <!-- Student Portals Menu Item -->
         <menuitem id="menu_lms_student_portals" name="Student Portals"
@@ -241,24 +236,6 @@
                   parent="menu_lms_student_portals"
                   action="action_lms_student_schedule"
                   sequence="1"/>
-
-        <!-- Student Portal Course Materials Action -->
-        <record id="action_student_portal_course_materials" model="ir.actions.act_window">
-            <field name="name">My Course Materials</field>
-            <field name="res_model">lms.course.material</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="search_view_id" ref="view_student_portal_course_material_search"/>
-            <field name="context">{'search_default_my_courses': 1}</field>
-        </record>
-
-        <!-- Student Portal Attendance Action -->
-        <record id="action_student_portal_attendance" model="ir.actions.act_window">
-            <field name="name">My Attendance</field>
-            <field name="res_model">lms.attendance</field>
-            <field name="view_mode">calendar,tree,form</field>
-            <field name="search_view_id" ref="view_student_portal_attendance_search"/>
-            <field name="context">{'search_default_my_attendance': 1}</field>
-        </record>
 
         <!-- Student Portal Course Material Search View -->
         <record id="view_student_portal_course_material_search" model="ir.ui.view">
@@ -689,6 +666,15 @@
             <field name="view_id" ref="student_portal_payment"/>
             <field name="target">current</field>
             <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+        </record>
+
+        <!-- Portal Actions -->
+        <record id="action_lms_student_profile" model="ir.actions.act_window">
+            <field name="name">Student Profile</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="student_portal_profile"/>
+            <field name="target">current</field>
         </record>
     </data>
 </odoo> 

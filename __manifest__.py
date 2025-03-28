@@ -25,25 +25,29 @@
         "security/ir.model.access.csv",
         "security/lms_security.xml",
         
-        # Core Views
+        # First load all model views
         'views/views.xml',
-        'views/menu_actions.xml',
-        'views/menu.xml',
-        'views/templates.xml',
-        
-        # Portal Views
-        'views/student_portal_views.xml',
-        'views/teacher_portal_views.xml',
-        'views/admin_portal_views.xml',
-        
-        # Feature Views
+        'views/course_views.xml',
         'views/quiz_views.xml',
         'views/quiz_question_views.xml',
         'views/quiz_option_views.xml',
         'views/quiz_attempt_views.xml',
         'views/quiz_question_attempt_views.xml',
-        'views/course_views.xml',
         'views/messaging_views.xml',
+        
+        # Portal views next
+        'views/student_portal_views.xml',
+        'views/teacher_portal_views.xml',
+        'views/admin_portal_views.xml',
+        
+        # Actions must be loaded before menus
+        'views/menu_actions.xml',
+        
+        # Menu last
+        'views/menu.xml',
+        'views/templates.xml',
+        
+        'views/enhanced_views.xml',
     ],
     'demo': [
         'demo/lms_demo.xml',
