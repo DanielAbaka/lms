@@ -76,3 +76,50 @@ class AcademicYear(models.Model):
         self.ensure_one()
         if self.state == 'cancelled':
             self.write({'state': 'draft'})
+
+    # ---------------------------------------------------------
+    # New Action Methods for use in the Academic Year view
+    # ---------------------------------------------------------
+    def action_view_semesters(self):
+        self.ensure_one()
+        return {
+            'name': 'Semesters',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.semester',
+            'view_mode': 'tree,form',
+            'domain': [('academic_year_id', '=', self.id)],
+            'context': {'default_academic_year_id': self.id},
+        }
+
+    def action_view_courses(self):
+        self.ensure_one()
+        return {
+            'name': 'Courses',
+            'type': 'ir.actions.act_window',
+            'res_model': 'slide.channel',
+            'view_mode': 'tree,form',
+            'domain': [('academic_year_id', '=', self.id)],
+            'context': {'default_academic_year_id': self.id},
+        }
+
+    def action_view_students(self):
+        self.ensure_one()
+        return {
+            'name': 'Students',
+            'type': 'ir.actions.act_window',
+            'res_model': 'res.users',
+            'view_mode': 'tree,form',
+            'domain': [('enrollment_ids.academic_year_id', '=', self.id)],
+            'context': {'default_academic_year_id': self.id},
+        }
+
+    def action_view_teachers(self):
+        self.ensure_one()
+        return {
+            'name': 'Teacher Assignments',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.teacher.assignment',
+            'view_mode': 'tree,form',
+            'domain': [('academic_year_id', '=', self.id)],
+            'context': {'default_academic_year_id': self.id},
+        }
