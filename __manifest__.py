@@ -29,7 +29,6 @@
         'views/views.xml',
         'views/course_views.xml',
         'views/quiz_views.xml',
-        'views/quiz_question_views.xml',
         'views/student_views.xml',
         'views/teacher_views.xml',
         'views/attendance_views.xml',

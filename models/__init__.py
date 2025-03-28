@@ -19,7 +19,11 @@ from . import messaging
 from . import administrator
 from . import attendance
 from . import course_material
-# Uncommented needed modules
+# Commented out unused modules
+# from . import quiz_question
+# from . import quiz_option
+# from . import quiz_attempt
+# from . import quiz_question_attempt
 from . import document_access
 from . import schedule
 from . import bulk_enrollment
