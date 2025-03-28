@@ -30,8 +30,7 @@
                             <page string="Academic Information" name="academic_info">
                                 <div class="student_dashboard">
                                     <group>
-                                        <field name="enrollment_date"/>
-                                        <field name="graduation_date"/>
+                                        <field name="dashboard_data"/>
                                     </group>
                                 </div>
                             </page>
@@ -51,7 +50,6 @@
                     <field name="student_id"/>
                     <field name="email"/>
                     <field name="phone"/>
-                    <field name="enrollment_date"/>
                 </tree>
             </field>
         </record>
@@ -67,7 +65,7 @@
                     <field name="email"/>
                     <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
                     <group expand="0" string="Group By">
-                        <filter name="group_by_enrollment_date" string="Enrollment Date" context="{'group_by': 'enrollment_date:month'}"/>
+                        <filter name="group_by_student_id" string="Student ID" context="{'group_by': 'student_id'}"/>
                     </group>
                 </search>
             </field>
