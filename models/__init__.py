@@ -19,10 +19,11 @@ from . import messaging
 from . import administrator
 from . import attendance
 from . import course_material
-# Removed non-existent modules
-# from . import quiz_question
-# from . import quiz_option
+# Uncommented needed modules
+from . import quiz_question
+# from . import quiz_option  # Will be imported from quiz_question.py
 # from . import quiz_attempt
 # from . import quiz_question_attempt
 from . import document_access
 from . import schedule
+from . import bulk_enrollment
