@@ -4,28 +4,26 @@
         <!-- LMS Manager Group -->
         <record id="group_lms_manager" model="res.groups">
             <field name="name">LMS Manager</field>
-            <!-- Change the category from hidden to a visible Education category -->
-            <field name="category_id" ref="base.module_category_education"/>
-            <!-- Optionally, add the admin user to this group -->
+            <field name="category_id" ref="base.module_category_elearning"/>
             <field name="users" eval="[(4, ref('base.user_admin'))]"/>
         </record>
 
         <!-- LMS User Group -->
         <record id="group_lms_user" model="res.groups">
             <field name="name">LMS User</field>
-            <field name="category_id" ref="base.module_category_education"/>
+            <field name="category_id" ref="base.module_category_elearning"/>
         </record>
 
         <!-- LMS Student Group -->
         <record id="group_lms_student" model="res.groups">
             <field name="name">LMS Student</field>
-            <field name="category_id" ref="base.module_category_education"/>
+            <field name="category_id" ref="base.module_category_elearning"/>
         </record>
 
         <!-- LMS Teacher Group -->
         <record id="group_lms_teacher" model="res.groups">
             <field name="name">LMS Teacher</field>
-            <field name="category_id" ref="base.module_category_education"/>
+            <field name="category_id" ref="base.module_category_elearning"/>
         </record>
     </data>
 </odoo>
