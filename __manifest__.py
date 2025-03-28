@@ -37,6 +37,7 @@
         'views/course_material_views.xml',
         'views/course_planning_views.xml',
         'views/document_views.xml',
+        'views/document_access_views.xml',
         'views/enrollment_views.xml',
         'views/grade_views.xml',
         'views/teacher_assignment_views.xml',
@@ -44,17 +45,17 @@
         'views/transcript_views.xml',
         'views/payment_views.xml',
         'views/payment_plan_views.xml',
-        'views/messaging_views.xml',
+        'views/administrator_views.xml',
+        'views/bulk_enrollment_views.xml',
         
         # Actions must be loaded before menus
         'views/menu_actions.xml',
         
         # Menu last
         'views/menu.xml',
-        'views/templates.xml',
     ],
     'demo': [
-        'demo/lms_demo.xml',
+        'demo/demo.xml',
     ],
     'installable': True,
     'application': True,
