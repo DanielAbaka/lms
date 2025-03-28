@@ -27,6 +27,7 @@
         
         # Core Views
         'views/views.xml',
+        'views/menu_actions.xml',
         'views/menu.xml',
         'views/templates.xml',
         

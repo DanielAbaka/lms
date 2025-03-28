@@ -313,5 +313,18 @@
             <field name="target">current</field>
             <field name="context">{'create': True}</field>
         </record>
+
+        <record id="action_teacher_portal_course_materials" model="ir.actions.act_window">
+            <field name="name">Course Materials</field>
+            <field name="res_model">lms.course.material</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('teacher_ids', 'in', [active_id])]</field>
+            <field name="context">{'default_teacher_ids': [(4, active_id)]}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course material
+                </p>
+            </field>
+        </record>
     </data>
 </odoo> 
