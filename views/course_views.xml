@@ -38,10 +38,10 @@
                 <form string="LMS Course">
                     <header>
                         <button name="action_publish" string="Publish" type="object" 
-                                attrs="{'invisible':[('state','!=','draft')]}"
+                                invisible="state != 'draft'"
                                 class="oe_highlight"/>
                         <button name="action_unpublish" string="Unpublish" type="object" 
-                                attrs="{'invisible':[('state','!=','published')]}" />
+                                invisible="state != 'published'" />
                         <field name="state" widget="statusbar" statusbar_visible="draft,published"/>
                     </header>
                     <sheet>
