@@ -85,11 +85,11 @@
     <!-- =========================================================================
          Payment Rules
          ========================================================================= -->
-    <!-- Students can only see their own payments -->
+    <!-- Students can only see their own payments - FIXED MODEL REFERENCE -->
     <record id="rule_lms_payment_student" model="ir.rule">
       <field name="name">Student Payment Access</field>
-      <field name="model_id" ref="model_lms_payment"/>
-      <field name="domain_force">[('student_id', '=', user.id)]</field>
+      <field name="model_id" ref="model_lms_payment_plan"/>
+      <field name="domain_force">[('enrollment_id.student_id', '=', user.id)]</field>
       <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
       <field name="perm_read" eval="True"/>
       <field name="perm_write" eval="False"/>
@@ -213,6 +213,36 @@
       <field name="name">Student Transcript Access</field>
       <field name="model_id" ref="model_lms_transcript"/>
       <field name="domain_force">[('student_id', '=', user.id)]</field>
+      <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="False"/>
+      <field name="perm_create" eval="False"/>
+      <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- =========================================================================
+         Payment Transaction Rules
+         ========================================================================= -->
+    <!-- Students can only see their own payment transactions -->
+    <record id="rule_lms_payment_transaction_student" model="ir.rule">
+      <field name="name">Student Payment Transaction Access</field>
+      <field name="model_id" ref="model_lms_payment_transaction"/>
+      <field name="domain_force">[('payment_id.student_id', '=', user.id)]</field>
+      <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="False"/>
+      <field name="perm_create" eval="False"/>
+      <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- =========================================================================
+         Payment Invoice Rules
+         ========================================================================= -->
+    <!-- Students can only see their own payment invoices -->
+    <record id="rule_lms_payment_invoice_student" model="ir.rule">
+      <field name="name">Student Payment Invoice Access</field>
+      <field name="model_id" ref="model_lms_payment_invoice"/>
+      <field name="domain_force">[('payment_id.student_id', '=', user.id)]</field>
       <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
       <field name="perm_read" eval="True"/>
       <field name="perm_write" eval="False"/>
