@@ -16,4 +16,3 @@ from . import grade
 from . import transcript
 from . import document
 from . import messaging
-from . import dashboard

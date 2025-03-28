@@ -2,19 +2,10 @@
 {
     'name': "LMS Module",
 
-    'summary': "A modern Learning Management System for managing courses, students, teachers, enrollments, and more.",
+    'summary': "A Learning Management System for managing courses, students, teachers, enrollments, and more.",
 
     'description': """
-Modern Learning Management System
----------------------------------
-* Student management with enrollment tracking
-* Course and curriculum management
-* Teacher assignment and scheduling
-* Grade management and transcript generation
-* Payment tracking and financial management
-* Document management for students and courses
-* Interactive dashboard with key metrics
-* Modern UI/UX design with responsive layout
+Long description of module's purpose
     """,
 
     'author': "CS4LIBERIA",
@@ -23,20 +14,20 @@ Modern Learning Management System
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'Education',
-    'version': '1.0',
+    'category': 'Uncategorized',
+    'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'website_slides', 'survey', 'hr', 'payment', 'mail', 'web'],
+    'depends': ['base','website_slides','survey','hr','payment','mail'],
 
     # always loaded
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
+
         # 'security/lms_security.xml',
         'views/views.xml',
         'views/menu.xml',
-        'views/dashboard_views.xml',
         'views/student_views.xml',
         'views/course_views.xml',
         'views/course_planning_views.xml',
@@ -50,17 +41,10 @@ Modern Learning Management System
         'views/transcript_views.xml',
         'views/document_views.xml',
         'views/messaging_views.xml',
+
+
+
     ],
-    
-    'assets': {
-        'web.assets_backend': [
-            'lms_module/static/src/scss/dashboard.scss',
-        ],
-    },
-    
-    # hooks
-    'post_init_hook': 'post_init_hook',
-    
     # only loaded in demonstration mode
     'installable': True,
     'application': True,
