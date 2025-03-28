@@ -22,9 +22,8 @@
     'data': [
         # Security
         "security/groups.xml",
-        "security/models_data.xml",
         "security/ir.model.access.csv",
-        "security/security.xml",
+        "security/lms_security.xml",
         
         # Core Views
         'views/views.xml',
