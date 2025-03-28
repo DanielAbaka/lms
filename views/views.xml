@@ -478,53 +478,42 @@
       <field name="arch" type="xml">
         <form string="Grade">
           <header>
-            <field name="state" widget="statusbar"/>
+            <button name="action_submit_grade" type="object" string="Submit Grade" class="oe_highlight" invisible="state != 'draft'"/>
+            <button name="action_reset_grade" type="object" string="Reset" invisible="state != 'submitted'"/>
+            <field name="state" widget="statusbar" statusbar_visible="draft,submitted,confirmed"/>
           </header>
           <sheet>
-            <div class="oe_button_box" name="button_box">
-              <button name="action_submit_grade" type="object" string="Submit Grade" class="oe_highlight"/>
-              <button name="action_reset_grade" type="object" string="Reset" class="oe_highlight"/>
-              <field name="state" widget="statusbar"/>
+            <div class="oe_title">
+              <h1><field name="name" readonly="1"/></h1>
             </div>
+            <group>
+              <group>
+                <field name="student_id" required="1" readonly="state != 'draft'"/>
+                <field name="enrollment_id" required="1" readonly="state != 'draft'"/>
+                <field name="course_id" required="1" readonly="state != 'draft'"/>
+                <field name="quiz_id" readonly="state != 'draft'"/>
+                <field name="teacher_assignment_id" readonly="state != 'draft'"/>
+              </group>
+              <group>
+                <field name="grade" required="1" readonly="state != 'draft'"/>
+                <field name="grade_type" required="1" readonly="state != 'draft'"/>
+                <field name="credits" required="1" readonly="state != 'draft'"/>
+                <field name="is_final" readonly="state != 'draft'"/>
+                <field name="date" readonly="state != 'draft'"/>
+                <field name="state" invisible="1"/>
+              </group>
+            </group>
             <notebook>
-              <page string="General Information">
-                <group>
-                  <group>
-                    <field name="student_id" required="1"/>
-                    <field name="enrollment_id" required="1"/>
-                    <field name="course_id" required="1"/>
-                    <field name="grade_letter" required="1"/>
-                    <field name="grade_point" required="1"/>
-                    <field name="credits" required="1"/>
-                    <field name="state"/>
-                  </group>
-                  <group>
-                    <field name="date"/>
-                    <field name="active"/>
-                  </group>
-                </group>
-              </page>
-              <page string="Grade Details">
-                <group>
-                  <group>
-                    <field name="grade_letter"/>
-                    <field name="grade_point"/>
-                  </group>
-                </group>
-              </page>
               <page string="Comments">
-                <field name="remarks"/>
+                <field name="remarks" readonly="state != 'draft'"/>
               </page>
-              <page string="Transcripts">
-                <field name="transcript_ids">
-                  <tree>
-                    <field name="student_id"/>
-                    <field name="academic_year_id"/>
-                    <field name="semester_id"/>
-                    <field name="gpa"/>
-                    <field name="state"/>
-                  </tree>
-                </field>
+              <page string="Grading Information" attrs="{'invisible': [('grading_date', '=', False)]}">
+                <group>
+                  <group>
+                    <field name="graded_by" readonly="1"/>
+                    <field name="grading_date" readonly="1"/>
+                  </group>
+                </group>
               </page>
             </notebook>
           </sheet>
@@ -542,14 +531,15 @@
       <field name="name">lms.grade.tree</field>
       <field name="model">lms.grade</field>
       <field name="arch" type="xml">
-        <tree decoration-info="state == 'draft'" decoration-success="state == 'approved'" decoration-muted="state == 'rejected'">
+        <tree decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-muted="state == 'submitted'">
+          <field name="name"/>
           <field name="student_id"/>
           <field name="course_id"/>
-          <field name="grade_letter"/>
-          <field name="grade_point"/>
+          <field name="grade"/>
+          <field name="grade_type"/>
           <field name="credits"/>
           <field name="date"/>
-          <field name="transcript_count"/>
+          <field name="is_final"/>
           <field name="state"/>
         </tree>
       </field>
@@ -561,18 +551,26 @@
       <field name="model">lms.grade</field>
       <field name="arch" type="xml">
         <search>
+          <field name="name"/>
           <field name="student_id"/>
           <field name="course_id"/>
-          <field name="grade_letter"/>
+          <field name="grade"/>
           <field name="date"/>
+          <field name="grade_type"/>
           <separator/>
           <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
           <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
-          <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
-          <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+          <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+          <separator/>
+          <filter string="Final Grades" name="is_final" domain="[('is_final', '=', True)]"/>
+          <filter string="Quiz Grades" name="quiz_grades" domain="[('grade_type', '=', 'quiz')]"/>
+          <filter string="Exam Grades" name="exam_grades" domain="[('grade_type', '=', 'exam')]"/>
+          <filter string="Assignment Grades" name="assignment_grades" domain="[('grade_type', '=', 'assignment')]"/>
           <group expand="0" string="Group By">
             <filter string="Student" name="group_by_student" context="{'group_by': 'student_id'}"/>
             <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+            <filter string="Grade Type" name="group_by_grade_type" context="{'group_by': 'grade_type'}"/>
+            <filter string="Date" name="group_by_date" context="{'group_by': 'date'}"/>
             <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
           </group>
         </search>
@@ -650,9 +648,8 @@
                     <field name="course_id"/>
                     <field name="credits"/>
                     <field name="grade"/>
-                    <field name="grade_letter"/>
-                    <field name="grade_point"/>
-                    <field name="grade_status"/>
+                    <field name="grade_type"/>
+                    <field name="is_final"/>
                     <field name="state"/>
                   </tree>
                 </field>
