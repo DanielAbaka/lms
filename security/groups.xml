@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
+    <data noupdate="0">
+        <!-- Create LMS Module Category -->
+        <record id="module_category_lms" model="ir.module.category">
+            <field name="name">Learning Management</field>
+            <field name="description">Manage learning resources</field>
+            <field name="sequence">20</field>
+        </record>
+
         <!-- LMS Manager Group -->
         <record id="group_lms_manager" model="res.groups">
             <field name="name">LMS Manager</field>
-            <field name="category_id" ref="base.module_category_elearning"/>
+            <field name="category_id" ref="module_category_lms"/>
             <field name="users" eval="[(4, ref('base.user_admin'))]"/>
         </record>
 
         <!-- LMS User Group -->
         <record id="group_lms_user" model="res.groups">
             <field name="name">LMS User</field>
-            <field name="category_id" ref="base.module_category_elearning"/>
+            <field name="category_id" ref="module_category_lms"/>
         </record>
 
         <!-- LMS Student Group -->
         <record id="group_lms_student" model="res.groups">
             <field name="name">LMS Student</field>
-            <field name="category_id" ref="base.module_category_elearning"/>
+            <field name="category_id" ref="module_category_lms"/>
         </record>
 
         <!-- LMS Teacher Group -->
         <record id="group_lms_teacher" model="res.groups">
             <field name="name">LMS Teacher</field>
-            <field name="category_id" ref="base.module_category_elearning"/>
+            <field name="category_id" ref="module_category_lms"/>
         </record>
     </data>
 </odoo>
