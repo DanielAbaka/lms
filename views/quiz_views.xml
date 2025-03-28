@@ -1,26 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-    <!-- Quiz Form View -->
-    <record id="view_lms_quiz_form" model="ir.ui.view">
-      <field name="name">lms.quiz.form</field>
+    <!-- Quiz Preview View for lms.quiz -->
+    <record id="view_lms_quiz_preview" model="ir.ui.view">
+      <field name="name">lms.quiz.preview</field>
       <field name="model">lms.quiz</field>
       <field name="arch" type="xml">
-        <form string="Quiz">
+        <form string="Quiz Preview">
           <header>
-            <button name="action_publish" string="Publish" type="object" class="oe_highlight" invisible="state != 'draft'"/>
-            <button name="action_start" string="Start" type="object" class="oe_highlight" invisible="state != 'published'"/>
-            <button name="action_complete" string="Complete" type="object" class="oe_highlight" invisible="state != 'in_progress'"/>
-            <button name="action_cancel" string="Cancel" type="object" invisible="state not in ('draft','published')"/>
-            <button name="action_reset_to_draft" string="Reset to Draft" type="object" invisible="state != 'cancelled'"/>
+            <button name="action_publish" string="Publish" type="object" class="oe_highlight"
+                    invisible="state != 'draft'"/>
+            <button name="action_start" string="Start" type="object" class="oe_highlight"
+                    invisible="state != 'published'"/>
+            <button name="action_complete" string="Complete" type="object" class="oe_highlight"
+                    invisible="state != 'in_progress'"/>
+            <button name="action_cancel" string="Cancel" type="object"
+                    invisible="state not in ('draft','published')"/>
+            <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                    invisible="state != 'cancelled'"/>
             <field name="state" widget="statusbar" statusbar_visible="draft,published,in_progress,completed,cancelled"/>
           </header>
           <sheet>
             <div class="oe_button_box" name="button_box">
-              <!-- Preview button (if an action exists for preview) -->
+              <!-- Button to launch preview action -->
               <button name="%(action_lms_quiz_preview)d" type="action" class="oe_stat_button" icon="fa-eye" string="Preview"/>
-              <!-- Display total points as an example statistic -->
-              <field name="total_points" widget="statinfo" string="Total Points"/>
+              <!-- Button to view attempts -->
+              <button name="action_view_attempts" type="object" class="oe_stat_button" icon="fa-pencil-square-o">
+                <field name="attempt_count" widget="statinfo" string="Attempts"/>
+              </button>
+              <field name="average_score" widget="statinfo" string="Avg Score"/>
             </div>
             <notebook>
               <page string="Quiz Details">
@@ -30,10 +38,11 @@
                     <field name="code" required="1"/>
                     <field name="teacher_assignment_id" required="1"/>
                     <field name="course_id" readonly="1"/>
-                  </group>
-                  <group>
                     <field name="duration"/>
                     <field name="passing_score"/>
+                  </group>
+                  <group>
+                    <field name="total_points"/>
                     <field name="max_attempts"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
@@ -45,6 +54,18 @@
                   <field name="description" nolabel="1"/>
                 </group>
               </page>
+              <!-- The "Questions" page has been removed because the model no longer has a question_ids field -->
+              <page string="Attempts">
+                <field name="attempt_ids">
+                  <tree>
+                    <field name="student_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="score"/>
+                    <field name="state"/>
+                  </tree>
+                </field>
+              </page>
             </notebook>
           </sheet>
           <div class="oe_chatter">
@@ -53,20 +74,6 @@
             <field name="message_ids"/>
           </div>
         </form>
-      </field>
-    </record>
-
-    <!-- Quiz Tree View -->
-    <record id="view_lms_quiz_tree" model="ir.ui.view">
-      <field name="name">lms.quiz.tree</field>
-      <field name="model">lms.quiz</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="code"/>
-          <field name="course_id"/>
-          <field name="state"/>
-        </tree>
       </field>
     </record>
   </data>
