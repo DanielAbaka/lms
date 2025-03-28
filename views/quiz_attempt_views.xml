@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- Quiz Attempt Form View -->
+        <record id="view_lms_quiz_attempt_form" model="ir.ui.view">
+            <field name="name">lms.quiz.attempt.form</field>
+            <field name="model">lms.quiz.attempt</field>
+            <field name="arch" type="xml">
+                <form string="Quiz Attempt">
+                    <header>
+                        <button name="action_submit" string="Submit" type="object" class="oe_highlight"
+                                invisible="state != 'in_progress'"/>
+                        <button name="action_timeout" string="Mark as Timeout" type="object"
+                                invisible="state != 'in_progress'"/>
+                        <button name="action_cancel" string="Cancel" type="object"
+                                invisible="state != 'in_progress'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="quiz_id"/>
+                                <field name="student_id"/>
+                                <field name="enrollment_id"/>
+                                <field name="course_id"/>
+                            </group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="duration"/>
+                                <field name="score"/>
+                                <field name="max_score"/>
+                                <field name="percentage"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Question Attempts">
+                                <field name="question_attempt_ids">
+                                    <tree>
+                                        <field name="question_id"/>
+                                        <field name="answer_text"/>
+                                        <field name="is_correct"/>
+                                        <field name="score"/>
+                                        <field name="max_score"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Quiz Attempt Tree View -->
+        <record id="view_lms_quiz_attempt_tree" model="ir.ui.view">
+            <field name="name">lms.quiz.attempt.tree</field>
+            <field name="model">lms.quiz.attempt</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="state == 'completed'" decoration-danger="state == 'timeout'" decoration-muted="state == 'cancelled'">
+                    <field name="name"/>
+                    <field name="quiz_id"/>
+                    <field name="student_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="duration"/>
+                    <field name="score"/>
+                    <field name="percentage"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Quiz Attempt Search View -->
+        <record id="view_lms_quiz_attempt_search" model="ir.ui.view">
+            <field name="name">lms.quiz.attempt.search</field>
+            <field name="model">lms.quiz.attempt</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="quiz_id"/>
+                    <field name="student_id"/>
+                    <field name="course_id"/>
+                    <separator/>
+                    <filter string="In Progress" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
+                    <filter string="Timeout" name="timeout" domain="[('state', '=', 'timeout')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Quiz" name="group_by_quiz" context="{'group_by': 'quiz_id'}"/>
+                        <filter string="Student" name="group_by_student" context="{'group_by': 'student_id'}"/>
+                        <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Quiz Attempt Action -->
+        <record id="action_lms_quiz_attempts" model="ir.actions.act_window">
+            <field name="name">Quiz Attempts</field>
+            <field name="res_model">lms.quiz.attempt</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_quiz_attempt_search"/>
+        </record>
+
+        <!-- Quiz Attempt Menu Item -->
+        <menuitem id="menu_lms_quiz_attempts" name="Quiz Attempts"
+                  parent="lms_module.menu_root"
+                  action="action_lms_quiz_attempts"
+                  sequence="10"/>
+    </data>
+</odoo> 

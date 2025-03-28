@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <!-- Quiz Option Form View -->
+        <record id="view_lms_quiz_option_form" model="ir.ui.view">
+            <field name="name">lms.quiz.option.form</field>
+            <field name="model">lms.quiz.option</field>
+            <field name="arch" type="xml">
+                <form string="Quiz Option">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="question_id"/>
+                                <field name="sequence"/>
+                                <field name="is_correct"/>
+                            </group>
+                            <group>
+                                <field name="attempt_count"/>
+                                <field name="selection_count"/>
+                                <field name="correct_count"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <group string="Explanation">
+                            <field name="explanation" nolabel="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Attempts">
+                                <field name="attempt_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="attempt_id"/>
+                                        <field name="is_correct"/>
+                                        <field name="score"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Quiz Option Tree View -->
+        <record id="view_lms_quiz_option_tree" model="ir.ui.view">
+            <field name="name">lms.quiz.option.tree</field>
+            <field name="model">lms.quiz.option</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="is_correct == True">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="question_id"/>
+                    <field name="is_correct"/>
+                    <field name="attempt_count"/>
+                    <field name="selection_count"/>
+                    <field name="correct_count"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Quiz Option Search View -->
+        <record id="view_lms_quiz_option_search" model="ir.ui.view">
+            <field name="name">lms.quiz.option.search</field>
+            <field name="model">lms.quiz.option</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="question_id"/>
+                    <separator/>
+                    <filter string="Correct" name="correct" domain="[('is_correct', '=', True)]"/>
+                    <filter string="Incorrect" name="incorrect" domain="[('is_correct', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Question" name="group_by_question" context="{'group_by': 'question_id'}"/>
+                        <filter string="Correctness" name="group_by_correct" context="{'group_by': 'is_correct'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Quiz Option Action -->
+        <record id="action_lms_quiz_options" model="ir.actions.act_window">
+            <field name="name">Quiz Options</field>
+            <field name="res_model">lms.quiz.option</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_quiz_option_search"/>
+        </record>
+    </data>
+</odoo> 
