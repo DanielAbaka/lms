@@ -19,11 +19,8 @@
                             <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
                                 <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
                             </button>
-                            <button name="action_view_quizzes" type="object" class="oe_stat_button" icon="fa-question-circle">
-                                <field name="quiz_count" widget="statinfo" string="Quizzes"/>
-                            </button>
-                            <button name="action_view_documents" type="object" class="oe_stat_button" icon="fa-file">
-                                <field name="document_count" widget="statinfo" string="Documents"/>
+                            <button name="action_view_assignments" type="object" class="oe_stat_button" icon="fa-tasks">
+                                <field name="assignment_count" widget="statinfo" string="Assignments"/>
                             </button>
                         </div>
                         <notebook>
@@ -61,35 +58,6 @@
                                         <field name="teacher_id"/>
                                         <field name="start_date"/>
                                         <field name="end_date"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Quizzes">
-                                <field name="quiz_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="start_date"/>
-                                        <field name="end_date"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Documents">
-                                <field name="document_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="date"/>
-                                        <field name="is_public"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Grades">
-                                <field name="grade_ids">
-                                    <tree>
-                                        <field name="student_id"/>
-                                        <field name="grade"/>
                                         <field name="state"/>
                                     </tree>
                                 </field>
