@@ -54,14 +54,21 @@
                   <field name="description" nolabel="1"/>
                 </group>
               </page>
-              <!-- The "Questions" page has been removed because the model no longer has a question_ids field -->
+              <page string="Statistics">
+                <group>
+                  <group>
+                    <field name="attempt_count"/>
+                    <field name="average_score"/>
+                    <field name="pass_rate"/>
+                  </group>
+                </group>
+              </page>
               <page string="Attempts">
                 <field name="attempt_ids">
                   <tree>
                     <field name="student_id"/>
-                    <field name="start_date"/>
-                    <field name="end_date"/>
-                    <field name="score"/>
+                    <field name="date"/>
+                    <field name="grade"/>
                     <field name="state"/>
                   </tree>
                 </field>

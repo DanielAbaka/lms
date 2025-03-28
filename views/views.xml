@@ -148,15 +148,14 @@
               <h2><field name="description"/></h2>
             </div>
             <notebook>
-              <page string="Questions">
-                <field name="question_ids">
-                  <tree editable="bottom">
-                    <field name="sequence" widget="handle"/>
-                    <field name="name"/>
-                    <field name="question_type"/>
-                    <field name="points"/>
-                  </tree>
-                </field>
+              <page string="Statistics">
+                <group>
+                  <group>
+                    <field name="attempt_count"/>
+                    <field name="average_score"/>
+                    <field name="pass_rate"/>
+                  </group>
+                </group>
               </page>
               <page string="Settings">
                 <group>

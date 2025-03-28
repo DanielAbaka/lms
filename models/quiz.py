@@ -55,6 +55,10 @@ class Quiz(models.Model):
     attempt_count = fields.Integer(string='Attempt Count', default=0)
     average_score = fields.Float(string='Average Score', default=0.0)
     pass_rate = fields.Float(string='Pass Rate', default=0.0)
+    
+    # Empty One2many relation for the views 
+    # This doesn't actually link to anything but prevents view errors
+    attempt_ids = fields.One2many('lms.grade', 'quiz_id', string='Attempts')
 
     @api.constrains('start_date', 'end_date')
     def _check_dates(self):
@@ -98,3 +102,14 @@ class Quiz(models.Model):
         self.ensure_one()
         if self.state == 'cancelled':
             self.write({'state': 'draft'})
+            
+    def action_view_attempts(self):
+        self.ensure_one()
+        return {
+            'name': _('Quiz Attempts'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'lms.grade',
+            'view_mode': 'tree,form',
+            'domain': [('quiz_id', '=', self.id)],
+            'context': {'default_quiz_id': self.id},
+        }
