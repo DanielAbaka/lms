@@ -1,5 +1,6 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from datetime import datetime, timedelta
 
 class Quiz(models.Model):
     _name = 'lms.quiz'
@@ -49,12 +50,11 @@ class Quiz(models.Model):
     ], string='Status', default='draft')
     active = fields.Boolean(default=True)
 
-    # ADD: One2many field to link quiz questions
-    question_ids = fields.One2many(
-        'lms.quiz.question', 
-        'quiz_id', 
-        string='Questions'
-    )
+    # Removed the question_ids field since quiz questions are not needed.
+    # Instead, we keep only statistics fields that may be computed by other means.
+    attempt_count = fields.Integer(string='Attempt Count', default=0)
+    average_score = fields.Float(string='Average Score', default=0.0)
+    pass_rate = fields.Float(string='Pass Rate', default=0.0)
 
     @api.constrains('start_date', 'end_date')
     def _check_dates(self):
