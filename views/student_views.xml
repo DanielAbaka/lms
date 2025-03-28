@@ -36,7 +36,7 @@
                 <xpath expr="//form/sheet/notebook" position="inside">
                     <!-- Alternatively you could create a brand-new form,
                          but in many cases you'd just extend the user form. -->
-                    <page string="Student Info" attrs="{'invisible':[('is_student','=',False)]}">
+                    <page string="Student Info" invisible="not is_student">
                         <group>
                             <group>
                                 <field name="is_student" invisible="1"/>
