@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Admin Portal Dashboard -->
+        <record id="admin_portal_dashboard" model="ir.ui.view">
+            <field name="name">Admin Portal Dashboard</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_view_profile" string="View Profile" type="object" class="oe_highlight"/>
+                        <field name="admin_state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Welcome, <field name="name"/></h1>
+                        </div>
+                        <div class="oe_button_box" name="button_box">
+                            <field name="total_students_count" widget="statinfo" string="Total Students"/>
+                            <field name="total_teachers_count" widget="statinfo" string="Total Teachers"/>
+                            <field name="total_courses_count" widget="statinfo" string="Total Courses"/>
+                            <field name="total_payments_count" widget="statinfo" string="Total Payments"/>
+                        </div>
+                        <notebook>
+                            <page string="Quick Actions">
+                                <group>
+                                    <group>
+                                        <button name="action_add_student" string="Add Student" type="object" class="oe_highlight"/>
+                                        <button name="action_add_teacher" string="Add Teacher" type="object" class="oe_highlight"/>
+                                        <button name="action_add_course" string="Add Course" type="object" class="oe_highlight"/>
+                                    </group>
+                                    <group>
+                                        <button name="action_create_schedule" string="Create Schedule" type="object" class="oe_highlight"/>
+                                        <button name="action_assign_teachers" string="Assign Teachers" type="object" class="oe_highlight"/>
+                                        <button name="action_view_payments" string="View Payments" type="object" class="oe_highlight"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Recent Activities">
+                                <field name="recent_activities">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="type"/>
+                                        <field name="description"/>
+                                        <field name="user_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Academic Year Management -->
+        <record id="admin_portal_academic_year" model="ir.ui.view">
+            <field name="name">Academic Year Management</field>
+            <field name="model">lms.academic.year</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_create_semester" string="Create Semester" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Academic Year: <field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="is_current"/>
+                            </group>
+                            <group>
+                                <field name="total_students"/>
+                                <field name="total_teachers"/>
+                                <field name="total_courses"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Semesters">
+                                <field name="semester_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="is_current"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Statistics">
+                                <group>
+                                    <group string="Enrollment Statistics">
+                                        <field name="total_enrollments"/>
+                                        <field name="active_enrollments"/>
+                                        <field name="completed_enrollments"/>
+                                    </group>
+                                    <group string="Financial Statistics">
+                                        <field name="total_revenue"/>
+                                        <field name="pending_payments"/>
+                                        <field name="total_scholarships"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Course Management -->
+        <record id="admin_portal_course_management" model="ir.ui.view">
+            <field name="name">Course Management</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_create_schedule" string="Create Schedule" type="object" class="oe_highlight"/>
+                        <button name="action_assign_teacher" string="Assign Teacher" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Course: <field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="credits"/>
+                                <field name="cost_per_credit"/>
+                            </group>
+                            <group>
+                                <field name="max_students"/>
+                                <field name="enrollment_count"/>
+                                <field name="assignment_count"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Teacher Assignments">
+                                <field name="teacher_assignment_ids">
+                                    <tree>
+                                        <field name="teacher_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Enrollments">
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Payment Management -->
+        <record id="admin_portal_payment_management" model="ir.ui.view">
+            <field name="name">Payment Management</field>
+            <field name="model">lms.payment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm_payment" string="Confirm Payment" type="object" class="oe_highlight"/>
+                        <button name="action_refund_payment" string="Refund Payment" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Payment Details</h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="student_id"/>
+                                <field name="course_id"/>
+                                <field name="amount"/>
+                                <field name="payment_date"/>
+                            </group>
+                            <group>
+                                <field name="payment_method"/>
+                                <field name="transaction_id"/>
+                                <field name="payment_plan"/>
+                                <field name="refund_status"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Payment History">
+                                <field name="payment_history_ids">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="amount"/>
+                                        <field name="status"/>
+                                        <field name="transaction_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Payment Reports">
+                                <group>
+                                    <group string="Daily Summary">
+                                        <field name="daily_total"/>
+                                        <field name="daily_count"/>
+                                        <field name="daily_pending"/>
+                                    </group>
+                                    <group string="Monthly Summary">
+                                        <field name="monthly_total"/>
+                                        <field name="monthly_count"/>
+                                        <field name="monthly_pending"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Schedule Management -->
+        <record id="admin_portal_schedule_management" model="ir.ui.view">
+            <field name="name">Schedule Management</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_assign_room" string="Assign Room" type="object" class="oe_highlight"/>
+                        <button name="action_assign_teacher" string="Assign Teacher" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Schedule: <field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="course_id"/>
+                                <field name="teacher_id"/>
+                                <field name="room_id"/>
+                                <field name="day"/>
+                            </group>
+                            <group>
+                                <field name="start_time"/>
+                                <field name="end_time"/>
+                                <field name="capacity"/>
+                                <field name="enrolled_count"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Room Availability">
+                                <field name="room_availability_ids">
+                                    <tree>
+                                        <field name="room_id"/>
+                                        <field name="day"/>
+                                        <field name="start_time"/>
+                                        <field name="end_time"/>
+                                        <field name="is_available"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Teacher Schedule">
+                                <field name="teacher_schedule_ids">
+                                    <tree>
+                                        <field name="teacher_id"/>
+                                        <field name="day"/>
+                                        <field name="start_time"/>
+                                        <field name="end_time"/>
+                                        <field name="course_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Portal Actions -->
+        <record id="action_admin_portal_dashboard" model="ir.actions.act_window">
+            <field name="name">Admin Dashboard</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_dashboard"/>
+            <field name="target">current</field>
+            <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+        </record>
+
+        <record id="action_admin_portal_academic_year" model="ir.actions.act_window">
+            <field name="name">Academic Year Management</field>
+            <field name="res_model">lms.academic.year</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_academic_year"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_admin_portal_course_management" model="ir.actions.act_window">
+            <field name="name">Course Management</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_course_management"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_admin_portal_payment_management" model="ir.actions.act_window">
+            <field name="name">Payment Management</field>
+            <field name="res_model">lms.payment</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_payment_management"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_admin_portal_schedule_management" model="ir.actions.act_window">
+            <field name="name">Schedule Management</field>
+            <field name="res_model">lms.schedule</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="admin_portal_schedule_management"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="view_lms_admin_course_form" model="ir.ui.view">
+            <field name="name">lms.admin.course.form</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <!-- ... existing view definition ... -->
+            </field>
+        </record>
+
+        <record id="action_lms_admin_course" model="ir.actions.act_window">
+            <field name="name">Courses</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo> 

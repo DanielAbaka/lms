@@ -16,7 +16,9 @@ class QuizAttempt(models.Model):
     academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year', related='enrollment_id.academic_year_id', store=True)
     semester_id = fields.Many2one('lms.semester', string='Semester', related='enrollment_id.semester_id', store=True)
     start_date = fields.Datetime(string='Start Date', required=True, default=fields.Datetime.now)
+    start_time = fields.Float(string='Start Time', compute='_compute_times', store=True)
     end_date = fields.Datetime(string='End Date')
+    end_time = fields.Float(string='End Time', compute='_compute_times', store=True)
     duration = fields.Integer(string='Duration (minutes)', compute='_compute_duration', store=True)
     score = fields.Float(string='Score', compute='_compute_score', store=True)
     max_score = fields.Float(string='Maximum Score', compute='_compute_score', store=True)
@@ -31,6 +33,23 @@ class QuizAttempt(models.Model):
 
     question_attempt_ids = fields.One2many('lms.quiz.question.attempt', 'attempt_id', string='Question Attempts')
     grade_id = fields.Many2one('lms.grade', string='Grade')
+
+    @api.depends('start_date', 'end_date')
+    def _compute_times(self):
+        for record in self:
+            if record.start_date:
+                hours = record.start_date.hour
+                minutes = record.start_date.minute
+                record.start_time = hours + minutes / 60.0
+            else:
+                record.start_time = 0.0
+                
+            if record.end_date:
+                hours = record.end_date.hour
+                minutes = record.end_date.minute
+                record.end_time = hours + minutes / 60.0
+            else:
+                record.end_time = 0.0
 
     @api.depends('start_date', 'end_date')
     def _compute_duration(self):

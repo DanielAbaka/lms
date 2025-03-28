@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Teacher Portal Dashboard -->
+        <record id="teacher_portal_dashboard" model="ir.ui.view">
+            <field name="name">res.users.teacher.dashboard</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_view_profile" string="View Profile" type="object" class="oe_highlight"/>
+                        <field name="teacher_state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Welcome, <field name="name"/></h1>
+                        </div>
+                        <div class="oe_button_box" name="button_box">
+                            <field name="assigned_courses_count" widget="statinfo" string="Assigned Courses"/>
+                            <field name="total_students_count" widget="statinfo" string="Total Students"/>
+                            <field name="pending_attendance_count" widget="statinfo" string="Pending Attendance"/>
+                            <field name="pending_grades_count" widget="statinfo" string="Pending Grades"/>
+                        </div>
+                        <notebook>
+                            <page string="My Courses">
+                                <field name="assigned_course_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="student_count"/>
+                                        <field name="state"/>
+                                        <button name="action_view_students" string="View Students" type="object" class="oe_highlight"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Course Schedule">
+                                <field name="course_schedule_ids">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="day"/>
+                                        <field name="start_time"/>
+                                        <field name="end_time"/>
+                                        <field name="room_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Pending Attendance">
+                                <field name="pending_attendance_ids">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="date"/>
+                                        <field name="student_count"/>
+                                        <button name="action_take_attendance" string="Take Attendance" type="object" class="oe_highlight"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Pending Grades">
+                                <field name="pending_grade_ids">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="student_id"/>
+                                        <field name="assignment_name"/>
+                                        <button name="action_add_grade" string="Add Grade" type="object" class="oe_highlight"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Teacher Profile View -->
+        <record id="teacher_portal_profile" model="ir.ui.view">
+            <field name="name">res.users.teacher.profile</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_edit_profile" string="Edit Profile" type="object" class="oe_highlight"/>
+                        <field name="teacher_state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>My Profile</h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="teacher_id"/>
+                                <field name="name"/>
+                                <field name="email"/>
+                                <field name="phone"/>
+                                <field name="address"/>
+                            </group>
+                            <group>
+                                <field name="department"/>
+                                <field name="specialization"/>
+                                <field name="qualification"/>
+                                <field name="joining_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Teaching History">
+                                <field name="teaching_history_ids">
+                                    <tree>
+                                        <field name="academic_year"/>
+                                        <field name="semester"/>
+                                        <field name="course_count"/>
+                                        <field name="student_count"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Documents">
+                                <field name="document_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="upload_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Course Students View -->
+        <record id="teacher_portal_course_students" model="ir.ui.view">
+            <field name="name">lms.course.students</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_view_enrollments" string="View Enrollments" type="object" class="oe_highlight"/>
+                        <button name="action_view_assignments" string="View Teacher Assignments" type="object" class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/> - Students</h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="enrollment_count" string="Student Count"/>
+                                <field name="credits"/>
+                            </group>
+                            <group>
+                                <field name="academic_year_id"/>
+                                <field name="semester_id"/>
+                                <field name="max_students"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Enrolled Students">
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Teacher Assignments">
+                                <field name="teacher_assignment_ids">
+                                    <tree>
+                                        <field name="teacher_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Take Attendance View -->
+        <record id="teacher_portal_take_attendance" model="ir.ui.view">
+            <field name="name">lms.attendance.take</field>
+            <field name="model">lms.attendance</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_verify" string="Verify Attendance" type="object" class="oe_highlight"/>
+                        <button name="action_unverify" string="Unverify" type="object"/>
+                        <button name="action_mark_all_present" string="Mark All Present" type="object"/>
+                        <button name="action_mark_all_absent" string="Mark All Absent" type="object"/>
+                        <button name="action_mark_all_late" string="Mark All Late" type="object"/>
+                        <button name="action_mark_all_excused" string="Mark All Excused" type="object"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Take Attendance - <field name="course_id"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date"/>
+                                <field name="session_type"/>
+                                <field name="student_id"/>
+                                <field name="enrollment_id" domain="[('student_id', '=', student_id)]"/>
+                            </group>
+                            <group>
+                                <field name="course_id"/>
+                                <field name="teacher_assignment_id" domain="[('course_id', '=', course_id)]"/>
+                                <field name="status"/>
+                                <field name="is_verified"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Add Grade View -->
+        <record id="teacher_portal_add_grade" model="ir.ui.view">
+            <field name="name">lms.grade.add</field>
+            <field name="model">lms.grade</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_submit_grade" string="Submit Grade" type="object" class="oe_highlight"/>
+                        <button name="action_reset_grade" string="Reset" type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Add Grade - <field name="course_id"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="student_id"/>
+                                <field name="enrollment_id" domain="[('student_id', '=', student_id)]"/>
+                                <field name="course_id"/>
+                                <field name="date"/>
+                            </group>
+                            <group>
+                                <field name="grade"/>
+                                <field name="credits"/>
+                                <field name="grade_type"/>
+                                <field name="is_final"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="remarks" placeholder="Add teacher comments here..."/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Portal Actions -->
+        <record id="action_teacher_portal_profile" model="ir.actions.act_window">
+            <field name="name">Teacher Profile</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="teacher_portal_profile"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_teacher_portal_course_students" model="ir.actions.act_window">
+            <field name="name">Course Students</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="teacher_portal_course_students"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_teacher_portal_take_attendance" model="ir.actions.act_window">
+            <field name="name">Take Attendance</field>
+            <field name="res_model">lms.attendance</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="teacher_portal_take_attendance"/>
+            <field name="target">current</field>
+            <field name="context">{'create': True}</field>
+        </record>
+
+        <record id="action_teacher_portal_add_grade" model="ir.actions.act_window">
+            <field name="name">Add Grade</field>
+            <field name="res_model">lms.grade</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="teacher_portal_add_grade"/>
+            <field name="target">current</field>
+            <field name="context">{'create': True}</field>
+        </record>
+    </data>
+</odoo> 
