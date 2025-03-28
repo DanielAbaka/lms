@@ -46,13 +46,13 @@
                     <header>
                         <!-- Buttons for state transitions -->
                         <button name="action_activate" string="Activate" type="object" class="oe_highlight"
-                                attrs="{'invisible':[('state','!=','draft')]}" />
+                                invisible="state != 'draft'" />
                         <button name="action_complete" string="Complete" type="object" class="oe_highlight"
-                                attrs="{'invisible':[('state','!=','active')]}" />
+                                invisible="state != 'active'" />
                         <button name="action_cancel" string="Cancel" type="object"
-                                attrs="{'invisible':[('state','not in',['draft','active'])]}" />
+                                invisible="state not in ('draft', 'active')" />
                         <button name="action_reset_to_draft" string="Reset to Draft" type="object"
-                                attrs="{'invisible':[('state','!=','cancelled')]}" />
+                                invisible="state != 'cancelled'" />
                         <field name="state" widget="statusbar" 
                                statusbar_visible="draft,active,completed,cancelled"/>
                     </header>

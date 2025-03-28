@@ -64,9 +64,6 @@
                             <button name="action_view_teachers" type="object" class="oe_stat_button" icon="fa-user-md">
                                 <field name="teacher_count" widget="statinfo" string="Teachers"/>
                             </button>
-                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-sign-in">
-                                <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
-                            </button>
                         </div>
 
                         <notebook>
