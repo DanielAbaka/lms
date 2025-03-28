@@ -8,13 +8,30 @@ class Quiz(models.Model):
 
     name = fields.Char(string='Name', required=True)
     code = fields.Char(string='Quiz Code', required=True, copy=False)
-    teacher_assignment_id = fields.Many2one('lms.teacher.assignment', string='Teacher Assignment',
-                                            required=True, ondelete='cascade')
-    course_id = fields.Many2one('slide.channel', string='Course', related='teacher_assignment_id.course_id', store=True)
-    academic_year_id = fields.Many2one('lms.academic.year', string='Academic Year',
-                                       related='teacher_assignment_id.academic_year_id', store=True)
-    semester_id = fields.Many2one('lms.semester', string='Semester',
-                                  related='teacher_assignment_id.semester_id', store=True)
+    teacher_assignment_id = fields.Many2one(
+        'lms.teacher.assignment', 
+        string='Teacher Assignment', 
+        required=True, 
+        ondelete='cascade'
+    )
+    course_id = fields.Many2one(
+        'slide.channel', 
+        string='Course', 
+        related='teacher_assignment_id.course_id', 
+        store=True
+    )
+    academic_year_id = fields.Many2one(
+        'lms.academic.year', 
+        string='Academic Year', 
+        related='teacher_assignment_id.academic_year_id', 
+        store=True
+    )
+    semester_id = fields.Many2one(
+        'lms.semester', 
+        string='Semester', 
+        related='teacher_assignment_id.semester_id', 
+        store=True
+    )
     description = fields.Text(string='Description')
     start_date = fields.Datetime(string='Start Date', required=True)
     end_date = fields.Datetime(string='End Date', required=True)
@@ -31,11 +48,13 @@ class Quiz(models.Model):
         ('cancelled', 'Cancelled')
     ], string='Status', default='draft')
     active = fields.Boolean(default=True)
-    
-    question_count = fields.Integer(string='Question Count', default=0)
-    attempt_count = fields.Integer(string='Attempt Count', default=0)
-    average_score = fields.Float(string='Average Score', default=0.0)
-    pass_rate = fields.Float(string='Pass Rate', default=0.0)
+
+    # ADD: One2many field to link quiz questions
+    question_ids = fields.One2many(
+        'lms.quiz.question', 
+        'quiz_id', 
+        string='Questions'
+    )
 
     @api.constrains('start_date', 'end_date')
     def _check_dates(self):
