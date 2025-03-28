@@ -478,7 +478,7 @@
       <field name="arch" type="xml">
         <form string="Grade">
           <header>
-            <button name="action_submit_grade" type="object" string="Submit Grade" class="oe_highlight" invisible="state != 'draft'"/>
+            <button name="action_submit_grade" string="Submit Grade" type="object" class="oe_highlight" invisible="state != 'draft'"/>
             <button name="action_reset_grade" type="object" string="Reset" invisible="state != 'submitted'"/>
             <field name="state" widget="statusbar" statusbar_visible="draft,submitted,confirmed"/>
           </header>
@@ -507,7 +507,7 @@
               <page string="Comments">
                 <field name="remarks" readonly="state != 'draft'"/>
               </page>
-              <page string="Grading Information" attrs="{'invisible': [('grading_date', '=', False)]}">
+              <page string="Grading Information" invisible="not grading_date">
                 <group>
                   <group>
                     <field name="graded_by" readonly="1"/>
