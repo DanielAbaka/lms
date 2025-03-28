@@ -127,13 +127,13 @@
 
         <!-- Course Students View -->
         <record id="teacher_portal_course_students" model="ir.ui.view">
-            <field name="name">Course Students</field>
-            <field name="model">lms.course</field>
+            <field name="name">lms.course.students</field>
+            <field name="model">slide.channel</field>
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="action_take_attendance" string="Take Attendance" type="object" class="oe_highlight"/>
-                        <button name="action_add_grade" string="Add Grade" type="object" class="oe_highlight"/>
+                        <button name="action_view_enrollments" string="View Enrollments" type="object" class="oe_highlight"/>
+                        <button name="action_view_assignments" string="View Teacher Assignments" type="object" class="oe_highlight"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -143,47 +143,32 @@
                         <group>
                             <group>
                                 <field name="code"/>
-                                <field name="student_count"/>
-                                <field name="attendance_rate"/>
+                                <field name="enrollment_count" string="Student Count"/>
+                                <field name="credits"/>
                             </group>
                             <group>
-                                <field name="average_grade"/>
-                                <field name="pass_rate"/>
+                                <field name="academic_year_id"/>
+                                <field name="semester_id"/>
+                                <field name="max_students"/>
                             </group>
                         </group>
                         <notebook>
                             <page string="Enrolled Students">
-                                <field name="enrolled_student_ids">
+                                <field name="enrollment_ids">
                                     <tree>
                                         <field name="student_id"/>
-                                        <field name="name"/>
-                                        <field name="attendance_rate"/>
-                                        <field name="average_grade"/>
-                                        <field name="status"/>
-                                        <button name="action_view_student_details" string="View Details" type="object"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="state"/>
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Attendance Records">
-                                <field name="attendance_record_ids">
+                            <page string="Teacher Assignments">
+                                <field name="teacher_assignment_ids">
                                     <tree>
-                                        <field name="date"/>
-                                        <field name="present_count"/>
-                                        <field name="absent_count"/>
-                                        <field name="late_count"/>
-                                        <button name="action_view_attendance" string="View Details" type="object"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Grades">
-                                <field name="grade_record_ids">
-                                    <tree>
-                                        <field name="student_id"/>
-                                        <field name="assignment_name"/>
-                                        <field name="grade"/>
-                                        <field name="submission_date"/>
-                                        <field name="status"/>
-                                        <button name="action_edit_grade" string="Edit Grade" type="object"/>
+                                        <field name="teacher_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
                                     </tree>
                                 </field>
                             </page>
@@ -195,13 +180,17 @@
 
         <!-- Take Attendance View -->
         <record id="teacher_portal_take_attendance" model="ir.ui.view">
-            <field name="name">Take Attendance</field>
+            <field name="name">lms.attendance.take</field>
             <field name="model">lms.attendance</field>
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="action_save_attendance" string="Save Attendance" type="object" class="oe_highlight"/>
-                        <field name="state" widget="statusbar"/>
+                        <button name="action_verify" string="Verify Attendance" type="object" class="oe_highlight"/>
+                        <button name="action_unverify" string="Unverify" type="object"/>
+                        <button name="action_mark_all_present" string="Mark All Present" type="object"/>
+                        <button name="action_mark_all_absent" string="Mark All Absent" type="object"/>
+                        <button name="action_mark_all_late" string="Mark All Late" type="object"/>
+                        <button name="action_mark_all_excused" string="Mark All Excused" type="object"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
@@ -210,26 +199,20 @@
                         <group>
                             <group>
                                 <field name="date"/>
-                                <field name="session_id"/>
+                                <field name="session_type"/>
+                                <field name="student_id"/>
+                                <field name="enrollment_id" domain="[('student_id', '=', student_id)]"/>
                             </group>
                             <group>
-                                <field name="total_students"/>
-                                <field name="present_count"/>
-                                <field name="absent_count"/>
-                                <field name="late_count"/>
+                                <field name="course_id"/>
+                                <field name="teacher_assignment_id" domain="[('course_id', '=', course_id)]"/>
+                                <field name="status"/>
+                                <field name="is_verified"/>
                             </group>
                         </group>
-                        <notebook>
-                            <page string="Student Attendance">
-                                <field name="student_attendance_ids">
-                                    <tree editable="bottom">
-                                        <field name="student_id"/>
-                                        <field name="status"/>
-                                        <field name="notes"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
+                        <group>
+                            <field name="notes"/>
+                        </group>
                     </sheet>
                 </form>
             </field>
@@ -237,12 +220,13 @@
 
         <!-- Add Grade View -->
         <record id="teacher_portal_add_grade" model="ir.ui.view">
-            <field name="name">Add Grade</field>
+            <field name="name">lms.grade.add</field>
             <field name="model">lms.grade</field>
             <field name="arch" type="xml">
                 <form>
                     <header>
-                        <button name="action_save_grade" string="Save Grade" type="object" class="oe_highlight"/>
+                        <button name="action_submit_grade" string="Submit Grade" type="object" class="oe_highlight"/>
+                        <button name="action_reset_grade" string="Reset" type="object"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -252,30 +236,20 @@
                         <group>
                             <group>
                                 <field name="student_id"/>
-                                <field name="assignment_name"/>
-                                <field name="submission_date"/>
+                                <field name="enrollment_id" domain="[('student_id', '=', student_id)]"/>
+                                <field name="course_id"/>
+                                <field name="date"/>
                             </group>
                             <group>
                                 <field name="grade"/>
-                                <field name="max_grade"/>
-                                <field name="grade_percentage"/>
+                                <field name="credits"/>
+                                <field name="grade_type"/>
+                                <field name="is_final"/>
                             </group>
                         </group>
-                        <notebook>
-                            <page string="Grade Details">
-                                <group>
-                                    <group>
-                                        <field name="grade_letter"/>
-                                        <field name="grade_point"/>
-                                        <field name="grade_status"/>
-                                    </group>
-                                    <group>
-                                        <field name="feedback"/>
-                                        <field name="notes"/>
-                                    </group>
-                                </group>
-                            </page>
-                        </notebook>
+                        <group>
+                            <field name="remarks" placeholder="Add teacher comments here..."/>
+                        </group>
                     </sheet>
                 </form>
             </field>
@@ -311,11 +285,12 @@
             <field name="view_id" ref="teacher_portal_profile"/>
             <field name="target">current</field>
             <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+            <field name="res_id" eval="uid"/>
         </record>
 
         <record id="action_teacher_portal_course_students" model="ir.actions.act_window">
             <field name="name">Course Students</field>
-            <field name="res_model">lms.course</field>
+            <field name="res_model">slide.channel</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="teacher_portal_course_students"/>
             <field name="target">current</field>
@@ -327,6 +302,7 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="teacher_portal_take_attendance"/>
             <field name="target">current</field>
+            <field name="context">{'create': True}</field>
         </record>
 
         <record id="action_teacher_portal_add_grade" model="ir.actions.act_window">
@@ -335,6 +311,7 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="teacher_portal_add_grade"/>
             <field name="target">current</field>
+            <field name="context">{'create': True}</field>
         </record>
     </data>
 </odoo> 
