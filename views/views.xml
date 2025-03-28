@@ -87,7 +87,6 @@
                 </sheet>
             </form>
         </field>
-        <field name="domain">[('is_teacher', '=', True)]</field>
     </record>
 
     <!-- Teacher Dashboard Action -->
