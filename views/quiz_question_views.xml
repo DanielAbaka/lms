@@ -34,7 +34,7 @@
                                     <field name="explanation"/>
                                 </group>
                             </page>
-                            <page string="Answer Options" attrs="{'invisible': [('question_type', 'not in', ['multiple_choice', 'true_false'])]}">
+                            <page string="Answer Options" invisible="question_type not in ['multiple_choice', 'true_false']">
                                 <field name="option_ids">
                                     <tree editable="bottom">
                                         <field name="sequence" widget="handle"/>
@@ -44,7 +44,7 @@
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Short Answer" attrs="{'invisible': [('question_type', '!=', 'short_answer')]}">
+                            <page string="Short Answer" invisible="question_type != 'short_answer'">
                                 <group>
                                     <field name="correct_answer"/>
                                     <field name="keywords"/>

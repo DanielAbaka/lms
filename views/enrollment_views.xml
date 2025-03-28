@@ -9,7 +9,8 @@
                 <form string="Enrollment">
                     <header>
                         <button name="action_import_students" string="Import Students" type="object" class="oe_highlight"/>
-                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" states="draft"/>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" 
+                                invisible="state != 'draft'"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>

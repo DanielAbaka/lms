@@ -8,8 +8,10 @@
             <field name="arch" type="xml">
                 <form string="Course">
                     <header>
-                        <button name="action_publish" string="Publish" type="object" class="oe_highlight" states="draft"/>
-                        <button name="action_unpublish" string="Unpublish" type="object" states="published"/>
+                        <button name="action_publish" string="Publish" type="object" class="oe_highlight" 
+                                invisible="state != 'draft'"/>
+                        <button name="action_unpublish" string="Unpublish" type="object" 
+                                invisible="state != 'published'"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>

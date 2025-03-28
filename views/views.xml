@@ -36,11 +36,16 @@
         <field name="arch" type="xml">
             <form string="Quiz Preview">
                 <header>
-                    <button name="action_publish" string="Publish" type="object" class="oe_highlight" states="draft"/>
-                    <button name="action_start" string="Start" type="object" class="oe_highlight" states="published"/>
-                    <button name="action_complete" string="Complete" type="object" class="oe_highlight" states="in_progress"/>
-                    <button name="action_cancel" string="Cancel" type="object" states="draft,published"/>
-                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" states="cancelled"/>
+                    <button name="action_publish" string="Publish" type="object" class="oe_highlight" 
+                            invisible="state != 'draft'"/>
+                    <button name="action_start" string="Start" type="object" class="oe_highlight" 
+                            invisible="state != 'published'"/>
+                    <button name="action_complete" string="Complete" type="object" class="oe_highlight" 
+                            invisible="state != 'in_progress'"/>
+                    <button name="action_cancel" string="Cancel" type="object" 
+                            invisible="state not in ('draft', 'published')"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object" 
+                            invisible="state != 'cancelled'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
