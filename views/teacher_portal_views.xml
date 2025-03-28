@@ -3,7 +3,7 @@
     <data>
         <!-- Teacher Portal Dashboard -->
         <record id="teacher_portal_dashboard" model="ir.ui.view">
-            <field name="name">Teacher Portal Dashboard</field>
+            <field name="name">res.users.teacher.dashboard</field>
             <field name="model">res.users</field>
             <field name="arch" type="xml">
                 <form>
@@ -72,7 +72,7 @@
 
         <!-- Teacher Profile View -->
         <record id="teacher_portal_profile" model="ir.ui.view">
-            <field name="name">Teacher Portal Profile</field>
+            <field name="name">res.users.teacher.profile</field>
             <field name="model">res.users</field>
             <field name="arch" type="xml">
                 <form>
@@ -287,8 +287,21 @@
             <field name="res_model">res.users</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="teacher_portal_dashboard"/>
-            <field name="target">current</field>
+            <field name="domain">[('is_teacher', '=', True)]</field>
             <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+            <field name="res_id" eval="uid"/>
+            <field name="target">current</field>
+        </record>
+
+        <record id="action_lms_teacher_dashboard" model="ir.actions.act_window">
+            <field name="name">Teacher Dashboard</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="teacher_portal_dashboard"/>
+            <field name="domain">[('is_teacher', '=', True)]</field>
+            <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+            <field name="res_id" eval="uid"/>
+            <field name="target">current</field>
         </record>
 
         <record id="action_teacher_portal_profile" model="ir.actions.act_window">
