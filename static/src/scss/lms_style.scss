@@ -1,0 +1,396 @@
+/* LMS Module - Modern Professional UI Style
+ * Inspired by BlackBoard with a professional look and feel
+ */
+
+// Color palette
+$primary-color: #0056b3;
+$secondary-color: #343a40;
+$accent-color: #ffc107;
+$success-color: #28a745;
+$danger-color: #dc3545;
+$info-color: #17a2b8;
+$light-gray: #f8f9fa;
+$medium-gray: #e9ecef;
+$dark-gray: #495057;
+$white: #ffffff;
+$black: #000000;
+
+// Typography
+$font-family: "Roboto", "Helvetica Neue", sans-serif;
+$font-size-base: 14px;
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+// Border radius
+$border-radius-sm: 3px;
+$border-radius-md: 5px;
+$border-radius-lg: 8px;
+
+// Shadows
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+// General styling for forms
+.o_form_view {
+  background-color: $white;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-sm;
+
+  .o_form_sheet {
+    max-width: 1140px;
+    margin: 0 auto;
+    border: 1px solid $medium-gray;
+    padding: $spacing-lg;
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-sm;
+  }
+
+  // Form headers
+  .o_form_sheet_bg {
+    background-color: $light-gray;
+    border-bottom: 1px solid $medium-gray;
+  }
+
+  // Group styling
+  .o_group {
+    margin-bottom: $spacing-md;
+
+    .o_field_widget {
+      margin-bottom: $spacing-sm;
+    }
+  }
+
+  // Labels
+  .o_form_label {
+    font-weight: $font-weight-bold;
+    color: $dark-gray;
+  }
+
+  // Fields
+  .o_field_widget {
+    input,
+    select,
+    textarea {
+      border: 1px solid $medium-gray;
+      border-radius: $border-radius-sm;
+      padding: $spacing-sm;
+      transition: border-color 0.2s ease;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.25);
+      }
+    }
+  }
+
+  // Statusbar
+  .o_statusbar_status {
+    background-color: $white;
+
+    .o_arrow_button {
+      background-color: $medium-gray;
+      color: $dark-gray;
+
+      &.btn-primary {
+        background-color: $primary-color;
+        color: $white;
+      }
+    }
+  }
+
+  // Notebook (tabs)
+  .nav-tabs {
+    border-bottom: 2px solid $medium-gray;
+
+    .nav-item {
+      margin-bottom: -2px;
+
+      .nav-link {
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: $dark-gray;
+        font-weight: $font-weight-normal;
+        padding: $spacing-md $spacing-lg;
+
+        &.active {
+          border-bottom: 2px solid $primary-color;
+          color: $primary-color;
+          font-weight: $font-weight-bold;
+        }
+
+        &:hover:not(.active) {
+          border-bottom: 2px solid $medium-gray;
+        }
+      }
+    }
+  }
+
+  // Tab content
+  .tab-content {
+    padding: $spacing-lg 0;
+  }
+
+  // Buttons
+  .btn {
+    border-radius: $border-radius-sm;
+    font-weight: $font-weight-bold;
+    padding: $spacing-sm $spacing-md;
+
+    &.btn-primary {
+      background-color: $primary-color;
+      border-color: $primary-color;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+        border-color: darken($primary-color, 10%);
+      }
+    }
+
+    &.btn-secondary {
+      background-color: $secondary-color;
+      border-color: $secondary-color;
+
+      &:hover {
+        background-color: darken($secondary-color, 10%);
+        border-color: darken($secondary-color, 10%);
+      }
+    }
+  }
+}
+
+// List view styling
+.o_list_view {
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+
+  .o_list_table {
+    border-collapse: separate;
+    border-spacing: 0;
+
+    thead {
+      background-color: $secondary-color;
+
+      th {
+        border-bottom: none;
+        color: $white;
+        font-weight: $font-weight-bold;
+        padding: $spacing-md;
+
+        &.o_column_sortable:hover {
+          background-color: lighten($secondary-color, 10%);
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        transition: background-color 0.2s ease;
+
+        &:nth-child(even) {
+          background-color: $light-gray;
+        }
+
+        &:hover {
+          background-color: $medium-gray;
+        }
+
+        td {
+          border-top: 1px solid $medium-gray;
+          padding: $spacing-md;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}
+
+// Search view styling
+.o_searchview {
+  border: 1px solid $medium-gray;
+  border-radius: $border-radius-md;
+  padding: $spacing-sm;
+  background-color: $white;
+  box-shadow: $shadow-sm;
+
+  .o_searchview_input_container {
+    .o_searchview_input {
+      border: none;
+      outline: none;
+      padding: $spacing-xs;
+    }
+  }
+
+  .o_searchview_facet {
+    background-color: $light-gray;
+    border: 1px solid $medium-gray;
+    border-radius: $border-radius-sm;
+
+    .o_facet_values {
+      color: $dark-gray;
+    }
+
+    .o_facet_remove {
+      color: $danger-color;
+    }
+  }
+}
+
+// Many2many tags field styling
+.o_field_many2manytags {
+  .o_tag {
+    background-color: $primary-color;
+    color: $white;
+    border-radius: $border-radius-sm;
+    padding: $spacing-xs $spacing-sm;
+    margin-right: $spacing-xs;
+
+    .o_delete {
+      color: rgba($white, 0.8);
+
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+}
+
+// Kanban view styling
+.o_kanban_view {
+  padding: $spacing-md;
+
+  .o_kanban_record {
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-sm;
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    border: 1px solid $medium-gray;
+    transition: all 0.2s ease;
+
+    &:hover {
+      box-shadow: $shadow-md;
+      transform: translateY(-2px);
+    }
+
+    .o_kanban_record_title {
+      font-weight: $font-weight-bold;
+      color: $dark-gray;
+      margin-bottom: $spacing-sm;
+    }
+
+    .o_kanban_record_subtitle {
+      color: lighten($dark-gray, 20%);
+      font-size: 12px;
+    }
+  }
+
+  .o_kanban_group {
+    background-color: $light-gray;
+    border-radius: $border-radius-md;
+    padding: $spacing-sm;
+
+    .o_kanban_header {
+      font-weight: $font-weight-bold;
+      color: $dark-gray;
+      padding: $spacing-sm;
+    }
+  }
+}
+
+// Calendar view styling
+.o_calendar_container {
+  .fc-view-container {
+    background-color: $white;
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-sm;
+
+    .fc-day-header {
+      background-color: $secondary-color;
+      color: $white;
+      padding: $spacing-sm;
+    }
+
+    .fc-day {
+      border-color: $medium-gray;
+    }
+
+    .fc-event {
+      background-color: $primary-color;
+      border-color: darken($primary-color, 10%);
+      border-radius: $border-radius-sm;
+      padding: $spacing-xs;
+    }
+  }
+}
+
+// Dashboard styling
+.o_dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-md;
+  padding: $spacing-md;
+
+  .o_dashboard_item {
+    background-color: $white;
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-sm;
+    padding: $spacing-lg;
+
+    .o_dashboard_item_title {
+      font-weight: $font-weight-bold;
+      color: $dark-gray;
+      margin-bottom: $spacing-md;
+      font-size: 16px;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .o_form_view .o_form_sheet {
+    padding: $spacing-md;
+  }
+
+  .o_form_view .nav-tabs .nav-item .nav-link {
+    padding: $spacing-sm $spacing-md;
+  }
+}
+
+// Ensuring BlackBoard-like colors for specific elements
+.lms_module {
+  .o_main_navbar {
+    background-color: $secondary-color;
+  }
+
+  .o_menu_brand {
+    color: $white;
+  }
+
+  // Course card styling (BlackBoard-like)
+  .course_card {
+    border-left: 4px solid $primary-color;
+  }
+
+  // Student dashboard
+  .student_dashboard {
+    .course_progress {
+      background-color: $medium-gray;
+      border-radius: $border-radius-sm;
+      height: 8px;
+      overflow: hidden;
+
+      .progress_bar {
+        background-color: $success-color;
+        height: 100%;
+      }
+    }
+  }
+}

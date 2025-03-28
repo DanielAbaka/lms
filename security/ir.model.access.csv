@@ -49,3 +49,7 @@ access_lms_document_user,LMS Document User,model_lms_document,lms_module.group_l
 access_lms_messaging_admin,LMS Messaging Admin,model_lms_messaging,base.group_system,1,1,1,1
 access_lms_messaging_manager,LMS Messaging Manager,model_lms_messaging,lms_module.group_lms_manager,1,1,1,1
 access_lms_messaging_user,LMS Messaging User,model_lms_messaging,lms_module.group_lms_user,1,0,0,0
+
+access_lms_dashboard_admin,LMS Dashboard Admin,model_lms_dashboard,base.group_system,1,1,1,1
+access_lms_dashboard_manager,LMS Dashboard Manager,model_lms_dashboard,lms_module.group_lms_manager,1,1,1,1
+access_lms_dashboard_user,LMS Dashboard User,model_lms_dashboard,lms_module.group_lms_user,1,1,0,0

@@ -6,20 +6,28 @@
             <field name="name">lms.course.form</field>
             <field name="model">slide.channel</field>
             <field name="arch" type="xml">
-                <form string="Course">
+                <form string="Course" class="lms_module o_form_view">
                     <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name" required="1" placeholder="Course Name"/></h1>
+                        </div>
                         <notebook>
-                            <page string="General Information">
-                                <group>
-                                    <field name="name" required="1"/>
-                                    <field name="academic_year_id"/>
-                                    <field name="semester_id"/>
-                                    <field name="credits"/>
-                                </group>
-                                <group>
-                                    <field name="prerequisite_course_ids" widget="many2many_tags"/>
-                                    <field name="teacher_assignment_ids" widget="one2many_list"/>
-                                </group>
+                            <page string="General Information" name="general_info">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <group>
+                                            <field name="academic_year_id" options="{'no_create': True}" />
+                                            <field name="semester_id" options="{'no_create': True}" />
+                                            <field name="credits" widget="integer" />
+                                        </group>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <group>
+                                            <field name="prerequisite_course_ids" widget="many2many_tags" options="{'color_field': 'color'}" />
+                                            <field name="teacher_assignment_ids" widget="one2many_list" options="{'reload_on_button': true}" />
+                                        </group>
+                                    </div>
+                                </div>
                             </page>
                         </notebook>
                     </sheet>
@@ -32,7 +40,7 @@
             <field name="name">lms.course.tree</field>
             <field name="model">slide.channel</field>
             <field name="arch" type="xml">
-                <tree default_order="academic_year_id desc">
+                <tree default_order="academic_year_id desc" class="lms_module o_list_view" decoration-info="credits &gt; 3">
                     <field name="name"/>
                     <field name="academic_year_id"/>
                     <field name="semester_id"/>
@@ -52,6 +60,10 @@
                     <field name="semester_id"/>
                     <field name="credits"/>
                     <filter name="current_year" string="Current Year" domain="[('academic_year_id', '=', context_today())]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_semester" string="Semester" context="{'group_by': 'semester_id'}"/>
+                        <filter name="group_by_academic_year" string="Academic Year" context="{'group_by': 'academic_year_id'}"/>
+                    </group>
                 </search>
             </field>
         </record>
@@ -60,8 +72,50 @@
         <record id="action_lms_courses" model="ir.actions.act_window">
             <field name="name">Courses</field>
             <field name="res_model">slide.channel</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,kanban</field>
             <field name="search_view_id" ref="view_lms_course_search"/>
+            <field name="context">{'search_default_group_by_academic_year': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course!
+                </p>
+                <p>
+                    Courses are the core of your learning management system.
+                </p>
+            </field>
+        </record>
+
+        <!-- ✅ Course Kanban View -->
+        <record id="view_lms_course_kanban" model="ir.ui.view">
+            <field name="name">lms.course.kanban</field>
+            <field name="model">slide.channel</field>
+            <field name="arch" type="xml">
+                <kanban class="lms_module o_kanban_view">
+                    <field name="name"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="credits"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click course_card">
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="academic_year_id"/> - <field name="semester_id"/>
+                                    </div>
+                                    <div>
+                                        <span class="badge badge-primary">
+                                            <field name="credits"/> Credits
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
         </record>
 
         <!-- ✅ Add Courses to the LMS Module Menu -->

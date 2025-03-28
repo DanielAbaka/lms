@@ -6,15 +6,36 @@
             <field name="name">lms.student.form</field>
             <field name="model">res.users</field>
             <field name="arch" type="xml">
-                <form string="Student Profile">
+                <form string="Student Profile" class="lms_module o_form_view">
                     <sheet>
-                        <group>
-                            <field name="name" required="1"/>
-                            <field name="student_id" required="1"/>
-                        </group>
-                        <group>
-                            <field name="enrolled_courses" widget="many2many_tags"/>
-                        </group>
+                        <div class="oe_title">
+                            <h1><field name="name" required="1" placeholder="Student Name"/></h1>
+                        </div>
+                        <field name="image_1920" widget="image" class="oe_avatar"/>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="student_id" required="1" placeholder="Student ID"/>
+                                    <field name="email" widget="email"/>
+                                    <field name="phone" widget="phone"/>
+                                </group>
+                            </div>
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="enrolled_courses" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                </group>
+                            </div>
+                        </div>
+                        <notebook>
+                            <page string="Academic Information" name="academic_info">
+                                <div class="student_dashboard">
+                                    <group>
+                                        <field name="enrollment_date"/>
+                                        <field name="graduation_date"/>
+                                    </group>
+                                </div>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -25,9 +46,12 @@
             <field name="name">lms.student.tree</field>
             <field name="model">res.users</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree class="lms_module o_list_view">
                     <field name="name"/>
                     <field name="student_id"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="enrollment_date"/>
                 </tree>
             </field>
         </record>
@@ -39,8 +63,46 @@
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
+                    <field name="student_id"/>
+                    <field name="email"/>
                     <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_enrollment_date" string="Enrollment Date" context="{'group_by': 'enrollment_date:month'}"/>
+                    </group>
                 </search>
+            </field>
+        </record>
+
+        <!-- ✅ Student Kanban View -->
+        <record id="view_lms_student_kanban" model="ir.ui.view">
+            <field name="name">lms.student.kanban</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <kanban class="lms_module o_kanban_view">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="student_id"/>
+                    <field name="email"/>
+                    <field name="image_128"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                                <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('res.users', 'image_128', record.id.raw_value)}')"/>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <div class="o_kanban_record_subtitle">
+                                        <field name="student_id"/>
+                                    </div>
+                                    <div>
+                                        <field name="email" widget="email"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
             </field>
         </record>
 
@@ -52,10 +114,18 @@
         <record id="action_lms_students" model="ir.actions.act_window">
             <field name="name">Students</field>
             <field name="res_model">res.users</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">kanban,tree,form</field>
             <field name="search_view_id" ref="view_lms_student_search"/>
             <field name="domain">[('is_student', '=', True)]</field>
             <field name="context">{'default_is_student': True}</field>  <!-- ✅ Mark new records as students -->
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add your first student!
+                </p>
+                <p>
+                    Create student profiles to track their enrollments, grades, and progress.
+                </p>
+            </field>
         </record>
 
         <!-- ✅ Add Menu Item for Students -->

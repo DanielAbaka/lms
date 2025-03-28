@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- ✅ Dashboard Kanban View -->
+        <record id="view_lms_dashboard_kanban" model="ir.ui.view">
+            <field name="name">lms.dashboard.kanban</field>
+            <field name="model">lms.dashboard</field>
+            <field name="arch" type="xml">
+                <kanban create="false" class="lms_module o_dashboard">
+                    <field name="id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="container-fluid o_dashboard">
+                                <!-- Welcome Section -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="o_dashboard_item bg-primary text-white p-4">
+                                            <h2>Welcome to your Learning Management System</h2>
+                                            <p>Access all your courses, assignments, and academic information in one place.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Main Dashboard Cards Row -->
+                                <div class="row mb-4">
+                                    <!-- Courses Card -->
+                                    <div class="col-md-4 mb-4">
+                                        <div class="o_dashboard_item h-100">
+                                            <div class="o_dashboard_item_title">
+                                                <i class="fa fa-book mr-2"></i> My Courses
+                                            </div>
+                                            <p>Access all your enrolled courses.</p>
+                                            <button name="%(lms_module.action_lms_courses)d" type="action" class="btn btn-primary">
+                                                View Courses
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Assignments Card -->
+                                    <div class="col-md-4 mb-4">
+                                        <div class="o_dashboard_item h-100">
+                                            <div class="o_dashboard_item_title">
+                                                <i class="fa fa-tasks mr-2"></i> Assignments
+                                            </div>
+                                            <p>View and submit your pending assignments.</p>
+                                            <button name="open_assignments" type="object" class="btn btn-primary">
+                                                View Assignments
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Grades Card -->
+                                    <div class="col-md-4 mb-4">
+                                        <div class="o_dashboard_item h-100">
+                                            <div class="o_dashboard_item_title">
+                                                <i class="fa fa-chart-line mr-2"></i> Grades
+                                            </div>
+                                            <p>Check your grades and academic performance.</p>
+                                            <button name="open_grades" type="object" class="btn btn-primary">
+                                                View Grades
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Calendar and Announcements Row -->
+                                <div class="row mb-4">
+                                    <!-- Calendar Card -->
+                                    <div class="col-md-8 mb-4">
+                                        <div class="o_dashboard_item h-100">
+                                            <div class="o_dashboard_item_title">
+                                                <i class="fa fa-calendar mr-2"></i> Academic Calendar
+                                            </div>
+                                            <div class="calendar-container mt-3">
+                                                <!-- Calendar placeholder - will be replaced by actual widget -->
+                                                <div class="text-center text-muted">
+                                                    <i class="fa fa-calendar fa-3x mb-2"></i>
+                                                    <p>Calendar will be displayed here.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Announcements Card -->
+                                    <div class="col-md-4 mb-4">
+                                        <div class="o_dashboard_item h-100">
+                                            <div class="o_dashboard_item_title">
+                                                <i class="fa fa-bullhorn mr-2"></i> Announcements
+                                            </div>
+                                            <div class="announcements-list mt-3">
+                                                <div class="announcement-item p-2 mb-2 border-bottom">
+                                                    <div class="font-weight-bold">New Semester Registration</div>
+                                                    <div class="text-muted small">Posted: Today</div>
+                                                    <p class="mb-0">Registration for the new semester is now open.</p>
+                                                </div>
+                                                <div class="announcement-item p-2 mb-2 border-bottom">
+                                                    <div class="font-weight-bold">System Maintenance</div>
+                                                    <div class="text-muted small">Posted: Yesterday</div>
+                                                    <p class="mb-0">The system will be down for maintenance on Friday.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Quick Links Row -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="o_dashboard_item">
+                                            <div class="o_dashboard_item_title">
+                                                <i class="fa fa-link mr-2"></i> Quick Links
+                                            </div>
+                                            <div class="row mt-3">
+                                                <div class="col-md-3 col-sm-6 mb-3">
+                                                    <button name="%(lms_module.action_lms_students)d" type="action" class="btn btn-outline-secondary w-100 text-left">
+                                                        <i class="fa fa-users mr-2"></i> Students
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3 col-sm-6 mb-3">
+                                                    <button name="%(lms_module.action_lms_teachers)d" type="action" class="btn btn-outline-secondary w-100 text-left">
+                                                        <i class="fa fa-chalkboard-teacher mr-2"></i> Teachers
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3 col-sm-6 mb-3">
+                                                    <button name="%(lms_module.action_lms_enrollment)d" type="action" class="btn btn-outline-secondary w-100 text-left">
+                                                        <i class="fa fa-user-graduate mr-2"></i> Enrollments
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3 col-sm-6 mb-3">
+                                                    <button name="%(lms_module.action_lms_quiz)d" type="action" class="btn btn-outline-secondary w-100 text-left">
+                                                        <i class="fa fa-question-circle mr-2"></i> Quizzes
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+    </data>
+</odoo> 
