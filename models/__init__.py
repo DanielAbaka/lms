@@ -19,9 +19,10 @@ from . import messaging
 from . import administrator
 from . import attendance
 from . import course_material
-from . import quiz_question
-from . import quiz_option
-from . import quiz_attempt
-from . import quiz_question_attempt
+# Removed non-existent modules
+# from . import quiz_question
+# from . import quiz_option
+# from . import quiz_attempt
+# from . import quiz_question_attempt
 from . import document_access
 from . import schedule

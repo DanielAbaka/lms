@@ -116,7 +116,10 @@
             <field name="context">{}</field>
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
-                    Create your first course material
+                    Create your first course material!
+                </p>
+                <p>
+                    Add documents, videos, and other resources for your courses.
                 </p>
             </field>
         </record>
@@ -194,6 +197,337 @@
             <field name="help" type="html">
                 <p class="o_view_nocontent_smiling_face">
                     No attendance records available yet
+                </p>
+            </field>
+        </record>
+
+        <!-- Education Actions -->
+        <record id="action_lms_course_planning" model="ir.actions.act_window">
+            <field name="name">Course Planning</field>
+            <field name="res_model">lms.course.planning</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first course plan!
+                </p>
+                <p>
+                    Plan your course content, objectives, and schedule.
+                </p>
+            </field>
+        </record>
+
+        <!-- People Actions -->
+        <record id="action_lms_administrators" model="ir.actions.act_window">
+            <field name="name">Administrators</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('is_admin', '=', True)]</field>
+            <field name="context">{'default_is_admin': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first administrator!
+                </p>
+                <p>
+                    Administrators can manage all aspects of the LMS system.
+                </p>
+            </field>
+        </record>
+
+        <!-- Assessment Actions -->
+        <record id="action_lms_grades" model="ir.actions.act_window">
+            <field name="name">Grades</field>
+            <field name="res_model">lms.grade</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Record your first grade!
+                </p>
+                <p>
+                    Track student performance through grade records.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_documents" model="ir.actions.act_window">
+            <field name="name">Documents</field>
+            <field name="res_model">lms.document</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Upload your first document!
+                </p>
+                <p>
+                    Share documents with your students and teachers.
+                </p>
+            </field>
+        </record>
+
+        <!-- Schedule Actions -->
+        <record id="action_lms_schedules" model="ir.actions.act_window">
+            <field name="name">Schedules</field>
+            <field name="res_model">lms.schedule</field>
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first schedule!
+                </p>
+                <p>
+                    Organize your class sessions and manage your teaching schedule.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_schedule_templates" model="ir.actions.act_window">
+            <field name="name">Schedule Templates</field>
+            <field name="res_model">lms.schedule.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first schedule template!
+                </p>
+                <p>
+                    Define reusable schedule templates for your courses.
+                </p>
+            </field>
+        </record>
+
+        <!-- Enrollment Actions -->
+        <record id="action_lms_enrollments" model="ir.actions.act_window">
+            <field name="name">Enrollments</field>
+            <field name="res_model">lms.enrollment</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first enrollment!
+                </p>
+                <p>
+                    Enroll students in courses to begin their learning journey.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_bulk_enrollment" model="ir.actions.act_window">
+            <field name="name">Bulk Enrollment</field>
+            <field name="res_model">lms.bulk.enrollment</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="help" type="html">
+                <p>
+                    Use this wizard to enroll multiple students in courses at once.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_teacher_assignments" model="ir.actions.act_window">
+            <field name="name">Teacher Assignments</field>
+            <field name="res_model">lms.teacher.assignment</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first teacher assignment!
+                </p>
+                <p>
+                    Assign teachers to courses for specific academic periods.
+                </p>
+            </field>
+        </record>
+
+        <!-- Academic Actions -->
+        <record id="action_lms_academic_years" model="ir.actions.act_window">
+            <field name="name">Academic Years</field>
+            <field name="res_model">lms.academic.year</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first academic year!
+                </p>
+                <p>
+                    Define the academic years for your institution.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_semesters" model="ir.actions.act_window">
+            <field name="name">Semesters</field>
+            <field name="res_model">lms.semester</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first semester!
+                </p>
+                <p>
+                    Define the semesters or terms for your academic years.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_transcripts" model="ir.actions.act_window">
+            <field name="name">Transcripts</field>
+            <field name="res_model">lms.transcript</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Generate your first transcript!
+                </p>
+                <p>
+                    Create and manage student academic transcripts.
+                </p>
+            </field>
+        </record>
+
+        <!-- Financial Actions -->
+        <record id="action_lms_payment_plans" model="ir.actions.act_window">
+            <field name="name">Payment Plans</field>
+            <field name="res_model">lms.payment.plan</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first payment plan!
+                </p>
+                <p>
+                    Define payment plans for course enrollments.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_payments" model="ir.actions.act_window">
+            <field name="name">Payments</field>
+            <field name="res_model">lms.payment</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Record your first payment!
+                </p>
+                <p>
+                    Track student payments for courses and programs.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_invoices" model="ir.actions.act_window">
+            <field name="name">Invoices</field>
+            <field name="res_model">lms.payment.invoice</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first invoice!
+                </p>
+                <p>
+                    Generate and manage invoices for student payments.
+                </p>
+            </field>
+        </record>
+
+        <!-- Communication Actions -->
+        <record id="action_lms_messaging" model="ir.actions.act_window">
+            <field name="name">Messaging</field>
+            <field name="res_model">lms.message</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Send your first message!
+                </p>
+                <p>
+                    Communicate with students and teachers through the LMS messaging system.
+                </p>
+            </field>
+        </record>
+
+        <!-- Report Actions -->
+        <record id="action_lms_student_performance_report" model="ir.actions.act_window">
+            <field name="name">Student Performance</field>
+            <field name="res_model">lms.grade</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="context">{'search_default_groupby_student': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Track student performance across courses!
+                </p>
+                <p>
+                    Analyze grade data to improve student outcomes.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_attendance_report" model="ir.actions.act_window">
+            <field name="name">Attendance Report</field>
+            <field name="res_model">lms.attendance</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="context">{'search_default_groupby_student': 1, 'search_default_groupby_course': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Track attendance patterns across courses!
+                </p>
+                <p>
+                    Analyze attendance data to improve student engagement.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_course_statistics" model="ir.actions.act_window">
+            <field name="name">Course Statistics</field>
+            <field name="res_model">slide.channel</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="context">{'search_default_groupby_type': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Analyze course performance!
+                </p>
+                <p>
+                    Review course statistics to improve educational content.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_financial_report" model="ir.actions.act_window">
+            <field name="name">Financial Report</field>
+            <field name="res_model">lms.payment</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="context">{'search_default_groupby_month': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Track financial performance!
+                </p>
+                <p>
+                    Analyze payment data to improve financial planning.
+                </p>
+            </field>
+        </record>
+
+        <!-- Configuration Actions -->
+        <record id="action_lms_settings" model="ir.actions.act_window">
+            <field name="name">LMS Settings</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module': 'lms_module'}</field>
+        </record>
+
+        <record id="action_lms_user_groups" model="ir.actions.act_window">
+            <field name="name">User Groups</field>
+            <field name="res_model">res.groups</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('category_id.name', '=', 'Learning Management System')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Manage user access levels!
+                </p>
+                <p>
+                    Configure user groups and permissions for the LMS system.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_lms_document_types" model="ir.actions.act_window">
+            <field name="name">Document Types</field>
+            <field name="res_model">lms.document.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Define document types!
+                </p>
+                <p>
+                    Configure the types of documents that can be uploaded to the LMS.
                 </p>
             </field>
         </record>

@@ -1,67 +1,144 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Enrollment Form View -->
+
+        <!-- ========================== -->
+        <!-- 1) TREE VIEW: enrollment -->
+        <!-- ========================== -->
+        <record id="view_lms_enrollment_tree" model="ir.ui.view">
+            <field name="name">lms.enrollment.tree</field>
+            <field name="model">lms.enrollment</field>
+            <field name="arch" type="xml">
+                <!-- 
+                  We can highlight based on state, 
+                  e.g. decoration-success for approved, decoration-muted for cancelled 
+                -->
+                <tree decoration-success="state == 'approved'"
+                      decoration-muted="state in ['cancelled','rejected']"
+                      decoration-info="state == 'pending'">
+                    <field name="name"/>
+                    <field name="student_id"/>
+                    <field name="course_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="state"/>
+                    <field name="payment_status"/>
+                    <field name="total_fee"/>
+                    <field name="paid_amount"/>
+                    <field name="remaining_amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ========================== -->
+        <!-- 2) FORM VIEW: enrollment -->
+        <!-- ========================== -->
         <record id="view_lms_enrollment_form" model="ir.ui.view">
             <field name="name">lms.enrollment.form</field>
             <field name="model">lms.enrollment</field>
             <field name="arch" type="xml">
-                <form string="Enrollment">
+                <form string="Enrollment" create="1" edit="1">
                     <header>
-                        <button name="action_import_students" string="Import Students" type="object" class="oe_highlight"/>
-                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" 
-                                invisible="state != 'draft'"/>
-                        <field name="state" widget="statusbar"/>
+                        <!-- Buttons for workflow states -->
+                        <button name="action_submit_for_approval" string="Submit" type="object"
+                                attrs="{'invisible':[('state','!=','draft')]}"
+                                class="oe_highlight"/>
+                        <button name="action_approve" string="Approve" type="object"
+                                attrs="{'invisible':[('state','!=','pending')]}"
+                                class="oe_highlight"/>
+                        <button name="action_reject" string="Reject" type="object"
+                                attrs="{'invisible':[('state','!=','pending')]}" />
+                        <button name="action_cancel" string="Cancel" type="object"
+                                attrs="{'invisible':[('state','in',['cancelled','rejected','approved'])]}" />
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,pending,approved,rejected,cancelled"/>
                     </header>
                     <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <field name="total_students" widget="statinfo" string="Total Students"/>
-                            <field name="confirmed_count" widget="statinfo" string="Confirmed"/>
-                            <field name="pending_count" widget="statinfo" string="Pending"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
                         </div>
+
+                        <group>
+                            <group>
+                                <field name="student_id" required="1" domain="[('is_student','=',True)]"/>
+                                <field name="course_id" required="1"/>
+                                <field name="academic_year_id" required="1"/>
+                                <field name="semester_id" required="1"/>
+                                <field name="schedule_id"/>
+                                <field name="teacher_assignment_id"/>
+                            </group>
+                            <group>
+                                <field name="state"/>
+                                <field name="payment_status"/>
+                                <field name="enrollment_date" required="1"/>
+                                <field name="start_date" required="1"/>
+                                <field name="end_date" required="1"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group>
+                                <field name="total_fee" required="1"/>
+                                <field name="paid_amount"/>
+                                <field name="remaining_amount" readonly="1"/>
+                                <field name="payment_plan_id"/>
+                            </group>
+                            <group>
+                                <field name="admin_id" domain="[('is_admin','=',True)]"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+
                         <notebook>
-                            <page string="Enrollment Details">
-                                <group>
-                                    <group>
-                                        <field name="course_id" required="1"/>
-                                        <field name="batch_id"/>
-                                        <field name="enrollment_date" required="1"/>
+                            <page string="Payments">
+                                <!-- A button to see all related Payment records -->
+                                <button name="action_view_payments" type="object" class="oe_stat_button" icon="fa-money">
+                                    <field name="payment_ids" widget="statinfo" string="Payments (Count)"/>
+                                </button>
+                                <field name="payment_ids">
+                                    <tree>
+                                        <field name="date"/>
+                                        <field name="amount"/>
+                                        <field name="payment_method"/>
                                         <field name="state"/>
-                                    </group>
-                                    <group>
-                                        <field name="total_students"/>
-                                        <field name="confirmed_count"/>
-                                        <field name="pending_count"/>
-                                        <field name="payment_status"/>
-                                    </group>
-                                </group>
-                                <group string="Notes">
-                                    <field name="notes"/>
-                                </group>
+                                    </tree>
+                                </field>
                             </page>
-                            <page string="Students">
-                                <field name="student_ids">
-                                    <tree editable="bottom">
+                            <page string="Grades">
+                                <button name="action_view_grades" type="object" class="oe_stat_button" icon="fa-star">
+                                    <field name="grade_ids" widget="statinfo" string="Grades (Count)"/>
+                                </button>
+                                <field name="grade_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="course_id"/>
+                                        <field name="grade"/>
+                                        <field name="grade_type"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Attendance">
+                                <button name="action_view_attendance" type="object" class="oe_stat_button" icon="fa-calendar-check-o">
+                                    <field name="attendance_ids" widget="statinfo" string="Attendance Records"/>
+                                </button>
+                                <field name="attendance_ids">
+                                    <tree>
+                                        <field name="date"/>
                                         <field name="student_id"/>
                                         <field name="status"/>
-                                        <field name="payment_status"/>
-                                        <field name="enrollment_date"/>
-                                        <field name="notes"/>
+                                        <field name="session_type"/>
                                     </tree>
                                 </field>
                             </page>
-                            <page string="Payment Plans">
-                                <field name="payment_plan_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="amount"/>
-                                        <field name="due_date"/>
-                                        <field name="status"/>
-                                    </tree>
-                                </field>
+                            <page string="Notes">
+                                <field name="notes" nolabel="1"/>
                             </page>
                         </notebook>
                     </sheet>
+
+                    <!-- Chatter section, because we have mail.thread & mail.activity.mixin -->
                     <div class="oe_chatter">
                         <field name="message_follower_ids"/>
                         <field name="activity_ids"/>
@@ -71,57 +148,61 @@
             </field>
         </record>
 
-        <!-- Enrollment Tree View -->
-        <record id="view_lms_enrollment_tree" model="ir.ui.view">
-            <field name="name">lms.enrollment.tree</field>
-            <field name="model">lms.enrollment</field>
-            <field name="arch" type="xml">
-                <tree decoration-info="state == 'draft'" decoration-success="state == 'confirmed'">
-                    <field name="course_id"/>
-                    <field name="batch_id"/>
-                    <field name="enrollment_date"/>
-                    <field name="total_students"/>
-                    <field name="confirmed_count"/>
-                    <field name="payment_status"/>
-                    <field name="state"/>
-                </tree>
-            </field>
-        </record>
-
-        <!-- Enrollment Search View -->
+        <!-- ========================== -->
+        <!-- 3) SEARCH VIEW: enrollment -->
+        <!-- ========================== -->
         <record id="view_lms_enrollment_search" model="ir.ui.view">
             <field name="name">lms.enrollment.search</field>
             <field name="model">lms.enrollment</field>
             <field name="arch" type="xml">
                 <search>
+                    <field name="name"/>
+                    <field name="student_id"/>
                     <field name="course_id"/>
-                    <field name="batch_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="state"/>
+                    <field name="payment_status"/>
+                    <field name="admin_id"/>
                     <separator/>
-                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-                    <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
-                    <filter string="Pending Payment" name="pending_payment" domain="[('payment_status', '=', 'pending')]"/>
+                    <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                    <filter string="Pending" name="pending" domain="[('state','=','pending')]"/>
+                    <filter string="Approved" name="approved" domain="[('state','=','approved')]"/>
+                    <filter string="Rejected" name="rejected" domain="[('state','=','rejected')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state','=','cancelled')]"/>
+                    <separator/>
+                    <filter string="Payment Pending" name="pay_pending" domain="[('payment_status','=','pending')]"/>
+                    <filter string="Partial Payment" name="pay_partial" domain="[('payment_status','=','partial')]"/>
+                    <filter string="Paid" name="pay_paid" domain="[('payment_status','=','paid')]"/>
                     <group expand="0" string="Group By">
-                        <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
-                        <filter string="Batch" name="group_by_batch" context="{'group_by': 'batch_id'}"/>
-                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Student" name="group_by_student" context="{'group_by':'student_id'}"/>
+                        <filter string="Course" name="group_by_course" context="{'group_by':'course_id'}"/>
+                        <filter string="Status" name="group_by_state" context="{'group_by':'state'}"/>
+                        <filter string="Payment Status" name="group_by_paystatus" context="{'group_by':'payment_status'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <!-- Enrollment Actions -->
-        <record id="action_lms_enrollments" model="ir.actions.act_window">
+        <!-- ========================== -->
+        <!-- 4) ACTION for enrollments -->
+        <!-- ========================== -->
+        <record id="action_lms_enrollment" model="ir.actions.act_window">
             <field name="name">Enrollments</field>
             <field name="res_model">lms.enrollment</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_lms_enrollment_search"/>
         </record>
 
-        <!-- Enrollment Menu -->
-        <menuitem id="menu_lms_enrollments"
-                  name="Enrollments"
-                  parent="lms_module.menu_root"
-                  action="action_lms_enrollments"
-                  sequence="5"/>
+        <!-- 
+          If your menus are in a different file, 
+          you can add something like:
+          <menuitem id="menu_lms_enrollments"
+                    name="Enrollments"
+                    parent="lms_module.menu_root"
+                    action="action_lms_enrollment"
+                    sequence="10"/>
+        -->
+
     </data>
 </odoo>

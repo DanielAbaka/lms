@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- 1) FORM VIEW for the Bulk Enrollment Wizard -->
+        <record id="view_lms_bulk_enrollment_form" model="ir.ui.view">
+            <field name="name">lms.bulk.enrollment.form</field>
+            <field name="model">lms.bulk.enrollment</field>
+            <field name="arch" type="xml">
+                <form string="Bulk Enrollment Wizard">
+                    <header>
+                        <!-- Show the current state in the header, plus any optional transitions -->
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,processing,completed,failed"/>
+                    </header>
+
+                    <sheet>
+                        <!-- A title or reference field -->
+                        <div class="oe_title">
+                            <h1><field name="name" readonly="1"/></h1>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="admin_id"/>
+                                <field name="academic_year_id" required="1"/>
+                                <field name="semester_id" required="1"/>
+                                <field name="start_date" required="1"/>
+                                <field name="end_date" required="1"/>
+                            </group>
+                            <group>
+                                <field name="course_ids" widget="many2many_tags" required="1"/>
+                                <field name="student_ids" widget="many2many_tags" required="1"/>
+                            </group>
+                        </group>
+
+                        <!-- Possibly a place to show error_message if state == 'failed' -->
+                        <group string="Process Info" attrs="{'invisible': [('state','!=','failed')]}">
+                            <field name="error_message" readonly="1"/>
+                        </group>
+
+                        <!-- Some instructions or details -->
+                        <label for="course_ids" string="Select multiple courses to enroll students in."/>
+                        <label for="student_ids" string="Pick the students to be enrolled."/>
+                    </sheet>
+
+                    <footer>
+                        <!-- A typical 'Confirm' button that calls action_process -->
+                        <button name="action_process" string="Process" type="object" 
+                                class="oe_highlight" 
+                                attrs="{'invisible': [('state','!=','draft')]}"/>
+
+                        <!-- A close/cancel button for the wizard -->
+                        <button string="Close" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- 2) ACTION to open the wizard in a popup (target=new) -->
+        <record id="action_lms_bulk_enrollment" model="ir.actions.act_window">
+            <field name="name">Bulk Enrollment</field>
+            <field name="res_model">lms.bulk.enrollment</field>
+            <field name="view_mode">form</field>
+            <!-- target=new => show as a modal/popup wizard -->
+            <field name="target">new</field>
+            <!-- optional: if you want a default 'draft' state or a default admin_id, you can set context -->
+            <field name="context">{'default_state':'draft'}</field>
+        </record>
+
+        <!-- 
+          3) (Optional) If you want to link this to a menu or a button somewhere, 
+          you could do something like:
+          
+          <menuitem id="menu_lms_bulk_enrollment"
+                    name="Bulk Enrollment Wizard"
+                    parent="menu_lms_root"
+                    action="action_lms_bulk_enrollment"
+                    sequence="10"/>
+          
+          Or define a button on some other form that triggers this wizard, etc.
+        -->
+    </data>
+</odoo>

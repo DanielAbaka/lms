@@ -1,342 +1,357 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Schedule Form View -->
-    <record id="view_lms_schedule_form" model="ir.ui.view">
-        <field name="name">lms.schedule.form</field>
-        <field name="model">lms.schedule</field>
-        <field name="arch" type="xml">
-            <form>
-                <header>
-                    <button name="action_activate" string="Activate" type="object" class="oe_highlight" 
-                            invisible="state != 'draft'"/>
-                    <button name="action_complete" string="Complete" type="object" class="oe_highlight"
-                            invisible="state != 'active'"/>
-                    <button name="action_cancel" string="Cancel" type="object"
-                            invisible="state in ['completed', 'cancelled']"/>
-                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"
-                            invisible="state != 'cancelled'"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,active,completed"/>
-                </header>
-                <sheet>
-                    <div class="oe_title">
-                        <h1>
-                            <field name="name" placeholder="Schedule Name"/>
-                        </h1>
+    <data>
+
+        <!-- ========================================================= -->
+        <!-- 1) SCHEDULE TEMPLATE Views & Action                       -->
+        <!--    (Model: lms.schedule.template)                         -->
+        <!-- ========================================================= -->
+
+        <!-- Tree View: lms.schedule.template -->
+        <record id="view_lms_schedule_template_tree" model="ir.ui.view">
+            <field name="name">lms.schedule.template.tree</field>
+            <field name="model">lms.schedule.template</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="course_id"/>
+                    <field name="day_of_week"/>
+                    <field name="start_time" widget="float_time"/>
+                    <field name="end_time" widget="float_time"/>
+                    <field name="classroom"/>
+                    <field name="capacity"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View: lms.schedule.template -->
+        <record id="view_lms_schedule_template_form" model="ir.ui.view">
+            <field name="name">lms.schedule.template.form</field>
+            <field name="model">lms.schedule.template</field>
+            <field name="arch" type="xml">
+                <form string="Schedule Template">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Template Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="admin_id" domain="[('is_admin','=',True)]"/>
+                                <field name="academic_year_id" required="1"/>
+                                <field name="semester_id" required="1"/>
+                                <field name="course_id" required="1"/>
+                            </group>
+                            <group>
+                                <field name="day_of_week" required="1"/>
+                                <field name="start_time" widget="float_time" required="1"/>
+                                <field name="end_time" widget="float_time" required="1"/>
+                                <field name="classroom" required="1"/>
+                                <field name="capacity" required="1"/>
+                            </group>
+                        </group>
+                        <group string="Teacher Assignments">
+                            <field name="teacher_assignment_ids">
+                                <tree editable="bottom">
+                                    <field name="teacher_id"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View: lms.schedule.template -->
+        <record id="view_lms_schedule_template_search" model="ir.ui.view">
+            <field name="name">lms.schedule.template.search</field>
+            <field name="model">lms.schedule.template</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="day_of_week"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Course" name="group_by_course" context="{'group_by':'course_id'}"/>
+                        <filter string="Day of Week" name="group_by_day" context="{'group_by':'day_of_week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action: lms.schedule.template -->
+        <record id="action_lms_schedule_template" model="ir.actions.act_window">
+            <field name="name">Schedule Templates</field>
+            <field name="res_model">lms.schedule.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_schedule_template_search"/>
+        </record>
+
+
+        <!-- ========================================================= -->
+        <!-- 2) SCHEDULE BULK WIZARD (Transient Model)                 -->
+        <!--    (Model: lms.schedule.bulk.wizard)                      -->
+        <!-- ========================================================= -->
+
+        <!-- Form View: lms.schedule.bulk.wizard -->
+        <record id="view_lms_schedule_bulk_wizard_form" model="ir.ui.view">
+            <field name="name">lms.schedule.bulk.wizard.form</field>
+            <field name="model">lms.schedule.bulk.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Bulk Schedule Creation">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="academic_year_id" required="1"/>
+                                <field name="semester_id" required="1"/>
+                                <field name="template_id" required="1"/>
+                            </group>
+                            <group>
+                                <field name="start_date" required="1"/>
+                                <field name="end_date" required="1"/>
+                                <field name="classroom" required="1"/>
+                                <field name="teacher_id" domain="[('is_teacher','=',True)]"/>
+                            </group>
+                        </group>
+                        <footer>
+                            <button name="action_create_schedules" string="Create Schedules" type="object" class="oe_highlight"/>
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Wizard: lms.schedule.bulk.wizard 
+             (Typically opened by button, but we can define an action for direct usage) -->
+        <record id="action_lms_schedule_bulk_wizard" model="ir.actions.act_window">
+            <field name="name">Bulk Schedule Creation</field>
+            <field name="res_model">lms.schedule.bulk.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <!-- ========================================================= -->
+        <!-- 3) ROOM AVAILABILITY WIZARD (Transient Model)             -->
+        <!--    (Model: lms.room.availability.wizard)                  -->
+        <!-- ========================================================= -->
+
+        <!-- Form View: lms.room.availability.wizard -->
+        <record id="view_lms_room_availability_wizard_form" model="ir.ui.view">
+            <field name="name">lms.room.availability.wizard.form</field>
+            <field name="model">lms.room.availability.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Room Availability Check">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="classroom" required="1"/>
+                                <field name="date" required="1"/>
+                                <field name="start_time" widget="float_time" required="1"/>
+                                <field name="end_time" widget="float_time" required="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Available Rooms">
+                                <field name="available_rooms">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="capacity"/>
+                                        <field name="is_available"/>
+                                        <field name="conflicting_schedules"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <footer>
+                            <button string="Close" class="oe_link" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Wizard: lms.room.availability.wizard -->
+        <record id="action_lms_room_availability_wizard" model="ir.actions.act_window">
+            <field name="name">Check Room Availability</field>
+            <field name="res_model">lms.room.availability.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <!-- ========================================================= -->
+        <!-- 4) SCHEDULE (Main Model) (Model: lms.schedule)            -->
+        <!-- ========================================================= -->
+
+        <!-- Tree View: lms.schedule -->
+        <record id="view_lms_schedule_tree" model="ir.ui.view">
+            <field name="name">lms.schedule.tree</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <!-- Decorate rows based on state, e.g. decoration-info="state=='draft'" -->
+                <tree decoration-info="state == 'draft'"
+                      decoration-success="state == 'active'"
+                      decoration-muted="state in ['completed','cancelled']">
+                    <field name="name"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="course_id"/>
+                    <field name="teacher_assignment_id"/>
+                    <field name="date"/>
+                    <field name="day_of_week"/>
+                    <field name="start_time" widget="float_time"/>
+                    <field name="end_time" widget="float_time"/>
+                    <field name="classroom"/>
+                    <field name="capacity"/>
+                    <field name="enrolled_students_count"/>
+                    <field name="available_slots"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View: lms.schedule -->
+        <record id="view_lms_schedule_form" model="ir.ui.view">
+            <field name="name">lms.schedule.form</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <form string="Schedule">
+                    <header>
+                        <!-- Buttons for transitions -->
+                        <button name="action_activate" string="Activate" type="object" class="oe_highlight"
+                                attrs="{'invisible':[('state','!=','draft')]}" />
+                        <button name="action_complete" string="Complete" type="object"
+                                attrs="{'invisible':[('state','!=','active')]}" />
+                        <button name="action_cancel" string="Cancel" type="object"
+                                attrs="{'invisible':[('state','not in',['draft','active'])]}" />
+                        <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                                attrs="{'invisible':[('state','!=','cancelled')]}" />
+                        <field name="state" widget="statusbar" 
+                               statusbar_visible="draft,active,completed,cancelled"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Schedule Name"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="academic_year_id" required="1"/>
+                                <field name="semester_id" required="1"/>
+                                <field name="course_id" required="1"/>
+                                <field name="teacher_assignment_id" required="1"/>
+                            </group>
+                            <group>
+                                <field name="date" required="1"/>
+                                <field name="day_of_week" required="1"/>
+                                <field name="start_time" widget="float_time" required="1"/>
+                                <field name="end_time" widget="float_time" required="1"/>
+                                <field name="classroom" required="1"/>
+                                <field name="capacity" required="1"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <group>
+                                <field name="enrolled_students_count" readonly="1"/>
+                                <field name="available_slots" readonly="1"/>
+                                <field name="is_full" readonly="1"/>
+                                <field name="teacher_assignment_count" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Attendance">
+                                <button name="action_view_attendance" type="object" class="oe_stat_button" icon="fa-calendar-check-o">
+                                    <field name="attendance_ids" widget="statinfo" string="Attendance"/>
+                                </button>
+                                <field name="attendance_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="date"/>
+                                        <field name="status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Enrollments">
+                                <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
+                                    <field name="enrollment_ids" widget="statinfo" string="Enrollments"/>
+                                </button>
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="state"/>
+                                        <field name="enrollment_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <footer>
+                        <!-- Additional wizard calls if needed -->
+                        <button name="action_bulk_create" string="Bulk Create" type="object"/>
+                        <button name="action_check_room_availability" string="Check Room Availability" type="object"/>
+                    </footer>
+
+                    <!-- chatter, if needed -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
                     </div>
-                    <group>
-                        <group>
-                            <field name="academic_year_id"/>
-                            <field name="semester_id"/>
-                            <field name="course_id"/>
-                            <field name="teacher_assignment_id"/>
-                        </group>
-                        <group>
-                            <field name="day_of_week"/>
-                            <field name="start_time" widget="float_time"/>
-                            <field name="end_time" widget="float_time"/>
-                            <field name="classroom"/>
-                            <field name="capacity"/>
-                        </group>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View: lms.schedule -->
+        <record id="view_lms_schedule_search" model="ir.ui.view">
+            <field name="name">lms.schedule.search</field>
+            <field name="model">lms.schedule</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="course_id"/>
+                    <field name="teacher_assignment_id"/>
+                    <field name="classroom"/>
+                    <separator/>
+                    <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                    <filter string="Active" name="active" domain="[('state','=','active')]"/>
+                    <filter string="Completed" name="completed" domain="[('state','=','completed')]"/>
+                    <filter string="Cancelled" name="cancelled" domain="[('state','=','cancelled')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Academic Year" name="group_by_year" context="{'group_by': 'academic_year_id'}"/>
+                        <filter string="Semester" name="group_by_semester" context="{'group_by': 'semester_id'}"/>
+                        <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                        <filter string="Teacher" name="group_by_teacher" context="{'group_by': 'teacher_assignment_id'}"/>
+                        <filter string="Classroom" name="group_by_classroom" context="{'group_by': 'classroom'}"/>
+                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
                     </group>
-                    <notebook>
-                        <page string="Attendance Records">
-                            <field name="attendance_ids">
-                                <tree>
-                                    <field name="date"/>
-                                    <field name="student_id"/>
-                                    <field name="status"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Enrollments">
-                            <field name="enrollment_ids">
-                                <tree>
-                                    <field name="student_id"/>
-                                    <field name="enrollment_date"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
-            </form>
-        </field>
-    </record>
+                </search>
+            </field>
+        </record>
 
-    <!-- Schedule Tree View -->
-    <record id="view_lms_schedule_tree" model="ir.ui.view">
-        <field name="name">lms.schedule.tree</field>
-        <field name="model">lms.schedule</field>
-        <field name="arch" type="xml">
-            <tree decoration-info="state == 'draft'" decoration-success="state == 'active'">
-                <field name="name"/>
-                <field name="academic_year_id"/>
-                <field name="semester_id"/>
-                <field name="course_id"/>
-                <field name="teacher_assignment_id"/>
-                <field name="day_of_week"/>
-                <field name="start_time" widget="float_time"/>
-                <field name="end_time" widget="float_time"/>
-                <field name="classroom"/>
-                <field name="capacity"/>
-                <field name="enrolled_students_count"/>
-                <field name="available_slots"/>
-                <field name="state"/>
-            </tree>
-        </field>
-    </record>
+        <!-- Action: lms.schedule -->
+        <record id="action_lms_schedule" model="ir.actions.act_window">
+            <field name="name">Schedules</field>
+            <field name="res_model">lms.schedule</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_schedule_search"/>
+        </record>
 
-    <!-- Schedule Search View -->
-    <record id="view_lms_schedule_search" model="ir.ui.view">
-        <field name="name">lms.schedule.search</field>
-        <field name="model">lms.schedule</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="name"/>
-                <field name="academic_year_id"/>
-                <field name="semester_id"/>
-                <field name="course_id"/>
-                <field name="teacher_assignment_id"/>
-                <field name="classroom"/>
-                <separator/>
-                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
-                <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
-                <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
-                <group expand="0" string="Group By">
-                    <filter string="Academic Year" name="group_by_academic_year" context="{'group_by': 'academic_year_id'}"/>
-                    <filter string="Semester" name="group_by_semester" context="{'group_by': 'semester_id'}"/>
-                    <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
-                    <filter string="Teacher" name="group_by_teacher" context="{'group_by': 'teacher_assignment_id'}"/>
-                    <filter string="Day of Week" name="group_by_day" context="{'group_by': 'day_of_week'}"/>
-                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <!-- Schedule Action -->
-    <record id="action_lms_schedule" model="ir.actions.act_window">
-        <field name="name">Schedules</field>
-        <field name="res_model">lms.schedule</field>
-        <field name="view_mode">calendar,tree,form</field>
-        <field name="search_view_id" ref="view_lms_schedule_search"/>
-    </record>
-
-    <!-- Schedule Menu Item -->
-    <menuitem id="menu_lms_schedule"
-              name="Schedules"
-              parent="menu_lms_academic"
-              action="action_lms_schedule"
-              sequence="4"/>
-
-    <!-- Schedule Calendar View -->
-    <record id="view_lms_schedule_calendar" model="ir.ui.view">
-        <field name="name">lms.schedule.calendar</field>
-        <field name="model">lms.schedule</field>
-        <field name="arch" type="xml">
-            <calendar string="Schedule Calendar" 
-                      date_start="start_time" 
-                      date_stop="end_time"
-                      color="teacher_assignment_id"
-                      quick_add="False"
-                      event_open_popup="True"
-                      decoration-info="state == 'draft'"
-                      decoration-success="state == 'active'">
-                <field name="name"/>
-                <field name="course_id"/>
-                <field name="teacher_assignment_id"/>
-                <field name="classroom"/>
-                <field name="enrolled_students_count"/>
-                <field name="available_slots"/>
-                <field name="state"/>
-            </calendar>
-        </field>
-    </record>
-
-    <!-- Schedule Template Form View -->
-    <record id="view_lms_schedule_template_form" model="ir.ui.view">
-        <field name="name">lms.schedule.template.form</field>
-        <field name="model">lms.schedule.template</field>
-        <field name="arch" type="xml">
-            <form string="Schedule Template">
-                <sheet>
-                    <group>
-                        <group>
-                            <field name="name"/>
-                            <field name="academic_year_id"/>
-                            <field name="semester_id"/>
-                            <field name="course_id"/>
-                        </group>
-                        <group>
-                            <field name="day_of_week"/>
-                            <field name="start_time" widget="float_time"/>
-                            <field name="end_time" widget="float_time"/>
-                            <field name="classroom"/>
-                            <field name="capacity"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Teacher Assignments">
-                            <field name="teacher_assignment_ids">
-                                <tree editable="bottom">
-                                    <field name="teacher_id"/>
-                                    <field name="start_date"/>
-                                    <field name="end_date"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
-            </form>
-        </field>
-    </record>
-
-    <!-- Schedule Template Tree View -->
-    <record id="view_lms_schedule_template_tree" model="ir.ui.view">
-        <field name="name">lms.schedule.template.tree</field>
-        <field name="model">lms.schedule.template</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="name"/>
-                <field name="academic_year_id"/>
-                <field name="semester_id"/>
-                <field name="course_id"/>
-                <field name="day_of_week"/>
-                <field name="start_time" widget="float_time"/>
-                <field name="end_time" widget="float_time"/>
-                <field name="classroom"/>
-                <field name="capacity"/>
-            </tree>
-        </field>
-    </record>
-
-    <!-- Schedule Template Search View -->
-    <record id="view_lms_schedule_template_search" model="ir.ui.view">
-        <field name="name">lms.schedule.template.search</field>
-        <field name="model">lms.schedule.template</field>
-        <field name="arch" type="xml">
-            <search>
-                <field name="name"/>
-                <field name="academic_year_id"/>
-                <field name="semester_id"/>
-                <field name="course_id"/>
-                <field name="classroom"/>
-                <group expand="0" string="Group By">
-                    <filter string="Academic Year" name="group_by_academic_year" context="{'group_by': 'academic_year_id'}"/>
-                    <filter string="Semester" name="group_by_semester" context="{'group_by': 'semester_id'}"/>
-                    <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
-                    <filter string="Day of Week" name="group_by_day" context="{'group_by': 'day_of_week'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <!-- Schedule Template Action -->
-    <record id="action_lms_schedule_template" model="ir.actions.act_window">
-        <field name="name">Schedule Templates</field>
-        <field name="res_model">lms.schedule.template</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_lms_schedule_template_search"/>
-    </record>
-
-    <!-- Add Template Menu Item -->
-    <menuitem id="menu_lms_schedule_template"
-              name="Schedule Templates"
-              parent="menu_lms_schedule"
-              action="action_lms_schedule_template"
-              sequence="2"/>
-
-    <!-- Add Bulk Schedule Creation Wizard -->
-    <record id="view_lms_schedule_bulk_wizard_form" model="ir.ui.view">
-        <field name="name">lms.schedule.bulk.wizard.form</field>
-        <field name="model">lms.schedule.bulk.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Bulk Schedule Creation">
-                <sheet>
-                    <group>
-                        <group>
-                            <field name="academic_year_id"/>
-                            <field name="semester_id"/>
-                            <field name="template_id"/>
-                        </group>
-                        <group>
-                            <field name="start_date"/>
-                            <field name="end_date"/>
-                            <field name="classroom"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Teacher Assignments">
-                            <field name="teacher_assignment_ids">
-                                <tree editable="bottom">
-                                    <field name="teacher_id"/>
-                                    <field name="start_date"/>
-                                    <field name="end_date"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- Add Bulk Schedule Creation Action -->
-    <record id="action_lms_schedule_bulk_wizard" model="ir.actions.act_window">
-        <field name="name">Bulk Schedule Creation</field>
-        <field name="res_model">lms.schedule.bulk.wizard</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
-
-    <!-- Add Room Availability Check Wizard -->
-    <record id="view_lms_room_availability_wizard_form" model="ir.ui.view">
-        <field name="name">lms.room.availability.wizard.form</field>
-        <field name="model">lms.room.availability.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Room Availability Check">
-                <sheet>
-                    <group>
-                        <group>
-                            <field name="classroom"/>
-                            <field name="date"/>
-                            <field name="start_time" widget="float_time"/>
-                            <field name="end_time" widget="float_time"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Available Rooms">
-                            <field name="available_rooms">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="capacity"/>
-                                    <field name="is_available"/>
-                                    <field name="conflicting_schedules"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- Add Room Availability Check Action -->
-    <record id="action_lms_room_availability_wizard" model="ir.actions.act_window">
-        <field name="name">Check Room Availability</field>
-        <field name="res_model">lms.room.availability.wizard</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
-</odoo> 
+    </data>
+</odoo>

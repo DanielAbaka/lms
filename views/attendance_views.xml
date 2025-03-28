@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ==================== -->
+        <!-- 1) TREE VIEW        -->
+        <!-- ==================== -->
+        <record id="view_lms_attendance_tree" model="ir.ui.view">
+            <field name="name">lms.attendance.tree</field>
+            <field name="model">lms.attendance</field>
+            <field name="arch" type="xml">
+                <!-- 
+                  decoration-* can highlight rows based on domain expressions
+                  e.g., decoration-success="is_verified == True"
+                -->
+                <tree decoration-success="is_verified == True">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="student_id"/>
+                    <field name="course_id"/>
+                    <field name="session_type"/>
+                    <field name="status"/>
+                    <field name="is_verified"/>
+                    <!-- Could also show teacher_assignment_id, schedule_id, etc. if you like -->
+                </tree>
+            </field>
+        </record>
+
+        <!-- ==================== -->
+        <!-- 2) FORM VIEW        -->
+        <!-- ==================== -->
+        <record id="view_lms_attendance_form" model="ir.ui.view">
+            <field name="name">lms.attendance.form</field>
+            <field name="model">lms.attendance</field>
+            <field name="arch" type="xml">
+                <form string="Attendance Record">
+                    <header>
+                        <!-- For verifying/unverifying attendance on a single record. -->
+                        <button name="action_verify" type="object" string="Verify" 
+                                class="oe_highlight" 
+                                states="draft"
+                                invisible="is_verified == True"/>
+                        <button name="action_unverify" type="object" string="Unverify"
+                                invisible="is_verified == False"/>
+                        
+                        <!-- Possibly you want to mark statuses from form too,
+                             but those are typically mass actions on multiple records in tree view. -->
+                        
+                        <!-- Statusbar-like approach if you want. 
+                             Or you can just show is_verified & status as fields below. -->
+                    </header>
+                    
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <!-- The Attendance Reference -->
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="student_id"/>
+                                <field name="enrollment_id"/>
+                                <field name="schedule_id"/>
+                                <field name="course_id"/>
+                                <field name="teacher_assignment_id"/>
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="status"/>
+                                <field name="session_type"/>
+                                <field name="duration"/>
+                                <field name="location"/>
+                            </group>
+                        </group>
+
+                        <group string="Verification Details" colspan="2">
+                            <field name="is_verified"/>
+                            <field name="verification_date" readonly="1"/>
+                            <field name="verified_by" readonly="1"/>
+                            <field name="marked_by" readonly="1"/>
+                        </group>
+
+                        <group string="Notes" colspan="2">
+                            <field name="notes" nolabel="1"/>
+                        </group>
+                    </sheet>
+
+                    <!-- The chatter, since _inherit includes mail.thread & mail.activity.mixin -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- ==================== -->
+        <!-- 3) SEARCH VIEW      -->
+        <!-- ==================== -->
+        <record id="view_lms_attendance_search" model="ir.ui.view">
+            <field name="name">lms.attendance.search</field>
+            <field name="model">lms.attendance</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="student_id"/>
+                    <field name="course_id"/>
+                    <field name="status"/>
+                    <separator/>
+                    <filter string="Verified" name="verified" domain="[('is_verified','=',True)]"/>
+                    <filter string="Unverified" name="unverified" domain="[('is_verified','=',False)]"/>
+                    <filter string="Present" name="present" domain="[('status','=','present')]"/>
+                    <filter string="Absent" name="absent" domain="[('status','=','absent')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Student" name="group_by_student" context="{'group_by':'student_id'}"/>
+                        <filter string="Date" name="group_by_date" context="{'group_by':'date'}"/>
+                        <filter string="Status" name="group_by_status" context="{'group_by':'status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ==================== -->
+        <!-- 4) ACTION (Window)  -->
+        <!-- ==================== -->
+        <record id="action_lms_attendance" model="ir.actions.act_window">
+            <field name="name">Attendance</field>
+            <field name="res_model">lms.attendance</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_attendance_search"/>
+        </record>
+
+        <!-- 
+          If your menu is in another file, you can do:
+          <menuitem id="menu_lms_attendance"
+                    name="Attendance"
+                    parent="some_parent_menu"
+                    action="action_lms_attendance"
+                    sequence="20" />
+          in that other file.
+        -->
+    </data>
+</odoo>

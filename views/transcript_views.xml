@@ -1,128 +1,66 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Transcript Form View -->
+
+        <!-- ========================== -->
+        <!-- 1) TREE VIEW: lms.transcript -->
+        <!-- ========================== -->
+        <record id="view_lms_transcript_tree" model="ir.ui.view">
+            <field name="name">lms.transcript.tree</field>
+            <field name="model">lms.transcript</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <!-- Show fields you want in the list view, e.g.: -->
+                    <field name="student_id"/>
+                    <field name="academic_year_id"/>
+                    <field name="semester_id"/>
+                    <field name="total_credits"/>
+                    <field name="gpa"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ========================== -->
+        <!-- 2) FORM VIEW: lms.transcript -->
+        <!-- ========================== -->
         <record id="view_lms_transcript_form" model="ir.ui.view">
             <field name="name">lms.transcript.form</field>
             <field name="model">lms.transcript</field>
             <field name="arch" type="xml">
-                <form string="Transcript">
-                    <header>
-                        <button name="action_activate" string="Activate" type="object" class="oe_highlight" 
-                                invisible="state != 'draft'"/>
-                        <button name="action_complete" string="Complete" type="object" class="oe_highlight" 
-                                invisible="state != 'active'"/>
-                        <button name="action_cancel" string="Cancel" type="object" 
-                                invisible="state not in ('draft', 'active')"/>
-                        <button name="action_reset_to_draft" string="Reset to Draft" type="object" 
-                                invisible="state != 'cancelled'"/>
-                        <field name="state" widget="statusbar"/>
-                    </header>
+                <form string="Student Transcript">
                     <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button name="action_view_grades" type="object" class="oe_stat_button" icon="fa-star">
-                                <field name="grade_count" widget="statinfo" string="Grades"/>
-                            </button>
-                            <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
-                                <field name="course_count" widget="statinfo" string="Courses"/>
-                            </button>
-                        </div>
-                        <notebook>
-                            <page string="General Information">
-                                <group>
-                                    <group>
-                                        <field name="student_id" required="1"/>
-                                        <field name="academic_year_id" required="1"/>
-                                        <field name="semester_id" required="1"/>
-                                        <field name="state"/>
-                                    </group>
-                                    <group>
-                                        <field name="gpa"/>
-                                        <field name="total_credits"/>
-                                        <field name="active"/>
-                                    </group>
-                                </group>
-                            </page>
-                            <page string="Academic Summary">
-                                <group>
-                                    <group>
-                                        <field name="total_courses"/>
-                                        <field name="courses_completed"/>
-                                        <field name="courses_in_progress"/>
-                                        <field name="courses_failed"/>
-                                    </group>
-                                    <group>
-                                        <field name="total_credits_attempted"/>
-                                        <field name="total_credits_earned"/>
-                                        <field name="total_credits_in_progress"/>
-                                        <field name="total_credits_failed"/>
-                                    </group>
-                                </group>
-                            </page>
-                            <page string="Notes">
-                                <field name="notes"/>
-                            </page>
-                            <page string="Grades">
-                                <field name="grade_ids">
-                                    <tree>
-                                        <field name="course_id"/>
-                                        <field name="credits"/>
-                                        <field name="grade"/>
-                                        <field name="grade_letter"/>
-                                        <field name="grade_point"/>
-                                        <field name="grade_status"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Courses">
-                                <field name="course_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="code"/>
-                                        <field name="credits"/>
-                                        <field name="grade"/>
-                                        <field name="grade_letter"/>
-                                        <field name="grade_point"/>
-                                        <field name="grade_status"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
+                        <group>
+                            <field name="student_id" required="1"/>
+                            <field name="academic_year_id"/>
+                            <field name="semester_id"/>
+                            <field name="total_credits" readonly="1"/>
+                            <field name="gpa" readonly="1"/>
+                        </group>
+                        <group string="Courses">
+                            <!-- If you want a tags widget or a tree for many2many, you can choose: -->
+                            <field name="course_ids" widget="many2many_tags"/>
+                            <!-- Alternatively:
+                            <field name="course_ids" mode="tree" >
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="credits"/>
+                                </tree>
+                            </field>
+                            -->
+                        </group>
                     </sheet>
+                    <!-- Chatter if you want to enable mail.thread on this model -->
                     <div class="oe_chatter">
                         <field name="message_follower_ids"/>
-                        <field name="activity_ids"/>
                         <field name="message_ids"/>
                     </div>
                 </form>
             </field>
         </record>
 
-        <!-- Transcript Tree View -->
-        <record id="view_lms_transcript_tree" model="ir.ui.view">
-            <field name="name">lms.transcript.tree</field>
-            <field name="model">lms.transcript</field>
-            <field name="arch" type="xml">
-                <tree decoration-info="state == 'draft'" decoration-success="state == 'active'" decoration-muted="state in ['completed', 'cancelled']">
-                    <field name="student_id"/>
-                    <field name="academic_year_id"/>
-                    <field name="semester_id"/>
-                    <field name="gpa"/>
-                    <field name="total_credits"/>
-                    <field name="total_courses"/>
-                    <field name="courses_completed"/>
-                    <field name="courses_in_progress"/>
-                    <field name="courses_failed"/>
-                    <field name="grade_count"/>
-                    <field name="course_count"/>
-                    <field name="state"/>
-                </tree>
-            </field>
-        </record>
-
-        <!-- Transcript Search View -->
+        <!-- ========================== -->
+        <!-- 3) SEARCH VIEW: lms.transcript -->
+        <!-- ========================== -->
         <record id="view_lms_transcript_search" model="ir.ui.view">
             <field name="name">lms.transcript.search</field>
             <field name="model">lms.transcript</field>
@@ -131,24 +69,19 @@
                     <field name="student_id"/>
                     <field name="academic_year_id"/>
                     <field name="semester_id"/>
-                    <field name="gpa"/>
-                    <field name="total_credits"/>
                     <separator/>
-                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-                    <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
-                    <filter string="Completed" name="completed" domain="[('state', '=', 'completed')]"/>
-                    <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                     <group expand="0" string="Group By">
-                        <filter string="Student" name="group_by_student" context="{'group_by': 'student_id'}"/>
-                        <filter string="Academic Year" name="group_by_academic_year" context="{'group_by': 'academic_year_id'}"/>
-                        <filter string="Semester" name="group_by_semester" context="{'group_by': 'semester_id'}"/>
-                        <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Student" name="group_by_student" context="{'group_by':'student_id'}"/>
+                        <filter string="Academic Year" name="group_by_academic_year" context="{'group_by':'academic_year_id'}"/>
+                        <filter string="Semester" name="group_by_semester" context="{'group_by':'semester_id'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <!-- Transcript Action -->
+        <!-- ========================== -->
+        <!-- 4) ACTION: lms.transcript -->
+        <!-- ========================== -->
         <record id="action_lms_transcript" model="ir.actions.act_window">
             <field name="name">Transcripts</field>
             <field name="res_model">lms.transcript</field>
@@ -156,10 +89,15 @@
             <field name="search_view_id" ref="view_lms_transcript_search"/>
         </record>
 
-        <!-- Transcripts Menu Item -->
-        <menuitem id="menu_lms_transcripts" name="Transcripts"
-                  parent="lms_module.menu_root"
-                  action="action_lms_transcript" 
-                  sequence="8"/>
+        <!-- 
+          If you manage menus in another XML file, reference "action_lms_transcript" there, e.g.:
+          
+          <menuitem id="menu_lms_transcripts"
+                    name="Transcripts"
+                    parent="lms_module.menu_root"
+                    action="action_lms_transcript"
+                    sequence="50"/>
+        -->
+
     </data>
 </odoo>

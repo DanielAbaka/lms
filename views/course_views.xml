@@ -1,84 +1,19 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Course Form View -->
-        <record id="view_lms_course_form" model="ir.ui.view">
-            <field name="name">lms.course.form</field>
-            <field name="model">slide.channel</field>
-            <field name="arch" type="xml">
-                <form string="Course">
-                    <header>
-                        <button name="action_publish" string="Publish" type="object" class="oe_highlight" 
-                                invisible="state != 'draft'"/>
-                        <button name="action_unpublish" string="Unpublish" type="object" 
-                                invisible="state != 'published'"/>
-                        <field name="state" widget="statusbar"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
-                                <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
-                            </button>
-                            <button name="action_view_assignments" type="object" class="oe_stat_button" icon="fa-tasks">
-                                <field name="assignment_count" widget="statinfo" string="Assignments"/>
-                            </button>
-                        </div>
-                        <notebook>
-                            <page string="General Information">
-                                <group>
-                                    <group>
-                                        <field name="name" required="1"/>
-                                        <field name="code" required="1"/>
-                                        <field name="academic_year_id" required="1"/>
-                                        <field name="semester_id" required="1"/>
-                                        <field name="credits" required="1"/>
-                                        <field name="max_students"/>
-                                        <field name="state"/>
-                                    </group>
-                                    <group>
-                                        <field name="description"/>
-                                        <field name="objectives"/>
-                                        <field name="prerequisites"/>
-                                        <field name="active"/>
-                                    </group>
-                                </group>
-                            </page>
-                            <page string="Enrollments">
-                                <field name="enrollment_ids">
-                                    <tree>
-                                        <field name="student_id"/>
-                                        <field name="enrollment_date"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Teacher Assignments">
-                                <field name="teacher_assignment_ids">
-                                    <tree>
-                                        <field name="teacher_id"/>
-                                        <field name="start_date"/>
-                                        <field name="end_date"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
-                    </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids"/>
-                        <field name="activity_ids"/>
-                        <field name="message_ids"/>
-                    </div>
-                </form>
-            </field>
-        </record>
 
-        <!-- Course Tree View -->
+        <!-- ============================== -->
+        <!-- 1) TREE VIEW for slide.channel -->
+        <!-- ============================== -->
         <record id="view_lms_course_tree" model="ir.ui.view">
             <field name="name">lms.course.tree</field>
             <field name="model">slide.channel</field>
+            <field name="priority" eval="20"/> 
+            <!-- You can set a priority if you want this to take precedence over standard eLearning views -->
             <field name="arch" type="xml">
-                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'">
+                <tree decoration-info="state == 'draft'" 
+                      decoration-success="state == 'published'">
+                    <!-- Key fields -->
                     <field name="name"/>
                     <field name="code"/>
                     <field name="academic_year_id"/>
@@ -92,7 +27,102 @@
             </field>
         </record>
 
-        <!-- Course Search View -->
+        <!-- ============================== -->
+        <!-- 2) FORM VIEW for slide.channel -->
+        <!-- ============================== -->
+        <record id="view_lms_course_form" model="ir.ui.view">
+            <field name="name">lms.course.form</field>
+            <field name="model">slide.channel</field>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <form string="LMS Course">
+                    <header>
+                        <button name="action_publish" string="Publish" type="object" 
+                                attrs="{'invisible':[('state','!=','draft')]}"
+                                class="oe_highlight"/>
+                        <button name="action_unpublish" string="Unpublish" type="object" 
+                                attrs="{'invisible':[('state','!=','published')]}" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,published"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <!-- Stat buttons referencing 'enrollment_count' & 'assignment_count' -->
+                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
+                            </button>
+                            <button name="action_view_assignments" type="object" class="oe_stat_button" icon="fa-tasks">
+                                <field name="assignment_count" widget="statinfo" string="Assignments"/>
+                            </button>
+                        </div>
+
+                        <notebook>
+                            <page string="General Information" name="page_general_info">
+                                <group>
+                                    <group>
+                                        <field name="name" required="1"/>
+                                        <field name="code" required="1"/>
+                                        <field name="academic_year_id"/>
+                                        <field name="semester_id"/>
+                                        <field name="credits"/>
+                                        <field name="max_students"/>
+                                        <field name="cost_per_credit"/>
+                                        <field name="state"/>
+                                    </group>
+                                    <group>
+                                        <field name="admin_id" domain="[('is_admin','=',True)]"/>
+                                        <field name="description" placeholder="Enter course description..."/>
+                                        <field name="objectives" placeholder="Enter course objectives..."/>
+                                        <field name="prerequisites" placeholder="Enter course prerequisites..."/>
+                                    </group>
+                                </group>
+                            </page>
+
+                            <page string="Enrollments" name="page_enrollments">
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Teacher Assignments" name="page_assignments">
+                                <field name="teacher_assignment_ids">
+                                    <tree>
+                                        <field name="teacher_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Prerequisites" name="page_prereqs">
+                                <field name="prerequisite_course_ids" mode="tree,kanban">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <!-- Optional chatter if needed (since this inherits from eLearning's slide.channel) -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- ================================ -->
+        <!-- 3) SEARCH VIEW for slide.channel -->
+        <!-- ================================ -->
         <record id="view_lms_course_search" model="ir.ui.view">
             <field name="name">lms.course.search</field>
             <field name="model">slide.channel</field>
@@ -103,7 +133,6 @@
                     <field name="academic_year_id"/>
                     <field name="semester_id"/>
                     <field name="credits"/>
-                    <separator/>
                     <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
                     <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
                     <group expand="0" string="Group By">
@@ -115,18 +144,23 @@
             </field>
         </record>
 
-        <!-- Course Action -->
+        <!-- ======================= -->
+        <!-- 4) ACTION              -->
+        <!-- ======================= -->
         <record id="action_lms_course" model="ir.actions.act_window">
             <field name="name">Courses</field>
             <field name="res_model">slide.channel</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_lms_course_search"/>
+            <!-- Optionally set domain if you want to show only courses with certain criteria -->
         </record>
 
-        <!-- Courses Menu Item -->
-        <menuitem id="menu_lms_courses" name="Courses"
-                  parent="lms_module.menu_root"
-                  action="action_lms_course" 
-                  sequence="3"/>
+        <!--
+          (Optional) If your menu is in a separate file, you can do something like:
+          <menuitem id="menu_lms_courses" name="Courses"
+                    parent="lms_module.menu_root"
+                    action="action_lms_course"
+                    sequence="3"/>
+        -->
     </data>
 </odoo>

@@ -1,147 +1,18 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Parent Menu for LMS Module -->
-        <!-- <menuitem id="lms_module.menu_root" name="LMS Module" sequence="10"/> -->
 
-        <!-- Academic Year Form View -->
-        <record id="view_lms_academic_year_form" model="ir.ui.view">
-            <field name="name">lms.academic.year.form</field>
-            <field name="model">lms.academic.year</field>
-            <field name="arch" type="xml">
-                <form string="Academic Year">
-                    <header>
-                        <button name="action_activate" string="Activate" type="object" class="oe_highlight" 
-                                invisible="state != 'draft'"/>
-                        <button name="action_complete" string="Complete" type="object" class="oe_highlight" 
-                                invisible="state != 'active'"/>
-                        <button name="action_cancel" string="Cancel" type="object" 
-                                invisible="state not in ('draft', 'active')"/>
-                        <button name="action_reset_to_draft" string="Reset to Draft" type="object" 
-                                invisible="state != 'cancelled'"/>
-                        <field name="state" widget="statusbar"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button name="action_view_semesters" type="object" class="oe_stat_button" icon="fa-calendar">
-                                <field name="semester_count" widget="statinfo" string="Semesters"/>
-                            </button>
-                            <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
-                                <field name="course_count" widget="statinfo" string="Courses"/>
-                            </button>
-                            <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
-                                <field name="student_count" widget="statinfo" string="Students"/>
-                            </button>
-                            <button name="action_view_teachers" type="object" class="oe_stat_button" icon="fa-user-md">
-                                <field name="teacher_count" widget="statinfo" string="Teachers"/>
-                            </button>
-                        </div>
-                        <notebook>
-                            <page string="General Information">
-                                <group>
-                                    <group>
-                                        <field name="name" required="1"/>
-                                        <field name="code" required="1"/>
-                                        <field name="start_date" required="1"/>
-                                        <field name="end_date" required="1"/>
-                                        <field name="state"/>
-                                    </group>
-                                    <group>
-                                        <field name="active"/>
-                                    </group>
-                                </group>
-                            </page>
-                            <page string="Semesters">
-                                <field name="semester_ids">
-                                    <tree editable="bottom">
-                                        <field name="sequence" widget="handle"/>
-                                        <field name="name"/>
-                                        <field name="code"/>
-                                        <field name="start_date"/>
-                                        <field name="end_date"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Courses">
-                                <field name="course_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="code"/>
-                                        <field name="credits"/>
-                                        <field name="enrollment_count"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Teacher Assignments">
-                                <field name="teacher_assignment_ids">
-                                    <tree>
-                                        <field name="teacher_id"/>
-                                        <field name="course_id"/>
-                                        <field name="start_date"/>
-                                        <field name="end_date"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Enrollments">
-                                <field name="enrollment_ids">
-                                    <tree>
-                                        <field name="student_id"/>
-                                        <field name="course_id"/>
-                                        <field name="enrollment_date"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Quizzes">
-                                <field name="quiz_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="start_date"/>
-                                        <field name="end_date"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Grades">
-                                <field name="grade_ids">
-                                    <tree>
-                                        <field name="student_id"/>
-                                        <field name="course_id"/>
-                                        <field name="grade"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Documents">
-                                <field name="document_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="date"/>
-                                        <field name="is_public"/>
-                                        <field name="state"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
-                    </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids"/>
-                        <field name="activity_ids"/>
-                        <field name="message_ids"/>
-                    </div>
-                </form>
-            </field>
-        </record>
-
-        <!-- Academic Year Tree View -->
+        <!-- ======================= -->
+        <!-- 1) TREE VIEW           -->
+        <!-- ======================= -->
         <record id="view_lms_academic_year_tree" model="ir.ui.view">
             <field name="name">lms.academic.year.tree</field>
             <field name="model">lms.academic.year</field>
             <field name="arch" type="xml">
-                <tree decoration-info="state == 'draft'" decoration-success="state == 'active'" decoration-muted="state in ['completed', 'cancelled']">
+                <!-- You can highlight rows by state with decoration-* attributes -->
+                <tree decoration-info="state == 'draft'"
+                      decoration-success="state == 'active'"
+                      decoration-muted="state in ['completed','cancelled']">
                     <field name="name"/>
                     <field name="code"/>
                     <field name="start_date"/>
@@ -155,7 +26,161 @@
             </field>
         </record>
 
-        <!-- Academic Year Search View -->
+        <!-- ======================= -->
+        <!-- 2) FORM VIEW           -->
+        <!-- ======================= -->
+        <record id="view_lms_academic_year_form" model="ir.ui.view">
+            <field name="name">lms.academic.year.form</field>
+            <field name="model">lms.academic.year</field>
+            <field name="arch" type="xml">
+                <form string="Academic Year" create="1" edit="1">
+                    <header>
+                        <!-- Buttons calling your model's methods for state transitions -->
+                        <button name="action_activate" string="Activate" type="object" class="oe_highlight"
+                                invisible="state != 'draft'"/>
+                        <button name="action_complete" string="Complete" type="object" class="oe_highlight"
+                                invisible="state != 'active'"/>
+                        <button name="action_cancel" string="Cancel" type="object"
+                                invisible="state not in ('draft','active')"/>
+                        <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                                invisible="state != 'cancelled'"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,active,completed,cancelled"/>
+                    </header>
+
+                    <sheet>
+                        <!-- Stat buttons for computed fields -->
+                        <div class="oe_button_box" name="button_box">
+                            <!-- If you have methods like action_view_semesters, action_view_courses, etc. -->
+                            <button name="action_view_semesters" type="object" class="oe_stat_button" icon="fa-calendar">
+                                <field name="semester_count" widget="statinfo" string="Semesters"/>
+                            </button>
+                            <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
+                                <field name="course_count" widget="statinfo" string="Courses"/>
+                            </button>
+                            <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                                <field name="student_count" widget="statinfo" string="Students"/>
+                            </button>
+                            <button name="action_view_teachers" type="object" class="oe_stat_button" icon="fa-user-md">
+                                <field name="teacher_count" widget="statinfo" string="Teachers"/>
+                            </button>
+                            <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-sign-in">
+                                <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
+                            </button>
+                        </div>
+
+                        <notebook>
+                            <page string="General Information">
+                                <group>
+                                    <group>
+                                        <field name="name" required="1"/>
+                                        <field name="code" required="1"/>
+                                        <field name="start_date" required="1"/>
+                                        <field name="end_date" required="1"/>
+                                        <field name="state"/>
+                                    </group>
+                                    <group>
+                                        <field name="admin_id"/>
+                                        <field name="active"/>
+                                    </group>
+                                </group>
+                            </page>
+
+                            <page string="Semesters">
+                                <field name="semester_ids">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Courses">
+                                <field name="course_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="credits"/>
+                                        <field name="enrollment_count"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Teacher Assignments">
+                                <field name="teacher_assignment_ids">
+                                    <tree>
+                                        <field name="teacher_id"/>
+                                        <field name="course_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Enrollments">
+                                <field name="enrollment_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="course_id"/>
+                                        <field name="enrollment_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Quizzes">
+                                <field name="quiz_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Grades">
+                                <field name="grade_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="course_id"/>
+                                        <field name="grade"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Documents">
+                                <field name="document_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="date"/>
+                                        <field name="is_public"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <!-- Chatter (mail.thread + mail.activity.mixin) -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- ======================= -->
+        <!-- 3) SEARCH VIEW         -->
+        <!-- ======================= -->
         <record id="view_lms_academic_year_search" model="ir.ui.view">
             <field name="name">lms.academic.year.search</field>
             <field name="model">lms.academic.year</field>
@@ -172,12 +197,15 @@
                     <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
                     <group expand="0" string="Group By">
                         <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                        <filter string="Administrator" name="group_by_admin" context="{'group_by': 'admin_id'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <!-- Academic Year Action -->
+        <!-- ======================= -->
+        <!-- 4) ACTION              -->
+        <!-- ======================= -->
         <record id="action_lms_academic_year" model="ir.actions.act_window">
             <field name="name">Academic Years</field>
             <field name="res_model">lms.academic.year</field>
@@ -185,10 +213,11 @@
             <field name="search_view_id" ref="view_lms_academic_year_search"/>
         </record>
 
-        <!-- Academic Years Menu Item -->
-        <menuitem id="menu_lms_academic_years" name="Academic Year"
-                  parent="lms_module.menu_root"
-                  action="action_lms_academic_year" 
-                  sequence="1"/>
+        <!--
+          You said the menu items are in a separate file, 
+          so no <menuitem> definition here. 
+          Another file can reference action_lms_academic_year if desired.
+        -->
+        
     </data>
 </odoo>

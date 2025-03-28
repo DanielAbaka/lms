@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- =============================== -->
+        <!-- 1) VIEWS FOR lms.course.material -->
+        <!-- =============================== -->
+
+        <!-- TREE VIEW: lms.course.material -->
+        <record id="view_lms_course_material_tree" model="ir.ui.view">
+            <field name="name">lms.course.material.tree</field>
+            <field name="model">lms.course.material</field>
+            <field name="arch" type="xml">
+                <tree decoration-success="is_published == True">
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="material_type"/>
+                    <field name="category"/>
+                    <field name="is_required"/>
+                    <field name="is_published"/>
+                    <field name="due_date"/>
+                    <field name="max_score"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW: lms.course.material -->
+        <record id="view_lms_course_material_form" model="ir.ui.view">
+            <field name="name">lms.course.material.form</field>
+            <field name="model">lms.course.material</field>
+            <field name="arch" type="xml">
+                <form string="Course Material">
+                    <header>
+                        <!-- Publish / Unpublish Buttons -->
+                        <button name="action_publish" type="object" string="Publish" 
+                                attrs="{'invisible':[('is_published','=',True)]}" 
+                                class="oe_highlight"/>
+                        <button name="action_unpublish" type="object" string="Unpublish" 
+                                attrs="{'invisible':[('is_published','=',False)]}"/>
+                        
+                        <!-- Statusbar approach if you want to display is_published or category -->
+                        <!-- optional: <field name="category" widget="statusbar"/> -->
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Material Title"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="course_id" required="1"/>
+                                <field name="material_type" required="1"/>
+                                <field name="category" required="1"/>
+                                <field name="is_required"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="is_published"/>
+                                <field name="published_date" readonly="1"/>
+                                <field name="published_by" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Content Details">
+                                <group>
+                                    <group>
+                                        <field name="duration" attrs="{'invisible':[('material_type','!=','video')]}"
+                                               placeholder="Duration (minutes)"/>
+                                        <field name="due_date" attrs="{'invisible':[('material_type','not in',['assignment','quiz'])]}" 
+                                               placeholder="Due date for assignments/quizzes"/>
+                                        <field name="max_score" attrs="{'invisible':[('material_type','not in',['assignment','quiz'])]}"
+                                               placeholder="Max score for quizzes/assignments"/>
+                                    </group>
+                                    <group>
+                                        <field name="file" filename="file_name" invisible="0"/>
+                                        <field name="file_name" invisible="1"/>
+                                        <field name="video_url" attrs="{'invisible':[('material_type','!=','video')]}"
+                                               placeholder="URL for video content"/>
+                                        <field name="external_url" attrs="{'invisible':[('material_type','!=','link')]}"
+                                               placeholder="External link if material_type=link"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="description" nolabel="1"/>
+                                </group>
+                            </page>
+
+                            <page string="Access & Statistics">
+                                <group>
+                                    <group>
+                                        <field name="view_count" readonly="1"/>
+                                        <field name="last_viewed" readonly="1"/>
+                                    </group>
+                                </group>
+                                <group string="Shared With">
+                                    <field name="student_ids" widget="many2many_tags" 
+                                           domain="[('is_student','=',True)]"/>
+                                    <field name="teacher_ids" widget="many2many_tags" 
+                                           domain="[('is_teacher','=',True)]"/>
+                                </group>
+                            </page>
+
+                            <page string="Prerequisites">
+                                <field name="prerequisites" mode="tree,kanban">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="material_type"/>
+                                        <field name="is_published"/>
+                                    </tree>
+                                    <kanban>
+                                        <field name="name"/>
+                                        <field name="material_type"/>
+                                        <field name="is_published"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div>
+                                                    <strong><field name="name"/></strong>
+                                                    <div><field name="material_type"/></div>
+                                                    <div><field name="is_published"/></div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    
+                    <!-- Chatter, because of mail.thread and mail.activity.mixin -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- SEARCH VIEW: lms.course.material -->
+        <record id="view_lms_course_material_search" model="ir.ui.view">
+            <field name="name">lms.course.material.search</field>
+            <field name="model">lms.course.material</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="material_type"/>
+                    <field name="category"/>
+                    <separator/>
+                    <filter string="Published" name="published" domain="[('is_published','=',True)]"/>
+                    <filter string="Unpublished" name="unpublished" domain="[('is_published','=',False)]"/>
+                    <filter string="Required" name="required" domain="[('is_required','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Course" name="group_by_course" context="{'group_by':'course_id'}"/>
+                        <filter string="Material Type" name="group_by_material_type" context="{'group_by':'material_type'}"/>
+                        <filter string="Category" name="group_by_category" context="{'group_by':'category'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ACTION: lms.course.material -->
+        <record id="action_lms_course_material" model="ir.actions.act_window">
+            <field name="name">Course Materials</field>
+            <field name="res_model">lms.course.material</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_course_material_search"/>
+        </record>
+
+
+        <!-- ================================================== -->
+        <!-- 2) VIEWS FOR lms.material.tag (optional manager)  -->
+        <!-- ================================================== -->
+
+        <!-- TREE VIEW: lms.material.tag -->
+        <record id="view_lms_material_tag_tree" model="ir.ui.view">
+            <field name="name">lms.material.tag.tree</field>
+            <field name="model">lms.material.tag</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <!-- color is an integer, so you might use a color widget or keep it simple -->
+                    <field name="color"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- FORM VIEW: lms.material.tag -->
+        <record id="view_lms_material_tag_form" model="ir.ui.view">
+            <field name="name">lms.material.tag.form</field>
+            <field name="model">lms.material.tag</field>
+            <field name="arch" type="xml">
+                <form string="Material Tag">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="color"/>
+                        </group>
+                        <group string="Materials with this Tag">
+                            <field name="material_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- SEARCH VIEW: lms.material.tag -->
+        <record id="view_lms_material_tag_search" model="ir.ui.view">
+            <field name="name">lms.material.tag.search</field>
+            <field name="model">lms.material.tag</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- ACTION: lms.material.tag -->
+        <record id="action_lms_material_tag" model="ir.actions.act_window">
+            <field name="name">Material Tags</field>
+            <field name="res_model">lms.material.tag</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lms_material_tag_search"/>
+        </record>
+
+        <!--
+          If you want, you can place <menuitem> references 
+          in a separate file linking to action_lms_course_material 
+          or action_lms_material_tag
+        -->
+
+    </data>
+</odoo>

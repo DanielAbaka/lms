@@ -1,68 +1,210 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- ✅ Teacher Profile Form View -->
-        <record id="view_lms_teacher_form" model="ir.ui.view">
-            <field name="name">res.users.teacher.form</field>
-            <field name="model">res.users</field>
-            <field name="arch" type="xml">
-                <form string="Teacher Profile">
-                    <sheet>
-                        <group>
-                            <field name="name"/>
-                            <field name="is_teacher"/>
-                        </group>
-                        <group>
-                            <field name="assigned_course_ids" widget="many2many_tags"/>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
 
-        <!-- ✅ Teacher Profile List View (Tree) -->
+        <!-- ================================================= -->
+        <!-- 1) TREE VIEW: res.users (is_teacher=True)        -->
+        <!-- ================================================= -->
         <record id="view_lms_teacher_tree" model="ir.ui.view">
-            <field name="name">res.users.teacher.tree</field>
+            <field name="name">lms.teacher.tree</field>
             <field name="model">res.users</field>
             <field name="arch" type="xml">
                 <tree>
+                    <!-- Show relevant teacher fields. 
+                         You can add or remove as needed. -->
                     <field name="name"/>
-                    <field name="is_teacher"/>
-                    <field name="assigned_course_ids" widget="many2many_tags"/>
+                    <field name="teacher_id"/>
+                    <field name="phone"/>
+                    <field name="department"/>
+                    <field name="specialization"/>
+                    <field name="qualification"/>
+                    <field name="average_attendance_rate" invisible="1"/> 
+                      <!-- Or show in the tree if you like. -->
+                    <field name="current_course_count" invisible="1"/>
                 </tree>
             </field>
         </record>
 
-        <!-- ✅ Teacher Profile Search View -->
+        <!-- ================================================= -->
+        <!-- 2) FORM VIEW: res.users (is_teacher=True)        -->
+        <!-- ================================================= -->
+        <record id="view_lms_teacher_form" model="ir.ui.view">
+            <field name="name">lms.teacher.form</field>
+            <field name="model">res.users</field>
+            <!-- 
+              Option 1: Inherit from the existing res.users form
+              and add teacher fields on a separate page.
+              That means referencing base.view_users_form 
+              or web_studio:inherit more explicitly.
+
+              Option 2: Provide a brand-new form with model="res.users".
+
+              Here we do an example of creating a brand-new form, 
+              for clarity. (If you want to override/extend the base user 
+              form, replace this with 
+              <field name="inherit_id" ref="base.view_users_form"/>
+              and place fields via xpath.)
+            -->
+            <field name="arch" type="xml">
+                <form string="Teacher Profile">
+                    <header>
+                        <!-- If you'd like teacher-specific buttons, 
+                             place them here -->
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <!-- name is the user’s name. 
+                                     teacher_id is your custom ID. -->
+                                <field name="name" placeholder="Teacher Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <!-- The is_teacher field ensures we know it’s a teacher record -->
+                                <field name="is_teacher" invisible="1"/>
+                                <field name="teacher_id" required="1" string="Teacher ID"/>
+                                <field name="admin_id" domain="[('is_admin','=',True)]" string="Administrator"/>
+                                <field name="department"/>
+                                <field name="specialization"/>
+                                <field name="qualification"/>
+                                <field name="office_location"/>
+                                <field name="office_hours"/>
+                            </group>
+                            <group>
+                                <field name="joining_date"/>
+                                <field name="phone"/>
+                                <field name="email"/>
+                                <field name="average_attendance_rate" readonly="1"/>
+                                <field name="current_course_count" readonly="1"/>
+                                <field name="total_student_count" readonly="1"/>
+                                <field name="pending_gradings" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Assigned Courses">
+                                <!-- Button to show the assigned courses in tree view -->
+                                <button name="action_view_courses" type="object" class="oe_stat_button" icon="fa-book">
+                                    <field name="current_course_count" widget="statinfo" string="Courses"/>
+                                </button>
+                                <field name="assigned_course_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="state"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Course Materials">
+                                <button name="action_view_materials" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                                    <field name="course_material_ids" widget="statinfo" string="Materials"/>
+                                </button>
+                                <field name="course_material_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="material_type"/>
+                                        <field name="course_id"/>
+                                        <field name="is_published"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Attendance">
+                                <button name="action_view_attendance" type="object" class="oe_stat_button" icon="fa-calendar-check-o">
+                                    <field name="attendance_ids" widget="statinfo" string="Attendance"/>
+                                </button>
+                                <field name="attendance_ids">
+                                    <tree>
+                                        <field name="student_id"/>
+                                        <field name="course_id"/>
+                                        <field name="date"/>
+                                        <field name="status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Quizzes">
+                                <button name="action_view_quizzes" type="object" class="oe_stat_button" icon="fa-question-circle">
+                                    <field name="quiz_ids" widget="statinfo" string="Quizzes"/>
+                                </button>
+                                <field name="quiz_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="course_id"/>
+                                        <field name="state"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Students">
+                                <button name="action_view_students" type="object" class="oe_stat_button" icon="fa-users">
+                                    <field name="total_student_count" widget="statinfo" string="Students"/>
+                                </button>
+                                <!-- 
+                                  We can't show them directly as a One2many 
+                                  because it’s a computed Many2many or domain search. 
+                                  Instead, we rely on the button domain or display a read-only tree.
+                                -->
+                            </page>
+                            <!-- Additional pages for assignments, analytics, etc., as you see fit. -->
+                        </notebook>
+                    </sheet>
+
+                    <footer>
+                        <!-- Example of custom teacher actions, if needed -->
+                        <button name="action_take_attendance" string="Take Attendance" type="object" class="oe_highlight"/>
+                        <button name="action_create_material" string="Create Material" type="object" class="oe_highlight"/>
+                        <button name="action_create_assignment" string="Create Assignment" type="object" class="oe_highlight"/>
+                        <button name="action_create_quiz" string="Create Quiz" type="object" class="oe_highlight"/>
+                        <button name="action_view_analytics" string="Analytics" type="object"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- ================================================= -->
+        <!-- 3) SEARCH VIEW: res.users (is_teacher=True)      -->
+        <!-- ================================================= -->
         <record id="view_lms_teacher_search" model="ir.ui.view">
-            <field name="name">res.users.teacher.search</field>
+            <field name="name">lms.teacher.search</field>
             <field name="model">res.users</field>
             <field name="arch" type="xml">
                 <search>
                     <field name="name"/>
-                    <filter name="filter_teachers" string="Teachers" domain="[('is_teacher', '=', True)]"/>
+                    <field name="teacher_id"/>
+                    <field name="department"/>
+                    <field name="specialization"/>
+                    <separator/>
+                    <filter string="Teachers" name="filter_teachers" domain="[('is_teacher','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Department" name="group_by_department" context="{'group_by':'department'}"/>
+                        <filter string="Specialization" name="group_by_specialization" context="{'group_by':'specialization'}"/>
+                    </group>
                 </search>
             </field>
         </record>
 
-        <!-- 
-            ✅ Teacher Profile Action
-            - domain=[('is_teacher','=',True)] to display only teacher accounts
-            - context="{'default_is_teacher': True}" so any new record is automatically a teacher
-        -->
+        <!-- ================================================= -->
+        <!-- 4) ACTION: for Teachers (res.users)              -->
+        <!-- ================================================= -->
         <record id="action_lms_teachers" model="ir.actions.act_window">
             <field name="name">Teachers</field>
             <field name="res_model">res.users</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_lms_teacher_search"/>
-            <field name="domain">[('is_teacher', '=', True)]</field>
-            <field name="context">{'default_is_teacher': True}</field> <!-- ✅ For new records, set is_teacher=True -->
+            <field name="domain">[('is_teacher','=',True)]</field>
+            <field name="context">{'default_is_teacher': True}</field>
         </record>
 
-        <!-- ✅ Add Teachers to the LMS Module Menu -->
-        <menuitem id="menu_lms_teachers" name="Teachers"
-                  parent="lms_module.menu_root"
-                  action="action_lms_teachers"
-                  sequence="5"/>
+        <!-- 
+          If your menus are in a separate file, reference action_lms_teachers there, e.g.:
+          <menuitem id="menu_lms_teachers"
+                    name="Teachers"
+                    parent="lms_module.menu_root"
+                    action="action_lms_teachers"
+                    sequence="30"/>
+        -->
+
     </data>
 </odoo>

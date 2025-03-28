@@ -29,13 +29,22 @@
         'views/views.xml',
         'views/course_views.xml',
         'views/quiz_views.xml',
-        # Removed quiz related views that were causing issues
+        'views/student_views.xml',
+        'views/teacher_views.xml',
+        'views/attendance_views.xml',
+        'views/academic_year_views.xml',
+        'views/semester_views.xml',
+        'views/course_material_views.xml',
+        'views/course_planning_views.xml',
+        'views/document_views.xml',
+        'views/enrollment_views.xml',
+        'views/grade_views.xml',
+        'views/teacher_assignment_views.xml',
+        'views/schedule_views.xml',
+        'views/transcript_views.xml',
+        'views/payment_views.xml',
+        'views/payment_plan_views.xml',
         'views/messaging_views.xml',
-        
-        # Portal views next
-        'views/student_portal_views.xml',
-        'views/teacher_portal_views.xml',
-        'views/admin_portal_views.xml',
         
         # Actions must be loaded before menus
         'views/menu_actions.xml',
@@ -43,8 +52,6 @@
         # Menu last
         'views/menu.xml',
         'views/templates.xml',
-        
-        'views/enhanced_views.xml',
     ],
     'demo': [
         'demo/lms_demo.xml',

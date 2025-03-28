@@ -1,70 +1,253 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <!-- Root Menu -->
-        <menuitem id="menu_root" name="Learning Management System" sequence="10"/>
+        <menuitem id="menu_root"
+                  name="LMS"
+                  sequence="10"
+                  web_icon="lms_module,static/description/icon.png"
+        />
 
         <!-- Dashboard Menu -->
-        <menuitem id="menu_dashboard" name="Dashboard" parent="menu_root" sequence="1"/>
+        <menuitem id="menu_dashboard"
+                  name="Dashboard"
+                  parent="menu_root"
+                  sequence="1"
+        />
 
-        <!-- Course Management Menu -->
-        <menuitem id="menu_courses" name="Course Management" parent="menu_root" sequence="2"/>
-        <menuitem id="menu_courses_all" name="All Courses" parent="menu_courses" action="action_lms_courses" sequence="1"/>
-        <menuitem id="menu_courses_kanban" name="Course Overview" parent="menu_courses" action="action_lms_courses_kanban" sequence="2"/>
+        <!-- ======================= -->
+        <!-- Education Menu & Items -->
+        <!-- ======================= -->
+        <menuitem id="menu_education"
+                  name="Education"
+                  parent="menu_root"
+                  sequence="10">
+            <menuitem id="menu_courses"
+                      name="Courses"
+                      parent="menu_education"
+                      action="action_lms_courses"
+                      sequence="1"/>
+            <menuitem id="menu_course_materials"
+                      name="Course Materials"
+                      parent="menu_education"
+                      action="action_lms_course_materials"
+                      sequence="2"/>
+            <menuitem id="menu_course_planning"
+                      name="Course Planning"
+                      parent="menu_education"
+                      action="action_lms_course_planning"
+                      sequence="3"/>
+        </menuitem>
 
-        <!-- Course Content Menu -->
-        <menuitem id="menu_course_content" name="Course Content" parent="menu_root" sequence="3"/>
-        <menuitem id="menu_course_materials" name="Course Materials" parent="menu_course_content" action="action_teacher_portal_course_materials" sequence="1" groups="lms_module.group_lms_teacher,lms_module.group_lms_admin"/>
-        <menuitem id="menu_course_schedules" name="Course Schedules" parent="menu_course_content" action="action_lms_course_schedules" sequence="2"/>
+        <!-- ===================== -->
+        <!-- People Menu & Items -->
+        <!-- ===================== -->
+        <menuitem id="menu_people"
+                  name="People"
+                  parent="menu_root"
+                  sequence="20">
+            <menuitem id="menu_students"
+                      name="Students"
+                      parent="menu_people"
+                      action="action_lms_students"
+                      sequence="1"/>
+            <menuitem id="menu_teachers"
+                      name="Teachers"
+                      parent="menu_people"
+                      action="action_lms_teachers"
+                      sequence="2"/>
+            <menuitem id="menu_administrators"
+                      name="Administrators"
+                      parent="menu_people"
+                      action="action_lms_administrators"
+                      sequence="3"/>
+        </menuitem>
 
-        <!-- Student Management Menu -->
-        <menuitem id="menu_student_management" name="Student Management" parent="menu_root" sequence="4"/>
-        <menuitem id="menu_course_enrollments" name="Course Enrollments" parent="menu_student_management" action="action_lms_course_enrollments" sequence="1"/>
-        <menuitem id="menu_course_attendance" name="Course Attendance" parent="menu_student_management" action="action_teacher_portal_attendance" sequence="2" groups="lms_module.group_lms_teacher,lms_module.group_lms_admin"/>
+        <!-- ========================= -->
+        <!-- Assessment Menu & Items -->
+        <!-- ========================= -->
+        <menuitem id="menu_assessment"
+                  name="Assessment"
+                  parent="menu_root"
+                  sequence="30">
+            <menuitem id="menu_quizzes"
+                      name="Quizzes"
+                      parent="menu_assessment"
+                      action="action_lms_quizzes"
+                      sequence="1"/>
+            <menuitem id="menu_grades"
+                      name="Grades"
+                      parent="menu_assessment"
+                      action="action_lms_grades"
+                      sequence="2"/>
+            <menuitem id="menu_documents"
+                      name="Documents"
+                      parent="menu_assessment"
+                      action="action_lms_documents"
+                      sequence="3"/>
+        </menuitem>
 
-        <!-- Assessment Menu -->
-        <menuitem id="menu_assessment" name="Assessment" parent="menu_root" sequence="5"/>
-        <menuitem id="menu_course_grades" name="Course Grades" parent="menu_assessment" action="action_lms_course_grades" sequence="1"/>
-        <menuitem id="menu_course_quizzes" name="Course Quizzes" parent="menu_assessment" action="action_lms_course_quizzes" sequence="2"/>
+        <!-- ====================== -->
+        <!-- Scheduling Menu Items -->
+        <!-- ====================== -->
+        <menuitem id="menu_scheduling"
+                  name="Scheduling"
+                  parent="menu_root"
+                  sequence="40">
+            <menuitem id="menu_schedules"
+                      name="Schedules"
+                      parent="menu_scheduling"
+                      action="action_lms_schedules"
+                      sequence="1"/>
+            <menuitem id="menu_attendance"
+                      name="Attendance"
+                      parent="menu_scheduling"
+                      action="action_lms_attendance"
+                      sequence="2"/>
+            <menuitem id="menu_schedule_templates"
+                      name="Schedule Templates"
+                      parent="menu_scheduling"
+                      action="action_lms_schedule_templates"
+                      sequence="3"/>
+        </menuitem>
 
-        <!-- Portal Access Menu -->
-        <menuitem id="menu_portal_access" name="Portal Access" parent="menu_root" sequence="6"/>
-        <menuitem id="menu_teacher_portal" name="Teacher Portal" parent="menu_portal_access" action="action_lms_teacher_dashboard" sequence="1"/>
-        <menuitem id="menu_student_portal" name="Student Portal" parent="menu_portal_access" action="action_lms_student_portal" sequence="2"/>
+        <!-- =========================== -->
+        <!-- Enrollment Menu & Items   -->
+        <!-- =========================== -->
+        <menuitem id="menu_enrollment"
+                  name="Enrollment"
+                  parent="menu_root"
+                  sequence="50">
+            <menuitem id="menu_enrollments"
+                      name="Enrollments"
+                      parent="menu_enrollment"
+                      action="action_lms_enrollments"
+                      sequence="1"/>
+            <menuitem id="menu_bulk_enrollment"
+                      name="Bulk Enrollment"
+                      parent="menu_enrollment"
+                      action="action_lms_bulk_enrollment"
+                      sequence="2"/>
+            <menuitem id="menu_teacher_assignments"
+                      name="Teacher Assignments"
+                      parent="menu_enrollment"
+                      action="action_lms_teacher_assignments"
+                      sequence="3"/>
+        </menuitem>
 
-        <!-- Configuration Menu -->
-        <menuitem id="menu_configuration" name="Configuration" parent="menu_root" sequence="7"/>
-        <menuitem id="menu_lms_config" name="LMS Settings" parent="menu_configuration" action="action_lms_config" sequence="1"/>
+        <!-- ======================== -->
+        <!-- Academic Menu & Items  -->
+        <!-- ======================== -->
+        <menuitem id="menu_academic"
+                  name="Academic"
+                  parent="menu_root"
+                  sequence="60">
+            <menuitem id="menu_academic_years"
+                      name="Academic Years"
+                      parent="menu_academic"
+                      action="action_lms_academic_years"
+                      sequence="1"/>
+            <menuitem id="menu_semesters"
+                      name="Semesters"
+                      parent="menu_academic"
+                      action="action_lms_semesters"
+                      sequence="2"/>
+            <menuitem id="menu_transcripts"
+                      name="Transcripts"
+                      parent="menu_academic"
+                      action="action_lms_transcripts"
+                      sequence="3"/>
+        </menuitem>
 
-        <!-- Course Materials Menu -->
-        <menuitem id="menu_lms_course_materials"
-                  name="Course Materials"
-                  parent="lms_module.menu_root"
-                  action="action_lms_course_materials"
-                  sequence="3"
-                  groups="lms_module.group_lms_teacher,lms_module.group_lms_admin"/>
+        <!-- ======================== -->
+        <!-- Financial Menu & Items -->
+        <!-- ======================== -->
+        <menuitem id="menu_financial"
+                  name="Financial"
+                  parent="menu_root"
+                  sequence="70">
+            <menuitem id="menu_payment_plans"
+                      name="Payment Plans"
+                      parent="menu_financial"
+                      action="action_lms_payment_plans"
+                      sequence="1"/>
+            <menuitem id="menu_payments"
+                      name="Payments"
+                      parent="menu_financial"
+                      action="action_lms_payments"
+                      sequence="2"/>
+            <menuitem id="menu_invoices"
+                      name="Invoices"
+                      parent="menu_financial"
+                      action="action_lms_invoices"
+                      sequence="3"/>
+        </menuitem>
 
-        <!-- Attendance Menu -->
-        <menuitem id="menu_lms_attendance"
-                  name="Attendance"
-                  parent="lms_module.menu_root"
-                  action="action_lms_attendance"
-                  sequence="4"
-                  groups="lms_module.group_lms_teacher,lms_module.group_lms_admin"/>
+        <!-- ============================ -->
+        <!-- Communication Menu & Items -->
+        <!-- ============================ -->
+        <menuitem id="menu_communication"
+                  name="Communication"
+                  parent="menu_root"
+                  sequence="80">
+            <menuitem id="menu_messaging"
+                      name="Messaging"
+                      parent="menu_communication"
+                      action="action_lms_messaging"
+                      sequence="1"/>
+        </menuitem>
 
-        <!-- Student Portal Menu Items -->
-        <menuitem id="menu_portal_course_materials"
-                  name="Course Materials"
-                  parent="portal.menu_portal"
-                  action="action_student_portal_course_materials"
-                  sequence="2"
-                  groups="lms_module.group_lms_student"/>
+        <!-- ========================= -->
+        <!-- Reporting Menu & Items  -->
+        <!-- ========================= -->
+        <menuitem id="menu_reporting"
+                  name="Reporting"
+                  parent="menu_root"
+                  sequence="90">
+            <menuitem id="menu_student_performance"
+                      name="Student Performance"
+                      parent="menu_reporting"
+                      action="action_lms_student_performance_report"
+                      sequence="1"/>
+            <menuitem id="menu_attendance_report"
+                      name="Attendance Report"
+                      parent="menu_reporting"
+                      action="action_lms_attendance_report"
+                      sequence="2"/>
+            <menuitem id="menu_course_statistics"
+                      name="Course Statistics"
+                      parent="menu_reporting"
+                      action="action_lms_course_statistics"
+                      sequence="3"/>
+            <menuitem id="menu_financial_report"
+                      name="Financial Report"
+                      parent="menu_reporting"
+                      action="action_lms_financial_report"
+                      sequence="4"/>
+        </menuitem>
 
-        <menuitem id="menu_portal_attendance"
-                  name="My Attendance"
-                  parent="portal.menu_portal"
-                  action="action_student_portal_attendance"
-                  sequence="3"
-                  groups="lms_module.group_lms_student"/>
+        <!-- ============================ -->
+        <!-- Configuration Menu & Items -->
+        <!-- ============================ -->
+        <menuitem id="menu_configuration"
+                  name="Configuration"
+                  parent="menu_root"
+                  sequence="100">
+            <menuitem id="menu_settings"
+                      name="Settings"
+                      parent="menu_configuration"
+                      action="action_lms_settings"
+                      sequence="1"/>
+            <menuitem id="menu_user_groups"
+                      name="User Groups"
+                      parent="menu_configuration"
+                      action="action_lms_user_groups"
+                      sequence="2"/>
+            <menuitem id="menu_document_types"
+                      name="Document Types"
+                      parent="menu_configuration"
+                      action="action_lms_document_types"
+                      sequence="3"/>
+        </menuitem>
     </data>
 </odoo>

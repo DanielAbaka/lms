@@ -1,58 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Student Profile Form View -->
+
+        <!-- ================================================ -->
+        <!-- 1) TREE VIEW: res.users (is_student=True)       -->
+        <!-- ================================================ -->
+        <record id="view_lms_student_tree" model="ir.ui.view">
+            <field name="name">lms.student.tree</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <!-- Show only relevant fields for 'students' -->
+                <tree>
+                    <field name="name"/>
+                    <field name="student_id"/>
+                    <field name="phone"/>
+                    <field name="date_of_birth"/>
+                    <field name="gender"/>
+                    <field name="major"/>
+                    <field name="gpa"/>
+                    <field name="grade_letter"/>
+                    <field name="grade_status"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ================================================ -->
+        <!-- 2) FORM VIEW: res.users (is_student=True)       -->
+        <!-- ================================================ -->
         <record id="view_lms_student_form" model="ir.ui.view">
             <field name="name">lms.student.form</field>
-            <field name="model">lms.student</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
             <field name="arch" type="xml">
-                <form string="Student Profile">
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name" readonly="1"/></h1>
-                        </div>
+                <!-- We can insert or replace relevant fields -->
+                <xpath expr="//form/sheet/notebook" position="inside">
+                    <!-- Alternatively you could create a brand-new form,
+                         but in many cases you'd just extend the user form. -->
+                    <page string="Student Info" attrs="{'invisible':[('is_student','=',False)]}">
                         <group>
                             <group>
+                                <field name="is_student" invisible="1"/>
                                 <field name="student_id" required="1"/>
-                                <field name="email"/>
+                                <field name="admin_id" domain="[('is_admin','=',True)]"/>
+                                <field name="date_of_birth"/>
+                                <field name="gender"/>
                                 <field name="phone"/>
-                                <field name="address"/>
+                                <field name="emergency_contact"/>
+                                <field name="emergency_phone"/>
+                                <field name="major"/>
+                                <field name="minor"/>
+                                <field name="expected_graduation"/>
                             </group>
                             <group>
-                                <field name="grade_letter"/>
-                                <field name="grade_point"/>
-                                <field name="grade_status"/>
-                                <field name="total_courses"/>
-                                <field name="courses_completed"/>
-                                <field name="courses_in_progress"/>
-                                <field name="courses_failed"/>
+                                <field name="blood_group"/>
+                                <field name="medical_conditions"/>
+                                <field name="gpa" readonly="1"/>
+                                <field name="grade_letter" readonly="1"/>
+                                <field name="grade_status" readonly="1"/>
+                                <field name="credits_completed" readonly="1"/>
+                                <field name="credits_remaining" readonly="1"/>
+                                <field name="total_credits" readonly="1"/>
+                                <field name="attendance_rate" readonly="1"/>
+                                <field name="average_grade" readonly="1"/>
                             </group>
                         </group>
+
+                        <!-- Stats/Notebook for enrollments, attendance, etc. -->
                         <notebook>
                             <page string="Enrollments">
-                                <field name="enrollment_ids">
+                                <button name="action_view_enrollments" type="object" class="oe_stat_button" icon="fa-users">
+                                    <field name="enrollment_count" widget="statinfo" string="Enrollments"/>
+                                </button>
+                                <field name="enrollment_ids" context="{'default_student_id': active_id}">
                                     <tree>
                                         <field name="course_id"/>
+                                        <field name="state"/>
                                         <field name="enrollment_date"/>
-                                        <field name="status"/>
-                                        <field name="grade_letter"/>
-                                        <field name="grade_point"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Grades">
-                                <field name="grade_ids">
-                                    <tree>
-                                        <field name="course_id"/>
-                                        <field name="grade_type"/>
-                                        <field name="score"/>
-                                        <field name="grade_letter"/>
-                                        <field name="grade_point"/>
                                     </tree>
                                 </field>
                             </page>
                             <page string="Attendance">
-                                <field name="attendance_ids">
+                                <button name="action_view_attendance" type="object" class="oe_stat_button" icon="fa-calendar-check-o">
+                                    <field name="attendance_ids" widget="statinfo" string="Attendance"/>
+                                </button>
+                                <field name="attendance_ids" context="{'default_student_id': active_id}">
                                     <tree>
                                         <field name="course_id"/>
                                         <field name="date"/>
@@ -60,55 +91,86 @@
                                     </tree>
                                 </field>
                             </page>
+                            <page string="Grades">
+                                <button name="action_view_grades" type="object" class="oe_stat_button" icon="fa-star">
+                                    <field name="grade_ids" widget="statinfo" string="Grades"/>
+                                </button>
+                                <field name="grade_ids" context="{'default_student_id': active_id}">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="grade"/>
+                                        <field name="grade_type"/>
+                                        <field name="date"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Payments">
+                                <button name="action_view_payments" type="object" class="oe_stat_button" icon="fa-money">
+                                    <field name="payment_ids" widget="statinfo" string="Payments"/>
+                                </button>
+                                <field name="payment_ids" context="{'default_student_id': active_id}">
+                                    <tree>
+                                        <field name="course_id"/>
+                                        <field name="date"/>
+                                        <field name="amount"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </page>
                         </notebook>
-                    </sheet>
-                </form>
+                    </page>
+                </xpath>
             </field>
         </record>
 
-        <!-- Student Profile List View (Tree) -->
-        <record id="view_lms_student_tree" model="ir.ui.view">
-            <field name="name">lms.student.tree</field>
-            <field name="model">lms.student</field>
-            <field name="arch" type="xml">
-                <tree>
-                    <field name="name"/>
-                    <field name="student_id"/>
-                    <field name="grade_letter"/>
-                    <field name="grade_point"/>
-                    <field name="grade_status"/>
-                    <field name="total_courses"/>
-                </tree>
-            </field>
-        </record>
-
-        <!-- Student Profile Search View -->
+        <!-- ================================================ -->
+        <!-- 3) SEARCH VIEW: res.users (is_student=True)     -->
+        <!-- ================================================ -->
         <record id="view_lms_student_search" model="ir.ui.view">
             <field name="name">lms.student.search</field>
-            <field name="model">lms.student</field>
+            <field name="model">res.users</field>
             <field name="arch" type="xml">
                 <search>
+                    <!--
+                      We can search by name, student_id, phone, etc.
+                      We also might want domain to filter is_student= True
+                    -->
                     <field name="name"/>
                     <field name="student_id"/>
-                    <field name="email"/>
-                    <filter name="filter_by_grade_status" string="Grade Status" context="{'group_by': 'grade_status'}"/>
-                    <filter name="filter_by_total_courses" string="Total Courses" context="{'group_by': 'total_courses'}"/>
+                    <field name="phone"/>
+                    <field name="major"/>
+                    <separator/>
+                    <filter string="Students" name="filter_is_student" domain="[('is_student','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Major" name="group_by_major" context="{'group_by':'major'}"/>
+                        <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}"/>
+                    </group>
                 </search>
             </field>
         </record>
 
-        <!-- Student Profile Action -->
+        <!-- ================================================ -->
+        <!-- 4) ACTION: for Students (res.users)             -->
+        <!-- ================================================ -->
         <record id="action_lms_students" model="ir.actions.act_window">
             <field name="name">Students</field>
-            <field name="res_model">lms.student</field>
+            <field name="res_model">res.users</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_lms_student_search"/>
+            <field name="domain">[('is_student','=',True)]</field>
+            <field name="context">{'default_is_student': True}</field>
         </record>
 
-        <!-- Add Menu Item for Students -->
-        <menuitem id="menu_lms_students" name="Students"
-                  parent="lms_module.menu_root"
-                  action="action_lms_students"
-                  sequence="4"/>
+        <!-- 
+          If you manage menus in another XML file, reference "action_lms_students" there.
+          Example:
+          <menuitem id="menu_lms_students"
+                    name="Students"
+                    parent="lms_module.menu_root"
+                    action="action_lms_students"
+                    sequence="20"/>
+        -->
+
     </data>
 </odoo>

@@ -1,12 +1,39 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Document Access Form View -->
+
+        <!-- =========================== -->
+        <!-- 1) TREE VIEW              -->
+        <!-- =========================== -->
+        <record id="view_lms_document_access_tree" model="ir.ui.view">
+            <field name="name">lms.document.access.tree</field>
+            <field name="model">lms.document.access</field>
+            <field name="arch" type="xml">
+                <!-- 
+                  decoration-* attributes can highlight rows.
+                  e.g., decoration-success="is_downloaded == True"
+                -->
+                <tree decoration-success="is_downloaded == True">
+                    <field name="document_id"/>
+                    <field name="user_id"/>
+                    <field name="access_date"/>
+                    <field name="access_type"/>
+                    <field name="ip_address"/>
+                    <field name="user_agent"/>
+                    <field name="duration"/>
+                    <field name="is_downloaded"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- =========================== -->
+        <!-- 2) FORM VIEW              -->
+        <!-- =========================== -->
         <record id="view_lms_document_access_form" model="ir.ui.view">
             <field name="name">lms.document.access.form</field>
             <field name="model">lms.document.access</field>
             <field name="arch" type="xml">
-                <form string="Document Access">
+                <form string="Document Access Log">
                     <sheet>
                         <group>
                             <group>
@@ -22,40 +49,19 @@
                                 <field name="is_downloaded"/>
                             </group>
                         </group>
-                        <notebook>
-                            <page string="Notes">
-                                <field name="notes"/>
-                            </page>
-                        </notebook>
+                        <group string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </group>
                     </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids"/>
-                        <field name="activity_ids"/>
-                        <field name="message_ids"/>
-                    </div>
+                    <!-- If you want mail.thread, you can add a chatter block here,
+                         but your model doesn't currently inherit mail.thread. -->
                 </form>
             </field>
         </record>
 
-        <!-- Document Access Tree View -->
-        <record id="view_lms_document_access_tree" model="ir.ui.view">
-            <field name="name">lms.document.access.tree</field>
-            <field name="model">lms.document.access</field>
-            <field name="arch" type="xml">
-                <tree decoration-info="is_downloaded == False" decoration-success="is_downloaded == True">
-                    <field name="document_id"/>
-                    <field name="user_id"/>
-                    <field name="access_date"/>
-                    <field name="access_type"/>
-                    <field name="ip_address"/>
-                    <field name="user_agent"/>
-                    <field name="duration"/>
-                    <field name="is_downloaded"/>
-                </tree>
-            </field>
-        </record>
-
-        <!-- Document Access Search View -->
+        <!-- =========================== -->
+        <!-- 3) SEARCH VIEW            -->
+        <!-- =========================== -->
         <record id="view_lms_document_access_search" model="ir.ui.view">
             <field name="name">lms.document.access.search</field>
             <field name="model">lms.document.access</field>
@@ -63,24 +69,26 @@
                 <search>
                     <field name="document_id"/>
                     <field name="user_id"/>
+                    <field name="access_type"/>
                     <field name="ip_address"/>
                     <field name="user_agent"/>
                     <separator/>
-                    <filter string="View" name="view" domain="[('access_type', '=', 'view')]"/>
-                    <filter string="Download" name="download" domain="[('access_type', '=', 'download')]"/>
-                    <filter string="Print" name="print" domain="[('access_type', '=', 'print')]"/>
-                    <filter string="Downloaded" name="downloaded" domain="[('is_downloaded', '=', True)]"/>
-                    <filter string="Not Downloaded" name="not_downloaded" domain="[('is_downloaded', '=', False)]"/>
+                    <filter string="Viewed" name="viewed" domain="[('access_type', '=', 'view')]"/>
+                    <filter string="Downloaded" name="downloaded" domain="[('access_type', '=', 'download')]"/>
+                    <filter string="Printed" name="printed" domain="[('access_type', '=', 'print')]"/>
+                    <filter string="Is Downloaded" name="is_downloaded" domain="[('is_downloaded','=',True)]"/>
                     <group expand="0" string="Group By">
-                        <filter string="Document" name="group_by_document" context="{'group_by': 'document_id'}"/>
-                        <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
-                        <filter string="Download Status" name="group_by_download" context="{'group_by': 'is_downloaded'}"/>
+                        <filter string="Document" name="group_by_document" context="{'group_by':'document_id'}"/>
+                        <filter string="User" name="group_by_user" context="{'group_by':'user_id'}"/>
+                        <filter string="Access Type" name="group_by_access" context="{'group_by':'access_type'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <!-- Document Access Action -->
+        <!-- =========================== -->
+        <!-- 4) ACTION (Window)        -->
+        <!-- =========================== -->
         <record id="action_lms_document_access" model="ir.actions.act_window">
             <field name="name">Document Access Logs</field>
             <field name="res_model">lms.document.access</field>
@@ -88,10 +96,15 @@
             <field name="search_view_id" ref="view_lms_document_access_search"/>
         </record>
 
-        <!-- Document Access Menu Item -->
-        <menuitem id="menu_lms_document_access" name="Document Access Logs"
-                  parent="lms_module.menu_root"
-                  action="action_lms_document_access"
-                  sequence="11"/>
+        <!-- 
+          If you keep menus in a separate file, you can do:
+          
+          <menuitem id="menu_lms_document_access"
+                    name="Document Access Logs"
+                    parent="lms_module.menu_root"
+                    action="action_lms_document_access"
+                    sequence="10"/>
+        -->
+
     </data>
-</odoo> 
+</odoo>

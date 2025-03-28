@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ===================== -->
+        <!-- 1) TREE VIEW         -->
+        <!-- ===================== -->
+        <record id="view_res_users_administrator_tree" model="ir.ui.view">
+            <field name="name">res.users.administrator.tree</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="is_admin == True">
+                    <!-- Show key admin fields -->
+                    <field name="name"/>
+                    <field name="administrator_code"/>
+                    <field name="department"/>
+                    <field name="position"/>
+                    <field name="joining_date"/>
+                    <field name="office_location"/>
+                    <!-- Possibly show is_admin to confirm -->
+                    <field name="is_admin"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ===================== -->
+        <!-- 2) FORM VIEW         -->
+        <!-- ===================== -->
+        <record id="view_res_users_administrator_form" model="ir.ui.view">
+            <field name="name">res.users.administrator.form</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="Administrator" create="1" edit="1">
+                    <header>
+                        <!-- 
+                            By default, Odoo puts 'Active' / 'Archive' in user form.
+                            You can keep or remove the standard header items as needed.
+                        -->
+                        <button name="toggle_active" states="active" type="object" string="Archive" 
+                                invisible="not active" class="oe_highlight" />
+                        <button name="toggle_active" states="inactive" type="object" string="Activate" 
+                                invisible="active" class="oe_highlight" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <!-- The user’s name -->
+                                <field name="name" placeholder="Administrator Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="login" readonly="1"/>
+                                <field name="is_admin" invisible="1"/> 
+                                <!-- is_admin stays hidden or read-only if you want -->
+                                <field name="administrator_code"/>
+                                <field name="department"/>
+                                <field name="position"/>
+                                <field name="joining_date"/>
+                            </group>
+                            <group>
+                                <field name="office_location"/>
+                                <field name="office_hours"/>
+                                <!-- Possibly reference the standard user fields:
+                                     phone, email, etc. if you want. -->
+                            </group>
+                        </group>
+
+                        <!-- Example notebook for dashboard stats and relationships -->
+                        <notebook>
+                            <page string="Dashboard Stats">
+                                <group>
+                                    <field name="total_student_count" readonly="1"/>
+                                    <field name="total_teacher_count" readonly="1"/>
+                                    <field name="total_course_count" readonly="1"/>
+                                    <field name="total_revenue" readonly="1"/>
+                                </group>
+                            </page>
+
+                            <page string="Related Records">
+                                <group>
+                                    <group string="Academic Years">
+                                        <!-- Show many2many with a tags or a tree -->
+                                        <field name="academic_year_ids" widget="many2many_tags"/>
+                                    </group>
+                                    <group string="Semesters">
+                                        <field name="semester_ids" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group string="Students">
+                                        <field name="student_ids" widget="many2many_tags"/>
+                                    </group>
+                                    <group string="Teachers">
+                                        <field name="teacher_ids" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                            </page>
+
+                            <page string="Payments">
+                                <group>
+                                    <group>
+                                        <field name="revenue_ids" widget="many2many_tags" string="Revenue"/>
+                                    </group>
+                                    <group>
+                                        <field name="pending_payment_ids" widget="many2many_tags" string="Pending"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                    <!-- Chatter is optional. If user inherits mail.thread, you can keep it. -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- ===================== -->
+        <!-- 3) SEARCH VIEW       -->
+        <!-- ===================== -->
+        <record id="view_res_users_administrator_search" model="ir.ui.view">
+            <field name="name">res.users.administrator.search</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="administrator_code"/>
+                    <field name="department"/>
+                    <field name="position"/>
+                    <separator/>
+                    <filter string="Administrators" name="administrators_only" 
+                            domain="[('is_admin','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Department" name="group_by_department" context="{'group_by':'department'}"/>
+                        <filter string="Position" name="group_by_position" context="{'group_by':'position'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ===================== -->
+        <!-- 4) ACTION            -->
+        <!-- ===================== -->
+        <record id="action_res_users_administrator" model="ir.actions.act_window">
+            <field name="name">Administrators</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">tree,form</field>
+            <!-- Use domain so only is_admin==True records appear -->
+            <field name="domain">[('is_admin','=',True)]</field>
+            <field name="search_view_id" ref="view_res_users_administrator_search"/>
+            <!-- 
+              context can ensure new records default is_admin=True 
+              if you allow creating from this view
+            -->
+            <field name="context">{'default_is_admin': True}</field>
+        </record>
+
+        <!-- 
+          You said menu is in a separate file. 
+          Another file can do something like:
+          
+          <menuitem id="menu_lms_administrators" name="Administrators" 
+                    parent="menu_lms_root"
+                    action="action_res_users_administrator" 
+                    sequence="10"/>
+        -->
+
+    </data>
+</odoo>

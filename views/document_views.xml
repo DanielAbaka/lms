@@ -1,53 +1,84 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Document Form View -->
+
+        <!-- =========================== -->
+        <!-- 1) TREE VIEW: lms.document -->
+        <!-- =========================== -->
+        <record id="view_lms_document_tree" model="ir.ui.view">
+            <field name="name">lms.document.tree</field>
+            <field name="model">lms.document</field>
+            <field name="arch" type="xml">
+                <!-- 
+                  Use decoration-* to highlight rows based on state. 
+                  e.g. decoration-info for draft, decoration-success for published
+                -->
+                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'">
+                    <field name="name"/>
+                    <field name="teacher_assignment_id"/>
+                    <field name="course_id"/>
+                    <field name="date"/>
+                    <field name="file_type"/>
+                    <field name="file_size"/>
+                    <field name="is_public"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- =========================== -->
+        <!-- 2) FORM VIEW: lms.document -->
+        <!-- =========================== -->
         <record id="view_lms_document_form" model="ir.ui.view">
             <field name="name">lms.document.form</field>
             <field name="model">lms.document</field>
             <field name="arch" type="xml">
-                <form string="Document">
+                <form string="Course Document">
                     <header>
-                        <button name="action_publish" string="Publish" type="object" class="oe_highlight" 
-                                invisible="state != 'draft'"/>
-                        <button name="action_archive" string="Archive" type="object" 
-                                invisible="state != 'published'"/>
-                        <button name="action_unarchive" string="Unarchive" type="object" 
-                                invisible="state != 'archived'"/>
-                        <button name="action_reset_to_draft" string="Reset to Draft" type="object" 
-                                invisible="state != 'archived'"/>
-                        <field name="state" widget="statusbar"/>
+                        <!-- Buttons for state transitions -->
+                        <button name="action_publish" string="Publish" type="object"
+                                attrs="{'invisible':[('state','!=','draft')]}"
+                                class="oe_highlight"/>
+                        <button name="action_archive" string="Archive" type="object"
+                                attrs="{'invisible':[('state','!=','published')]}" />
+                        <button name="action_unarchive" string="Unarchive" type="object"
+                                attrs="{'invisible':[('state','!=','archived')]}" />
+                        <button name="action_reset_to_draft" string="Reset to Draft" type="object"
+                                attrs="{'invisible':[('state','not in',['published','archived'])]}" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,published,archived"/>
                     </header>
                     <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button name="action_view_access_logs" type="object" class="oe_stat_button" icon="fa-eye">
-                                <field name="access_count" widget="statinfo" string="Accesses"/>
-                            </button>
-                            <button name="action_view_last_access" type="object" class="oe_stat_button" icon="fa-clock-o">
-                                <field name="last_accessed" widget="statinfo" string="Last Access"/>
-                            </button>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Document Name"/>
+                            </h1>
                         </div>
+
+                        <group>
+                            <group>
+                                <field name="teacher_assignment_id" required="1"/>
+                                <field name="course_id" readonly="1"/>
+                                <field name="academic_year_id" readonly="1"/>
+                                <field name="semester_id" readonly="1"/>
+                                <field name="is_public"/>
+                            </group>
+                            <group>
+                                <field name="date" required="1"/>
+                                <field name="active"/>
+                                <field name="file_type" readonly="1"/>
+                                <field name="file_size" readonly="1"/>
+                            </group>
+                        </group>
+
                         <notebook>
-                            <page string="Document Details">
+                            <page string="File Details">
                                 <group>
-                                    <group>
-                                        <field name="name" required="1"/>
-                                        <field name="teacher_assignment_id" required="1"/>
-                                        <field name="description"/>
-                                    </group>
-                                    <group>
-                                        <field name="date" required="1"/>
-                                        <field name="is_public"/>
-                                        <field name="state"/>
-                                        <field name="active"/>
-                                    </group>
-                                </group>
-                                <group string="File Information">
                                     <field name="file" filename="file_name" required="1"/>
-                                    <field name="file_name" readonly="1"/>
-                                    <field name="file_type" readonly="1"/>
-                                    <field name="file_size" readonly="1"/>
+                                    <field name="file_name" required="1"/>
                                 </group>
+                            </page>
+                            <page string="Description">
+                                <field name="description" nolabel="1"/>
                             </page>
                             <page string="Access Logs">
                                 <field name="access_log_ids">
@@ -62,8 +93,17 @@
                                     </tree>
                                 </field>
                             </page>
+                            <page string="Statistics">
+                                <group>
+                                    <field name="access_count" readonly="1"/>
+                                    <field name="download_count" readonly="1"/>
+                                    <field name="last_accessed" readonly="1"/>
+                                </group>
+                            </page>
                         </notebook>
                     </sheet>
+
+                    <!-- chatter section (mail.thread, mail.activity.mixin) -->
                     <div class="oe_chatter">
                         <field name="message_follower_ids"/>
                         <field name="activity_ids"/>
@@ -73,26 +113,9 @@
             </field>
         </record>
 
-        <!-- Document Tree View -->
-        <record id="view_lms_document_tree" model="ir.ui.view">
-            <field name="name">lms.document.tree</field>
-            <field name="model">lms.document</field>
-            <field name="arch" type="xml">
-                <tree decoration-info="state == 'draft'" decoration-success="state == 'published'">
-                    <field name="name"/>
-                    <field name="teacher_assignment_id"/>
-                    <field name="date"/>
-                    <field name="file_type"/>
-                    <field name="file_size"/>
-                    <field name="access_count"/>
-                    <field name="last_accessed"/>
-                    <field name="is_public"/>
-                    <field name="state"/>
-                </tree>
-            </field>
-        </record>
-
-        <!-- Document Search View -->
+        <!-- =========================== -->
+        <!-- 3) SEARCH VIEW: lms.document -->
+        <!-- =========================== -->
         <record id="view_lms_document_search" model="ir.ui.view">
             <field name="name">lms.document.search</field>
             <field name="model">lms.document</field>
@@ -100,24 +123,28 @@
                 <search>
                     <field name="name"/>
                     <field name="teacher_assignment_id"/>
+                    <field name="course_id"/>
                     <field name="date"/>
                     <field name="file_type"/>
                     <separator/>
                     <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
                     <filter string="Published" name="published" domain="[('state', '=', 'published')]"/>
                     <filter string="Archived" name="archived" domain="[('state', '=', 'archived')]"/>
-                    <filter string="Public" name="public" domain="[('is_public', '=', True)]"/>
-                    <filter string="Private" name="private" domain="[('is_public', '=', False)]"/>
+                    <filter string="Public" name="public" domain="[('is_public','=',True)]"/>
+                    <filter string="Private" name="private" domain="[('is_public','=',False)]"/>
                     <group expand="0" string="Group By">
+                        <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
                         <filter string="Teacher Assignment" name="group_by_assignment" context="{'group_by': 'teacher_assignment_id'}"/>
-                        <filter string="File Type" name="group_by_type" context="{'group_by': 'file_type'}"/>
+                        <filter string="File Type" name="group_by_file_type" context="{'group_by': 'file_type'}"/>
                         <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
                     </group>
                 </search>
             </field>
         </record>
 
-        <!-- Document Action -->
+        <!-- =========================== -->
+        <!-- 4) ACTION: lms.document    -->
+        <!-- =========================== -->
         <record id="action_lms_document" model="ir.actions.act_window">
             <field name="name">Documents</field>
             <field name="res_model">lms.document</field>
@@ -125,10 +152,16 @@
             <field name="search_view_id" ref="view_lms_document_search"/>
         </record>
 
-        <!-- Document Menu Item -->
-        <menuitem id="menu_lms_document" name="Documents"
-                  parent="lms_module.menu_root"
-                  action="action_lms_document"
-                  sequence="10"/>
+        <!-- 
+          If you keep menus in another file, 
+          reference action_lms_document there, e.g.:
+
+          <menuitem id="menu_lms_documents" 
+                    name="Documents"
+                    parent="lms_module.menu_root"
+                    action="action_lms_document"
+                    sequence="10"/>
+        -->
+
     </data>
 </odoo>
