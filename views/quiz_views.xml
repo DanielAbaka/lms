@@ -22,8 +22,6 @@
           </header>
           <sheet>
             <div class="oe_button_box" name="button_box">
-              <!-- Button to launch preview action -->
-              <button name="%(action_lms_quiz_preview)d" type="action" class="oe_stat_button" icon="fa-eye" string="Preview"/>
               <!-- Button to view attempts -->
               <button name="action_view_attempts" type="object" class="oe_stat_button" icon="fa-pencil-square-o">
                 <field name="attempt_count" widget="statinfo" string="Attempts"/>
@@ -82,6 +80,13 @@
           </div>
         </form>
       </field>
+    </record>
+    
+    <!-- Action for Quizzes -->
+    <record id="action_lms_quizzes" model="ir.actions.act_window">
+        <field name="name">Quizzes</field>
+        <field name="res_model">lms.quiz</field>
+        <field name="view_mode">tree,form</field>
     </record>
   </data>
 </odoo>
