@@ -58,6 +58,9 @@ Modern Learning Management System
         ],
     },
     
+    # hooks
+    'post_init_hook': 'post_init_hook',
+    
     # only loaded in demonstration mode
     'installable': True,
     'application': True,
