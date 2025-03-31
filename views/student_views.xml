@@ -5,60 +5,50 @@
     <record id="view_lms_student_form" model="ir.ui.view">
       <field name="name">lms.student.form</field>
       <field name="model">res.users</field>
+      <field name="inherit_id" ref="base.view_users_form"/>
       <field name="arch" type="xml">
-        <form string="Student Profile" class="lms_module o_form_view">
-          <header>
-            <field name="academic_status" widget="statusbar" statusbar_visible="good_standing,probation,suspended"/>
-          </header>
-          <sheet>
-            <div class="oe_title">
-              <h1>
-                <field name="firstname"/> <field name="lastname"/>
-              </h1>
-            </div>
-            <field name="image_1920" widget="image" class="oe_avatar"/>
-            <notebook>
-              <page string="Personal Information" name="personal_info">
-                <group>
-                  <group>
-                    <field name="firstname" required="1"/>
-                    <field name="lastname" required="1"/>
-                    <field name="student_id" required="1" placeholder="Student ID"/>
-                    <field name="email" widget="email"/>
-                  </group>
-                  <group>
-                    <field name="date_of_birth" widget="date"/>
-                    <field name="gender"/>
-                    <field name="phone" widget="phone"/>
-                    <field name="emergency_contact" placeholder="Emergency Contact"/>
-                  </group>
-                </group>
-                <group>
-                  <field name="address" placeholder="Full Address"/>
-                </group>
-              </page>
-              <page string="Academic Information" name="academic_info">
-                <group>
-                  <group>
-                    <field name="major"/>
-                    <field name="minor"/>
-                    <field name="gpa"/>
-                    <field name="academic_status"/>
-                  </group>
-                  <group>
-                    <field name="enrolled_courses" widget="many2many_tags"/>
-                    <field name="dashboard_data"/>
-                    <field name="is_student"/>
-                  </group>
-                </group>
-              </page>
-            </notebook>
-          </sheet>
-          <div class="oe_chatter">
-            <field name="message_follower_ids" widget="mail_followers"/>
-            <field name="message_ids" widget="mail_thread"/>
-          </div>
-        </form>
+        <xpath expr="//field[@name='name']" position="replace">
+          <h1>
+            <field name="firstname"/> <field name="lastname"/>
+          </h1>
+        </xpath>
+        <xpath expr="//field[@name='image_1920']" position="after">
+          <field name="student_id" required="1" placeholder="Student ID"/>
+        </xpath>
+        <xpath expr="//notebook" position="inside">
+          <page string="Personal Information" name="personal_info">
+            <group>
+              <group>
+                <field name="firstname" required="1"/>
+                <field name="lastname" required="1"/>
+                <field name="date_of_birth" widget="date"/>
+                <field name="gender"/>
+              </group>
+              <group>
+                <field name="phone" widget="phone"/>
+                <field name="emergency_contact" placeholder="Emergency Contact"/>
+                <field name="is_student"/>
+              </group>
+            </group>
+            <group>
+              <field name="address" placeholder="Full Address"/>
+            </group>
+          </page>
+          <page string="Academic Information" name="academic_info">
+            <group>
+              <group>
+                <field name="major"/>
+                <field name="minor"/>
+                <field name="gpa"/>
+                <field name="academic_status"/>
+              </group>
+              <group>
+                <field name="enrolled_courses" widget="many2many_tags"/>
+                <field name="dashboard_data"/>
+              </group>
+            </group>
+          </page>
+        </xpath>
       </field>
     </record>
 
@@ -66,16 +56,14 @@
     <record id="view_lms_student_tree" model="ir.ui.view">
       <field name="name">lms.student.tree</field>
       <field name="model">res.users</field>
+      <field name="inherit_id" ref="base.view_users_tree"/>
       <field name="arch" type="xml">
-        <tree class="lms_module o_list_view">
-          <field name="firstname"/>
-          <field name="lastname"/>
+        <field name="name" position="after">
           <field name="student_id"/>
-          <field name="email"/>
           <field name="major"/>
           <field name="academic_status"/>
           <field name="gpa"/>
-        </tree>
+        </field>
       </field>
     </record>
 
@@ -83,20 +71,20 @@
     <record id="view_lms_student_search" model="ir.ui.view">
       <field name="name">lms.student.search</field>
       <field name="model">res.users</field>
+      <field name="inherit_id" ref="base.view_users_search"/>
       <field name="arch" type="xml">
-        <search>
-          <field name="firstname"/>
-          <field name="lastname"/>
+        <field name="name" position="after">
           <field name="student_id"/>
-          <field name="email"/>
           <field name="major"/>
           <field name="academic_status"/>
+        </field>
+        <filter name="group_type" position="after">
           <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
-          <group expand="0" string="Group By">
-            <filter name="group_by_major" string="Major" context="{'group_by': 'major'}"/>
-            <filter name="group_by_status" string="Academic Status" context="{'group_by': 'academic_status'}"/>
-          </group>
-        </search>
+        </filter>
+        <group expand="0" string="Group By" position="inside">
+          <filter name="group_by_major" string="Major" context="{'group_by': 'major'}"/>
+          <filter name="group_by_status" string="Academic Status" context="{'group_by': 'academic_status'}"/>
+        </group>
       </field>
     </record>
 
@@ -104,7 +92,7 @@
     <record id="action_lms_students" model="ir.actions.act_window">
       <field name="name">Students</field>
       <field name="res_model">res.users</field>
-      <field name="view_mode">kanban,tree,form</field>
+      <field name="view_mode">tree,form</field>
       <field name="search_view_id" ref="view_lms_student_search"/>
       <field name="domain">[('is_student', '=', True)]</field>
       <field name="context">{'default_is_student': True}</field>
