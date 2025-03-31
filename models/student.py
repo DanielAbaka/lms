@@ -1,11 +1,16 @@
 from odoo import models, fields, api
-from odoo.exceptions import ValidationError
 
 class StudentProfile(models.Model):
     _inherit = 'res.users'
+    _description = 'Student Profile Extension'
 
+    # Flag to mark a user as a student
     is_student = fields.Boolean(string="Is Student", default=False)
-    student_id = fields.Char(string="Student ID", required=True, unique=True)
+    
+    # Unique student identifier
+    student_id = fields.Char(string="Student ID", required=True, copy=False)
+    
+    # Relationship to enrolled courses
     enrolled_courses = fields.Many2many(
         'slide.channel',
         'lms_student_course_rel',
@@ -13,6 +18,8 @@ class StudentProfile(models.Model):
         'course_id',
         string="Enrolled Courses"
     )
+    
+    # Dashboard (computed example)
     dashboard_data = fields.Text(string="Dashboard Data", compute="_compute_dashboard_data")
 
     # Personal Information
@@ -32,7 +39,7 @@ class StudentProfile(models.Model):
     major = fields.Char(string="Major")
     minor = fields.Char(string="Minor")
     
-    # Academic Progress
+    # Academic Progress (these might be computed elsewhere)
     gpa = fields.Float(string="GPA", digits=(3, 2))
     academic_status = fields.Selection([
         ('good_standing', 'Good Standing'),
@@ -43,17 +50,12 @@ class StudentProfile(models.Model):
     @api.depends('enrolled_courses')
     def _compute_dashboard_data(self):
         for record in self:
-            course_names = record.enrolled_courses.mapped('name')
-            record.dashboard_data = "Enrolled Courses: " + ", ".join(course_names) if course_names else "No courses enrolled."
-
-    @api.constrains('student_id')
-    def _check_student_id(self):
-        for user in self:
-            if self.search_count([('student_id', '=', user.student_id), ('id', '!=', user.id)]) > 0:
-                raise ValidationError("Student ID must be unique!")
+            enrolled = record.enrolled_courses.mapped('name')
+            record.dashboard_data = "Enrolled Courses: " + ", ".join(enrolled) if enrolled else "No courses enrolled"
 
     @api.model
     def create(self, vals):
+        # When creating a user marked as student, add them to the student group
         if vals.get('is_student'):
             student_group = self.env.ref('lms_module.group_lms_student', raise_if_not_found=False)
             if student_group:

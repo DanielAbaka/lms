@@ -12,7 +12,10 @@
           </header>
           <sheet>
             <div class="oe_title">
-              <h1><field name="name" required="1" placeholder="Student Name"/></h1>
+              <!-- Display the full name from firstname and lastname if needed -->
+              <h1>
+                <field name="firstname"/> <field name="lastname"/>
+              </h1>
             </div>
             <field name="image_1920" widget="image" class="oe_avatar"/>
             <notebook>
@@ -48,31 +51,6 @@
                     <field name="dashboard_data"/>
                   </group>
                 </group>
-                <group>
-                  <group>
-                    <field name="total_courses"/>
-                    <field name="completed_courses"/>
-                    <field name="in_progress_courses"/>
-                    <field name="average_grade"/>
-                  </group>
-                  <group>
-                    <field name="attendance_rate"/>
-                    <field name="last_login"/>
-                    <field name="is_student"/>
-                    <field name="is_teacher"/>
-                  </group>
-                </group>
-              </page>
-              <page string="Enrollments" name="enrollments">
-                <field name="enrollment_ids" readonly="1">
-                  <tree>
-                    <field name="course_id"/>
-                    <field name="enrollment_date"/>
-                    <field name="payment_status"/>
-                    <field name="total_cost"/>
-                    <field name="remaining_balance"/>
-                  </tree>
-                </field>
               </page>
             </notebook>
           </sheet>
@@ -84,13 +62,14 @@
       </field>
     </record>
 
-    <!-- Student Profile Tree View -->
+    <!-- Student Profile List View (Tree) -->
     <record id="view_lms_student_tree" model="ir.ui.view">
       <field name="name">lms.student.tree</field>
       <field name="model">res.users</field>
       <field name="arch" type="xml">
         <tree class="lms_module o_list_view">
-          <field name="name"/>
+          <field name="firstname"/>
+          <field name="lastname"/>
           <field name="student_id"/>
           <field name="email"/>
           <field name="major"/>
@@ -106,7 +85,8 @@
       <field name="model">res.users</field>
       <field name="arch" type="xml">
         <search>
-          <field name="name"/>
+          <field name="firstname"/>
+          <field name="lastname"/>
           <field name="student_id"/>
           <field name="email"/>
           <field name="major"/>
@@ -120,42 +100,28 @@
       </field>
     </record>
 
-    <!-- Student Profile Kanban View -->
-    <record id="view_lms_student_kanban" model="ir.ui.view">
-      <field name="name">lms.student.kanban</field>
-      <field name="model">res.users</field>
-      <field name="arch" type="xml">
-        <kanban class="lms_module o_kanban_view">
-          <field name="id"/>
-          <field name="name"/>
-          <field name="student_id"/>
-          <field name="email"/>
-          <field name="major"/>
-          <field name="academic_status"/>
-          <field name="image_128"/>
-          <templates>
-            <t t-name="kanban-box">
-              <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
-                <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('res.users', 'image_128', record.id.raw_value)}')"/>
-                <div class="oe_kanban_details">
-                  <strong class="o_kanban_record_title">
-                    <field name="name"/>
-                  </strong>
-                  <div class="o_kanban_record_subtitle">
-                    <field name="major"/>
-                  </div>
-                  <div>
-                    <field name="academic_status"/>
-                  </div>
-                  <div>
-                    <field name="email" widget="email"/>
-                  </div>
-                </div>
-              </div>
-            </t>
-          </templates>
-        </kanban>
+    <!-- Student Profile Action -->
+    <record id="action_lms_students" model="ir.actions.act_window">
+      <field name="name">Students</field>
+      <field name="res_model">res.users</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="search_view_id" ref="view_lms_student_search"/>
+      <field name="domain">[('is_student', '=', True)]</field>
+      <field name="context">{'default_is_student': True}</field>
+      <field name="help" type="html">
+        <p class="o_view_nocontent_smiling_face">
+          Add your first student!
+        </p>
+        <p>
+          Create student profiles to manage academic information and course enrollments.
+        </p>
       </field>
     </record>
+
+    <!-- Menu Item for Students -->
+    <menuitem id="menu_lms_students" name="Students"
+              parent="lms_module.menu_root"
+              action="action_lms_students"
+              sequence="4"/>
   </data>
 </odoo>
