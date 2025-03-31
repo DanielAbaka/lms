@@ -11,9 +11,6 @@ access_lms_semester_admin,LMS Semester Admin,model_lms_semester,base.group_syste
 access_lms_semester_manager,LMS Semester Manager,model_lms_semester,lms_module.group_lms_manager,1,1,1,1
 access_lms_semester_user,LMS Semester User,model_lms_semester,lms_module.group_lms_user,1,0,0,0
 
-access_lms_student_profile_admin,LMS Student Profile Admin,model_student_profile,base.group_system,1,1,1,1
-access_lms_student_profile_manager,LMS Student Profile Manager,model_student_profile,lms_module.group_lms_manager,1,1,1,1
-access_lms_student_profile_user,LMS Student Profile User,model_student_profile,lms_module.group_lms_user,1,1,0,0
 
 access_lms_teacher_admin,LMS Teacher Admin,model_res_users,base.group_system,1,1,1,1
 access_lms_teacher_manager,LMS Teacher Manager,model_res_users,lms_module.group_lms_manager,1,1,1,1
@@ -22,6 +19,7 @@ access_lms_teacher_user,LMS Teacher User,model_res_users,lms_module.group_lms_us
 access_lms_teacher_assignment_admin,LMS Teacher Assignment Admin,model_lms_teacher_assignment,base.group_system,1,1,1,1
 access_lms_teacher_assignment_manager,LMS Teacher Assignment Manager,model_lms_teacher_assignment,lms_module.group_lms_manager,1,1,1,1
 access_lms_teacher_assignment_user,LMS Teacher Assignment User,model_lms_teacher_assignment,lms_module.group_lms_user,1,0,0,0
+
 
 access_lms_course_planning_admin,LMS Course Planning Admin,model_lms_course_planning,base.group_system,1,1,1,1
 access_lms_course_planning_manager,LMS Course Planning Manager,model_lms_course_planning,lms_module.group_lms_manager,1,1,1,1
@@ -42,6 +40,7 @@ access_lms_grade_user,LMS Grade User,model_lms_grade,lms_module.group_lms_user,1
 access_lms_transcript_admin,LMS Transcript Admin,model_lms_transcript,base.group_system,1,1,1,1
 access_lms_transcript_manager,LMS Transcript Manager,model_lms_transcript,lms_module.group_lms_manager,1,1,1,1
 access_lms_transcript_user,LMS Transcript User,model_lms_transcript,lms_module.group_lms_user,1,0,0,0
+
 
 access_lms_document_admin,LMS Document Admin,model_lms_document,base.group_system,1,1,1,1
 access_lms_document_manager,LMS Document Manager,model_lms_document,lms_module.group_lms_manager,1,1,1,1
