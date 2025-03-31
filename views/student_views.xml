@@ -12,9 +12,7 @@
           </header>
           <sheet>
             <div class="oe_title">
-              <h1>
-                <field name="firstname"/> <field name="lastname"/>
-              </h1>
+              <h1><field name="name" placeholder="Student Name"/></h1>
             </div>
             <field name="image_1920" widget="image" class="oe_avatar"/>
             <notebook>
@@ -30,7 +28,7 @@
                     <field name="date_of_birth" widget="date"/>
                     <field name="gender"/>
                     <field name="phone" widget="phone"/>
-                    <field name="emergency_contact" placeholder="Emergency Contact"/>
+                    <field name="emergency_contact"/>
                   </group>
                 </group>
                 <group>
@@ -48,7 +46,6 @@
                   <group>
                     <field name="enrolled_courses" widget="many2many_tags"/>
                     <field name="dashboard_data"/>
-                    <field name="is_student"/>
                   </group>
                 </group>
               </page>
@@ -62,14 +59,13 @@
       </field>
     </record>
 
-    <!-- Student Profile List View (Tree) -->
+    <!-- Student Profile List View -->
     <record id="view_lms_student_tree" model="ir.ui.view">
       <field name="name">lms.student.tree</field>
       <field name="model">res.users</field>
       <field name="arch" type="xml">
         <tree class="lms_module o_list_view">
-          <field name="firstname"/>
-          <field name="lastname"/>
+          <field name="name"/>
           <field name="student_id"/>
           <field name="email"/>
           <field name="major"/>
@@ -85,8 +81,7 @@
       <field name="model">res.users</field>
       <field name="arch" type="xml">
         <search>
-          <field name="firstname"/>
-          <field name="lastname"/>
+          <field name="name"/>
           <field name="student_id"/>
           <field name="email"/>
           <field name="major"/>
@@ -117,11 +112,5 @@
         </p>
       </field>
     </record>
-
-    <!-- Menu Item for Students -->
-    <menuitem id="menu_lms_students" name="Students"
-              parent="lms_module.menu_root"
-              action="action_lms_students"
-              sequence="4"/>
   </data>
 </odoo>

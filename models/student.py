@@ -4,13 +4,11 @@ class StudentProfile(models.Model):
     _inherit = 'res.users'
     _description = 'Student Profile Extension'
 
-    # Flag to mark a user as a student
+    # Student flag and unique student id
     is_student = fields.Boolean(string="Is Student", default=False)
-    
-    # Unique student identifier
     student_id = fields.Char(string="Student ID", required=True, copy=False)
     
-    # Relationship to enrolled courses
+    # Academic Relations
     enrolled_courses = fields.Many2many(
         'slide.channel',
         'lms_student_course_rel',
@@ -18,8 +16,6 @@ class StudentProfile(models.Model):
         'course_id',
         string="Enrolled Courses"
     )
-    
-    # Dashboard (computed example)
     dashboard_data = fields.Text(string="Dashboard Data", compute="_compute_dashboard_data")
 
     # Personal Information
@@ -39,7 +35,7 @@ class StudentProfile(models.Model):
     major = fields.Char(string="Major")
     minor = fields.Char(string="Minor")
     
-    # Academic Progress (these might be computed elsewhere)
+    # Academic Progress (computed elsewhere or updated manually)
     gpa = fields.Float(string="GPA", digits=(3, 2))
     academic_status = fields.Selection([
         ('good_standing', 'Good Standing'),
@@ -50,12 +46,11 @@ class StudentProfile(models.Model):
     @api.depends('enrolled_courses')
     def _compute_dashboard_data(self):
         for record in self:
-            enrolled = record.enrolled_courses.mapped('name')
-            record.dashboard_data = "Enrolled Courses: " + ", ".join(enrolled) if enrolled else "No courses enrolled"
+            courses = record.enrolled_courses.mapped('name')
+            record.dashboard_data = "Enrolled Courses: " + ", ".join(courses)
 
     @api.model
     def create(self, vals):
-        # When creating a user marked as student, add them to the student group
         if vals.get('is_student'):
             student_group = self.env.ref('lms_module.group_lms_student', raise_if_not_found=False)
             if student_group:
