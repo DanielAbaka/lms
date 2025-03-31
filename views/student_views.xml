@@ -12,7 +12,6 @@
           </header>
           <sheet>
             <div class="oe_title">
-              <!-- Display the full name from firstname and lastname if needed -->
               <h1>
                 <field name="firstname"/> <field name="lastname"/>
               </h1>
