@@ -27,6 +27,24 @@
               name="Academic" 
               parent="lms_module.menu_root" 
               sequence="2"/>
+
+    <!-- ✅ Define the Student Action -->
+    <record id="action_lms_students" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_student', '=', True)]</field>
+        <field name="context">{'default_is_student': True}</field>
+        <field name="search_view_id" ref="view_lms_student_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first student!
+            </p>
+            <p>
+                Create student profiles to manage academic information and course enrollments.
+            </p>
+        </field>
+    </record>
               
     <!-- ✅ Move Courses, Students, Teachers Under Academic -->
     <menuitem id="menu_lms_courses" name="Courses"
