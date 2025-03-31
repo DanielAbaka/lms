@@ -1,164 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <!-- ✅ Student Profile Form View -->
-        <record id="view_lms_student_form" model="ir.ui.view">
-            <field name="name">lms.student.form</field>
-            <field name="model">res.users</field>
-            <field name="arch" type="xml">
-                <form string="Student Profile" class="lms_module o_form_view">
-                    <header>
-                        <field name="academic_status" widget="statusbar" statusbar_visible="good_standing,probation,suspended"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_title">
-                            <h1><field name="name" required="1" placeholder="Student Name"/></h1>
-                        </div>
-                        <field name="image_1920" widget="image" class="oe_avatar"/>
-                        <notebook>
-                            <page string="Personal Information" name="personal_info">
-                                <group>
-                                    <group>
-                                        <field name="firstname" required="1"/>
-                                        <field name="lastname" required="1"/>
-                                        <field name="student_id" required="1" placeholder="Student ID"/>
-                                        <field name="email" widget="email"/>
-                                    </group>
-                                    <group>
-                                        <field name="date_of_birth" widget="date"/>
-                                        <field name="gender"/>
-                                        <field name="phone" widget="phone"/>
-                                        <field name="emergency_contact" placeholder="Emergency Contact"/>
-                                    </group>
-                                </group>
-                                <group>
-                                    <field name="address" placeholder="Full Address"/>
-                                </group>
-                            </page>
-                            <page string="Academic Information" name="academic_info">
-                                <group>
-                                    <group>
-                                        <field name="major"/>
-                                        <field name="minor"/>
-                                        <field name="gpa"/>
-                                        <field name="academic_status"/>
-                                    </group>
-                                    <group>
-                                        <field name="enrolled_courses" widget="many2many_tags"/>
-                                        <field name="dashboard_data"/>
-                                    </group>
-                                </group>
-                            </page>
-                        </notebook>
-                    </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers"/>
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
-                </form>
-            </field>
-        </record>
-
-        <!-- ✅ Student Profile List View (Tree) -->
-        <record id="view_lms_student_tree" model="ir.ui.view">
-            <field name="name">lms.student.tree</field>
-            <field name="model">res.users</field>
-            <field name="arch" type="xml">
-                <tree class="lms_module o_list_view">
-                    <field name="name"/>
-                    <field name="student_id"/>
-                    <field name="email"/>
+  <data>
+    <!-- Student Profile Form View -->
+    <record id="view_lms_student_form" model="ir.ui.view">
+      <field name="name">lms.student.form</field>
+      <field name="model">res.users</field>
+      <field name="arch" type="xml">
+        <form string="Student Profile" class="lms_module o_form_view">
+          <header>
+            <field name="academic_status" widget="statusbar" statusbar_visible="good_standing,probation,suspended"/>
+          </header>
+          <sheet>
+            <div class="oe_title">
+              <h1><field name="name" required="1" placeholder="Student Name"/></h1>
+            </div>
+            <field name="image_1920" widget="image" class="oe_avatar"/>
+            <notebook>
+              <page string="Personal Information" name="personal_info">
+                <group>
+                  <group>
+                    <field name="firstname" required="1"/>
+                    <field name="lastname" required="1"/>
+                    <field name="student_id" required="1" placeholder="Student ID"/>
+                    <field name="email" widget="email"/>
+                  </group>
+                  <group>
+                    <field name="date_of_birth" widget="date"/>
+                    <field name="gender"/>
+                    <field name="phone" widget="phone"/>
+                    <field name="emergency_contact" placeholder="Emergency Contact"/>
+                  </group>
+                </group>
+                <group>
+                  <field name="address" placeholder="Full Address"/>
+                </group>
+              </page>
+              <page string="Academic Information" name="academic_info">
+                <group>
+                  <group>
                     <field name="major"/>
-                    <field name="academic_status"/>
+                    <field name="minor"/>
                     <field name="gpa"/>
-                </tree>
-            </field>
-        </record>
-
-        <!-- ✅ Student Profile Search View -->
-        <record id="view_lms_student_search" model="ir.ui.view">
-            <field name="name">lms.student.search</field>
-            <field name="model">res.users</field>
-            <field name="arch" type="xml">
-                <search>
-                    <field name="name"/>
-                    <field name="student_id"/>
-                    <field name="email"/>
-                    <field name="major"/>
                     <field name="academic_status"/>
-                    <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
-                    <group expand="0" string="Group By">
-                        <filter name="group_by_major" string="Major" context="{'group_by': 'major'}"/>
-                        <filter name="group_by_status" string="Academic Status" context="{'group_by': 'academic_status'}"/>
-                    </group>
-                </search>
-            </field>
-        </record>
+                  </group>
+                  <group>
+                    <field name="enrolled_courses" widget="many2many_tags"/>
+                    <field name="dashboard_data"/>
+                  </group>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
 
-        <!-- ✅ Student Kanban View -->
-        <record id="view_lms_student_kanban" model="ir.ui.view">
-            <field name="name">lms.student.kanban</field>
-            <field name="model">res.users</field>
-            <field name="arch" type="xml">
-                <kanban class="lms_module o_kanban_view">
-                    <field name="id"/>
+    <!-- Student Profile Tree View -->
+    <record id="view_lms_student_tree" model="ir.ui.view">
+      <field name="name">lms.student.tree</field>
+      <field name="model">res.users</field>
+      <field name="arch" type="xml">
+        <tree class="lms_module o_list_view">
+          <field name="name"/>
+          <field name="student_id"/>
+          <field name="email"/>
+          <field name="major"/>
+          <field name="academic_status"/>
+          <field name="gpa"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Student Profile Search View -->
+    <record id="view_lms_student_search" model="ir.ui.view">
+      <field name="name">lms.student.search</field>
+      <field name="model">res.users</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name"/>
+          <field name="student_id"/>
+          <field name="email"/>
+          <field name="major"/>
+          <field name="academic_status"/>
+          <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
+          <group expand="0" string="Group By">
+            <filter name="group_by_major" string="Major" context="{'group_by': 'major'}"/>
+            <filter name="group_by_status" string="Academic Status" context="{'group_by': 'academic_status'}"/>
+          </group>
+        </search>
+      </field>
+    </record>
+
+    <!-- Student Profile Kanban View -->
+    <record id="view_lms_student_kanban" model="ir.ui.view">
+      <field name="name">lms.student.kanban</field>
+      <field name="model">res.users</field>
+      <field name="arch" type="xml">
+        <kanban class="lms_module o_kanban_view">
+          <field name="id"/>
+          <field name="name"/>
+          <field name="student_id"/>
+          <field name="email"/>
+          <field name="major"/>
+          <field name="academic_status"/>
+          <field name="image_128"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('res.users', 'image_128', record.id.raw_value)}')"/>
+                <div class="oe_kanban_details">
+                  <strong class="o_kanban_record_title">
                     <field name="name"/>
-                    <field name="student_id"/>
-                    <field name="email"/>
+                  </strong>
+                  <div class="o_kanban_record_subtitle">
                     <field name="major"/>
+                  </div>
+                  <div>
                     <field name="academic_status"/>
-                    <field name="image_128"/>
-                    <templates>
-                        <t t-name="kanban-box">
-                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
-                                <div class="o_kanban_image_fill_left d-none d-md-block" t-attf-style="background-image:url('#{kanban_image('res.users', 'image_128', record.id.raw_value)}')"/>
-                                <div class="oe_kanban_details">
-                                    <strong class="o_kanban_record_title">
-                                        <field name="name"/>
-                                    </strong>
-                                    <div class="o_kanban_record_subtitle">
-                                        <field name="major"/>
-                                    </div>
-                                    <div>
-                                        <field name="academic_status"/>
-                                    </div>
-                                    <div>
-                                        <field name="email" widget="email"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </t>
-                    </templates>
-                </kanban>
-            </field>
-        </record>
-
-        <!-- 
-            ✅ Student Profile Action
-            - domain=[('is_student','=',True)] so only students are shown
-            - context="{'default_is_student': True}" so any new record defaults to a student
-        -->
-        <record id="action_lms_students" model="ir.actions.act_window">
-            <field name="name">Students</field>
-            <field name="res_model">res.users</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="search_view_id" ref="view_lms_student_search"/>
-            <field name="domain">[('is_student', '=', True)]</field>
-            <field name="context">{'default_is_student': True}</field>  <!-- ✅ Mark new records as students -->
-            <field name="help" type="html">
-                <p class="o_view_nocontent_smiling_face">
-                    Add your first student!
-                </p>
-                <p>
-                    Create student profiles to manage academic information and course enrollments.
-                </p>
-            </field>
-        </record>
-
-        <!-- ✅ Add Menu Item for Students -->
-        <menuitem id="menu_lms_students" name="Students"
-                  parent="lms_module.menu_root"
-                  action="action_lms_students"
-                  sequence="4"/>
-    </data>
+                  </div>
+                  <div>
+                    <field name="email" widget="email"/>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+  </data>
 </odoo>

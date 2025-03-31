@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 class StudentProfile(models.Model):
     _inherit = 'res.users'
@@ -42,17 +43,20 @@ class StudentProfile(models.Model):
     @api.depends('enrolled_courses')
     def _compute_dashboard_data(self):
         for record in self:
-            enrolled_courses = record.enrolled_courses.mapped('name')
-            record.dashboard_data = f"Enrolled Courses: {', '.join(enrolled_courses)}"
+            course_names = record.enrolled_courses.mapped('name')
+            record.dashboard_data = "Enrolled Courses: " + ", ".join(course_names) if course_names else "No courses enrolled."
+
+    @api.constrains('student_id')
+    def _check_student_id(self):
+        for user in self:
+            if self.search_count([('student_id', '=', user.student_id), ('id', '!=', user.id)]) > 0:
+                raise ValidationError("Student ID must be unique!")
 
     @api.model
     def create(self, vals):
-        """When creating a user with is_student=True, add them to the student group."""
         if vals.get('is_student'):
             student_group = self.env.ref('lms_module.group_lms_student', raise_if_not_found=False)
             if student_group:
-                # Add the user to the student group
-                # If there's an existing groups_id, we append (4, group_id)
                 existing_groups = vals.get('groups_id', [])
                 vals['groups_id'] = existing_groups + [(4, student_group.id)]
-        return super().create(vals)
+        return super(StudentProfile, self).create(vals)
