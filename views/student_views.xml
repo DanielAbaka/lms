@@ -18,24 +18,42 @@
                                     <field name="student_id" required="1" placeholder="Student ID"/>
                                     <field name="email" widget="email"/>
                                     <field name="phone" widget="phone"/>
+                                    <field name="emergency_contact" placeholder="Emergency Contact"/>
                                 </group>
                             </div>
                             <div class="col-md-6">
                                 <group>
-                                    <field name="enrolled_courses" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                    <field name="firstname" required="1"/>
+                                    <field name="lastname" required="1"/>
+                                    <field name="date_of_birth" widget="date"/>
+                                    <field name="gender"/>
                                 </group>
                             </div>
                         </div>
                         <notebook>
                             <page string="Academic Information" name="academic_info">
-                                <div class="student_dashboard">
+                                <group>
                                     <group>
+                                        <field name="major"/>
+                                        <field name="minor"/>
+                                        <field name="gpa"/>
+                                        <field name="academic_status"/>
+                                    </group>
+                                    <group>
+                                        <field name="address" placeholder="Full Address"/>
                                         <field name="dashboard_data"/>
                                     </group>
-                                </div>
+                                </group>
+                            </page>
+                            <page string="Courses" name="enrolled_courses">
+                                <field name="enrolled_courses" widget="many2many_tags"/>
                             </page>
                         </notebook>
                     </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
@@ -49,7 +67,9 @@
                     <field name="name"/>
                     <field name="student_id"/>
                     <field name="email"/>
-                    <field name="phone"/>
+                    <field name="major"/>
+                    <field name="academic_status"/>
+                    <field name="gpa"/>
                 </tree>
             </field>
         </record>
@@ -63,9 +83,12 @@
                     <field name="name"/>
                     <field name="student_id"/>
                     <field name="email"/>
+                    <field name="major"/>
+                    <field name="academic_status"/>
                     <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
                     <group expand="0" string="Group By">
-                        <filter name="group_by_student_id" string="Student ID" context="{'group_by': 'student_id'}"/>
+                        <filter name="group_by_major" string="Major" context="{'group_by': 'major'}"/>
+                        <filter name="group_by_status" string="Academic Status" context="{'group_by': 'academic_status'}"/>
                     </group>
                 </search>
             </field>
@@ -81,6 +104,8 @@
                     <field name="name"/>
                     <field name="student_id"/>
                     <field name="email"/>
+                    <field name="major"/>
+                    <field name="academic_status"/>
                     <field name="image_128"/>
                     <templates>
                         <t t-name="kanban-box">
@@ -91,7 +116,10 @@
                                         <field name="name"/>
                                     </strong>
                                     <div class="o_kanban_record_subtitle">
-                                        <field name="student_id"/>
+                                        <field name="major"/>
+                                    </div>
+                                    <div>
+                                        <field name="academic_status"/>
                                     </div>
                                     <div>
                                         <field name="email" widget="email"/>
@@ -121,7 +149,7 @@
                     Add your first student!
                 </p>
                 <p>
-                    Create student profiles to track their enrollments, grades, and progress.
+                    Create student profiles to manage academic information and course enrollments.
                 </p>
             </field>
         </record>
