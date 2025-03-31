@@ -35,7 +35,7 @@
     <record id="group_lms_teacher" model="res.groups">
       <field name="name">Teacher</field>
       <field name="category_id" ref="lms_module.module_category_lms"/>
-      <field name="implied_ids" eval="[(4, ref('lms_module.group_lms_user'))]"/>
+      <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('lms_module.group_lms_user'))]"/>
     </record>
 
     <!-- Student can only see and edit their own profile -->
