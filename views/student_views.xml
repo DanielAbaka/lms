@@ -12,25 +12,26 @@
                             <h1><field name="name" required="1" placeholder="Student Name"/></h1>
                         </div>
                         <field name="image_1920" widget="image" class="oe_avatar"/>
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <group>
-                                    <field name="student_id" required="1" placeholder="Student ID"/>
-                                    <field name="email" widget="email"/>
-                                    <field name="phone" widget="phone"/>
-                                    <field name="emergency_contact" placeholder="Emergency Contact"/>
-                                </group>
-                            </div>
-                            <div class="col-md-6">
-                                <group>
-                                    <field name="firstname" required="1"/>
-                                    <field name="lastname" required="1"/>
-                                    <field name="date_of_birth" widget="date"/>
-                                    <field name="gender"/>
-                                </group>
-                            </div>
-                        </div>
                         <notebook>
+                            <page string="Personal Information" name="personal_info">
+                                <group>
+                                    <group>
+                                        <field name="firstname" required="1"/>
+                                        <field name="lastname" required="1"/>
+                                        <field name="student_id" required="1" placeholder="Student ID"/>
+                                        <field name="email" widget="email"/>
+                                    </group>
+                                    <group>
+                                        <field name="date_of_birth" widget="date"/>
+                                        <field name="gender"/>
+                                        <field name="phone" widget="phone"/>
+                                        <field name="emergency_contact" placeholder="Emergency Contact"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="address" placeholder="Full Address"/>
+                                </group>
+                            </page>
                             <page string="Academic Information" name="academic_info">
                                 <group>
                                     <group>
@@ -40,13 +41,10 @@
                                         <field name="academic_status"/>
                                     </group>
                                     <group>
-                                        <field name="address" placeholder="Full Address"/>
+                                        <field name="enrolled_courses" widget="many2many_tags"/>
                                         <field name="dashboard_data"/>
                                     </group>
                                 </group>
-                            </page>
-                            <page string="Courses" name="enrolled_courses">
-                                <field name="enrolled_courses" widget="many2many_tags"/>
                             </page>
                         </notebook>
                     </sheet>
