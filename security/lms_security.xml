@@ -27,7 +27,8 @@
     <record id="group_lms_student" model="res.groups">
       <field name="name">Student</field>
       <field name="category_id" ref="lms_module.module_category_lms"/>
-      <field name="implied_ids" eval="[(4, ref('lms_module.group_lms_user'))]"/>
+      <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('lms_module.group_lms_user'))]"/>
+      <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>
         
     <!-- Teacher Group -->
@@ -35,6 +36,30 @@
       <field name="name">Teacher</field>
       <field name="category_id" ref="lms_module.module_category_lms"/>
       <field name="implied_ids" eval="[(4, ref('lms_module.group_lms_user'))]"/>
+    </record>
+
+    <!-- Student can only see and edit their own profile -->
+    <record id="rule_lms_student_profile" model="ir.rule">
+      <field name="name">Student Profile Access</field>
+      <field name="model_id" ref="base.model_res_users"/>
+      <field name="groups" eval="[(4, ref('lms_module.group_lms_student'))]"/>
+      <field name="domain_force">[('id', '=', user.id)]</field>
+    </record>
+
+    <!-- Manager can see all student profiles -->
+    <record id="rule_lms_student_profile_manager" model="ir.rule">
+      <field name="name">Student Profile Manager Access</field>
+      <field name="model_id" ref="base.model_res_users"/>
+      <field name="groups" eval="[(4, ref('lms_module.group_lms_manager'))]"/>
+      <field name="domain_force">[('is_student', '=', True)]</field>
+    </record>
+
+    <!-- Admin can see all student profiles -->
+    <record id="rule_lms_student_profile_admin" model="ir.rule">
+      <field name="name">Student Profile Admin Access</field>
+      <field name="model_id" ref="base.model_res_users"/>
+      <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+      <field name="domain_force">[(1, '=', 1)]</field>
     </record>
   </data>
 </odoo>
