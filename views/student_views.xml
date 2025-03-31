@@ -8,7 +8,6 @@
             <field name="arch" type="xml">
                 <form string="Student Profile" class="lms_module o_form_view">
                     <header>
-                        <button name="action_view_dashboard" type="object" class="btn-primary" string="View Dashboard"/>
                         <field name="academic_status" widget="statusbar" statusbar_visible="good_standing,probation,suspended"/>
                     </header>
                     <sheet>
