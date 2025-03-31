@@ -48,6 +48,7 @@
                   <group>
                     <field name="enrolled_courses" widget="many2many_tags"/>
                     <field name="dashboard_data"/>
+                    <field name="is_student"/>
                   </group>
                 </group>
               </page>
