@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- ✅ Define the LMS Dashboard Action -->
+    <!-- Dashboard Action -->
     <record id="action_lms_dashboard" model="ir.actions.act_window">
         <field name="name">Dashboard</field>
         <field name="res_model">lms.dashboard</field>
@@ -12,30 +12,15 @@
             </div>
         </field>
     </record>
-    
-    <!-- ✅ Root Menu Item with Modern Styling -->
-    <menuitem id="menu_root" name="LMS" web_icon="lms_module,static/description/icon.png" sequence="10"/>
-    
-    <!-- ✅ Dashboard Menu -->
-    <menuitem id="menu_lms_dashboard" name="Dashboard"
-              parent="lms_module.menu_root"
-              action="action_lms_dashboard"
-              sequence="1"/>
-              
-    <!-- ✅ Academic Menu Category -->
-    <menuitem id="menu_lms_academic" 
-              name="Academic" 
-              parent="lms_module.menu_root" 
-              sequence="2"/>
 
-    <!-- ✅ Define the Student Action -->
+    <!-- Students Action (defined only once clearly here) -->
     <record id="action_lms_students" model="ir.actions.act_window">
         <field name="name">Students</field>
         <field name="res_model">res.users</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[('is_student', '=', True)]</field>
         <field name="context">{'default_is_student': True}</field>
-        <field name="search_view_id" ref="view_lms_student_search"/>
+        <field name="search_view_id" ref="lms_module.view_lms_student_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Add your first student!
@@ -45,30 +30,47 @@
             </p>
         </field>
     </record>
-              
-    <!-- ✅ Move Courses, Students, Teachers Under Academic -->
+
+    <!-- Root Menu -->
+    <menuitem id="menu_root" name="LMS" web_icon="lms_module,static/description/icon.png" sequence="10"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_lms_dashboard" name="Dashboard"
+              parent="menu_root"
+              action="action_lms_dashboard"
+              sequence="1"/>
+
+    <!-- Academic Menu Category -->
+    <menuitem id="menu_lms_academic"
+              name="Academic"
+              parent="menu_root"
+              sequence="2"/>
+
+    <!-- Courses Menu Item (Ensure action_lms_courses is defined elsewhere) -->
     <menuitem id="menu_lms_courses" name="Courses"
-              parent="lms_module.menu_lms_academic"
+              parent="menu_lms_academic"
               action="action_lms_courses"
               sequence="1"/>
-              
+
+    <!-- Students Menu Item -->
     <menuitem id="menu_lms_students" name="Students"
-              parent="lms_module.menu_lms_academic"
+              parent="menu_lms_academic"
               action="action_lms_students"
               sequence="2"/>
-              
+
+    <!-- Teachers Menu Item (Ensure action_lms_teachers is defined elsewhere) -->
     <menuitem id="menu_lms_teachers" name="Teachers"
-              parent="lms_module.menu_lms_academic"
+              parent="menu_lms_academic"
               action="action_lms_teachers"
               sequence="3"/>
-              
-    <!-- ✅ Administration Menu Category -->
-    <menuitem id="menu_lms_administration" 
-              name="Administration" 
-              parent="lms_module.menu_root" 
+
+    <!-- Administration Menu Category -->
+    <menuitem id="menu_lms_administration"
+              name="Administration"
+              parent="menu_root"
               sequence="15"/>
 
-    <!-- ✅ Define the Quiz Action With Modern UI -->
+    <!-- Quiz Action -->
     <record id="action_lms_quiz" model="ir.actions.act_window">
         <field name="name">Quizzes</field>
         <field name="res_model">survey.survey</field>
@@ -81,26 +83,26 @@
         </field>
     </record>
 
-    <!-- ✅ Quiz Menu Moved under Academic -->
+    <!-- Quiz Menu Item -->
     <menuitem id="menu_lms_quiz" name="Quizzes"
-              parent="lms_module.menu_lms_academic"
+              parent="menu_lms_academic"
               action="action_lms_quiz"
               sequence="10"/>
 
-    <!-- ✅ Tree View for LMS Quiz with Modern UI -->
+    <!-- Quiz Tree View -->
     <record id="view_lms_quiz_tree" model="ir.ui.view">
         <field name="name">lms.quiz.tree</field>
         <field name="model">survey.survey</field>
         <field name="arch" type="xml">
             <tree string="Quizzes" class="lms_module o_list_view">
                 <field name="title"/>
-                <field name="course_id"/> <!-- Ensure this field exists -->
+                <field name="course_id"/>
                 <field name="create_date"/>
             </tree>
         </field>
     </record>
 
-    <!-- ✅ Form View for LMS Quiz with Modern UI -->
+    <!-- Quiz Form View -->
     <record id="view_lms_quiz_form" model="ir.ui.view">
         <field name="name">lms.quiz.form</field>
         <field name="model">survey.survey</field>
@@ -121,12 +123,12 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Description" name="description">
+                        <page string="Description">
                             <field name="description" placeholder="Describe the purpose of this quiz..."/>
                         </page>
-                        <page string="Questions" name="questions">
-                            <field name="question_ids" widget="one2many">
-                                <tree>
+                        <page string="Questions">
+                            <field name="question_ids">
+                                <tree editable="bottom">
                                     <field name="title"/>
                                     <field name="question_type"/>
                                     <field name="constr_mandatory" string="Required"/>
@@ -138,8 +140,8 @@
             </form>
         </field>
     </record>
-    
-    <!-- ✅ Kanban View for LMS Quiz with Modern UI -->
+
+    <!-- Quiz Kanban View -->
     <record id="view_lms_quiz_kanban" model="ir.ui.view">
         <field name="name">lms.quiz.kanban</field>
         <field name="model">survey.survey</field>
@@ -158,9 +160,7 @@
                                 <div class="o_kanban_record_subtitle">
                                     <field name="course_id"/>
                                 </div>
-                                <div class="mt-2">
-                                    <small class="text-muted">Created: <field name="create_date" widget="date"/></small>
-                                </div>
+                                <small class="text-muted">Created: <field name="create_date" widget="date"/></small>
                             </div>
                         </div>
                     </t>
