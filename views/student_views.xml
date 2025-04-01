@@ -49,18 +49,8 @@
                                     </group>
                                 </group>
                                 <group>
-                                    <group>
-                                        <field name="total_courses"/>
-                                        <field name="completed_courses"/>
-                                        <field name="in_progress_courses"/>
-                                        <field name="average_grade"/>
-                                    </group>
-                                    <group>
-                                        <field name="attendance_rate"/>
-                                        <field name="last_login"/>
-                                        <field name="is_student"/>
-                                        <field name="is_teacher"/>
-                                    </group>
+                                    <field name="is_student"/>
+                                    <field name="is_teacher"/>
                                 </group>
                             </page>
                             <page string="Enrollments" name="enrollments">
