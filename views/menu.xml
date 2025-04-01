@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Dashboard Action -->
+    <!-- LMS Dashboard Action -->
     <record id="action_lms_dashboard" model="ir.actions.act_window">
         <field name="name">Dashboard</field>
         <field name="res_model">lms.dashboard</field>
@@ -13,13 +13,13 @@
         </field>
     </record>
 
-    <!-- Students Action (defined only once clearly here) -->
+    <!-- Students Action Corrected -->
     <record id="action_lms_students" model="ir.actions.act_window">
         <field name="name">Students</field>
         <field name="res_model">res.users</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[('is_student', '=', True)]</field>
-        <field name="context">{'default_is_student': True}</field>
+        <field name="context">{"default_is_student": True}</field>
         <field name="search_view_id" ref="lms_module.view_lms_student_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
@@ -40,37 +40,34 @@
               action="action_lms_dashboard"
               sequence="1"/>
 
-    <!-- Academic Menu Category -->
-    <menuitem id="menu_lms_academic"
-              name="Academic"
-              parent="menu_root"
-              sequence="2"/>
+    <!-- Academic Menu -->
+    <menuitem id="menu_lms_academic" name="Academic"
+              parent="menu_root" sequence="2"/>
 
-    <!-- Courses Menu Item (Ensure action_lms_courses is defined elsewhere) -->
+    <!-- Courses Menu -->
     <menuitem id="menu_lms_courses" name="Courses"
               parent="menu_lms_academic"
               action="action_lms_courses"
               sequence="1"/>
 
-    <!-- Students Menu Item -->
+    <!-- Students Menu -->
     <menuitem id="menu_lms_students" name="Students"
               parent="menu_lms_academic"
               action="action_lms_students"
               sequence="2"/>
 
-    <!-- Teachers Menu Item (Ensure action_lms_teachers is defined elsewhere) -->
+    <!-- Teachers Menu -->
     <menuitem id="menu_lms_teachers" name="Teachers"
               parent="menu_lms_academic"
               action="action_lms_teachers"
               sequence="3"/>
 
-    <!-- Administration Menu Category -->
-    <menuitem id="menu_lms_administration"
-              name="Administration"
+    <!-- Administration Menu -->
+    <menuitem id="menu_lms_administration" name="Administration"
               parent="menu_root"
               sequence="15"/>
 
-    <!-- Quiz Action -->
+    <!-- Quiz Action and Menu -->
     <record id="action_lms_quiz" model="ir.actions.act_window">
         <field name="name">Quizzes</field>
         <field name="res_model">survey.survey</field>
@@ -83,89 +80,9 @@
         </field>
     </record>
 
-    <!-- Quiz Menu Item -->
     <menuitem id="menu_lms_quiz" name="Quizzes"
               parent="menu_lms_academic"
               action="action_lms_quiz"
               sequence="10"/>
 
-    <!-- Quiz Tree View -->
-    <record id="view_lms_quiz_tree" model="ir.ui.view">
-        <field name="name">lms.quiz.tree</field>
-        <field name="model">survey.survey</field>
-        <field name="arch" type="xml">
-            <tree string="Quizzes" class="lms_module o_list_view">
-                <field name="title"/>
-                <field name="course_id"/>
-                <field name="create_date"/>
-            </tree>
-        </field>
-    </record>
-
-    <!-- Quiz Form View -->
-    <record id="view_lms_quiz_form" model="ir.ui.view">
-        <field name="name">lms.quiz.form</field>
-        <field name="model">survey.survey</field>
-        <field name="arch" type="xml">
-            <form string="LMS Quiz" class="lms_module o_form_view">
-                <sheet>
-                    <div class="oe_title">
-                        <h1><field name="title" placeholder="Quiz Title"/></h1>
-                    </div>
-                    <group>
-                        <group>
-                            <field name="course_id" options="{'no_create': true}"/>
-                            <field name="active"/>
-                        </group>
-                        <group>
-                            <field name="access_mode"/>
-                            <field name="users_login_required"/>
-                        </group>
-                    </group>
-                    <notebook>
-                        <page string="Description">
-                            <field name="description" placeholder="Describe the purpose of this quiz..."/>
-                        </page>
-                        <page string="Questions">
-                            <field name="question_ids">
-                                <tree editable="bottom">
-                                    <field name="title"/>
-                                    <field name="question_type"/>
-                                    <field name="constr_mandatory" string="Required"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- Quiz Kanban View -->
-    <record id="view_lms_quiz_kanban" model="ir.ui.view">
-        <field name="name">lms.quiz.kanban</field>
-        <field name="model">survey.survey</field>
-        <field name="arch" type="xml">
-            <kanban class="lms_module o_kanban_view">
-                <field name="title"/>
-                <field name="course_id"/>
-                <field name="create_date"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click">
-                            <div class="oe_kanban_details">
-                                <strong class="o_kanban_record_title">
-                                    <field name="title"/>
-                                </strong>
-                                <div class="o_kanban_record_subtitle">
-                                    <field name="course_id"/>
-                                </div>
-                                <small class="text-muted">Created: <field name="create_date" widget="date"/></small>
-                            </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
 </odoo>
