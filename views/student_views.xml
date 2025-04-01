@@ -88,7 +88,11 @@
                 <field name="email"/>
                 <field name="major"/>
                 <field name="academic_status"/>
-                <filter string="Students" domain="[('is_student', '=', True)]"/>
+                <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_major" string="Major" context="{'group_by': 'major'}"/>
+                    <filter name="group_by_status" string="Academic Status" context="{'group_by': 'academic_status'}"/>
+                </group>
             </search>
         </field>
     </record>
