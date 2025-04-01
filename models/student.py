@@ -4,13 +4,8 @@ class StudentProfile(models.Model):
     _inherit = 'res.users'
     _description = 'Student Profile Extension'
 
-    # Flag to mark a user as a student
     is_student = fields.Boolean(string="Is Student", default=False)
-    
-    # Unique student identifier
     student_id = fields.Char(string="Student ID", required=True, copy=False)
-    
-    # Relationship to enrolled courses
     enrolled_courses = fields.Many2many(
         'slide.channel',
         'lms_student_course_rel',
@@ -18,11 +13,9 @@ class StudentProfile(models.Model):
         'course_id',
         string="Enrolled Courses"
     )
-    
-    # Dashboard (computed example)
+
     dashboard_data = fields.Text(string="Dashboard Data", compute="_compute_dashboard_data")
 
-    # Personal Information
     firstname = fields.Char(string="First Name", required=True)
     lastname = fields.Char(string="Last Name", required=True)
     date_of_birth = fields.Date(string="Date of Birth")
@@ -34,12 +27,8 @@ class StudentProfile(models.Model):
     address = fields.Text(string="Address")
     phone = fields.Char(string="Phone")
     emergency_contact = fields.Char(string="Emergency Contact")
-    
-    # Academic Information
     major = fields.Char(string="Major")
     minor = fields.Char(string="Minor")
-    
-    # Academic Progress (could be computed elsewhere)
     gpa = fields.Float(string="GPA", digits=(3, 2))
     academic_status = fields.Selection([
         ('good_standing', 'Good Standing'),
@@ -55,10 +44,9 @@ class StudentProfile(models.Model):
 
     @api.model
     def create(self, vals):
-        # When creating a user marked as a student, add them to the student group
         if vals.get('is_student'):
-            student_group = self.env.ref('lms_module.group_lms_student', raise_if_not_found=False)
+            student_group = self.env.ref('lms_module.group_student', raise_if_not_found=False)
             if student_group:
-                existing_groups = vals.get('groups_id', [])
-                vals['groups_id'] = existing_groups + [(4, student_group.id)]
+                vals.setdefault('groups_id', [])
+                vals['groups_id'].append((4, student_group.id))
         return super(StudentProfile, self).create(vals)

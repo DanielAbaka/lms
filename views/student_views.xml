@@ -1,65 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data>
-    <!-- Student Profile Form View -->
-    <record id="view_lms_student_form" model="ir.ui.view">
-      <field name="name">lms.student.form</field>
-      <field name="model">res.users</field>
-      <field name="arch" type="xml">
-        <form string="Student Profile" class="lms_module o_form_view">
-          <header>
-            <!-- Admins and managers will see the full status, while students see only their own record -->
-            <field name="academic_status" widget="statusbar" statusbar_visible="good_standing,probation,suspended"/>
-          </header>
-          <sheet>
-            <div class="oe_title">
-              <h1>
-                <field name="name" placeholder="Student Name" readonly="1"/>
-              </h1>
-            </div>
-            <field name="image_1920" widget="image" class="oe_avatar"/>
-            <notebook>
-              <page string="Personal Information" name="personal_info">
-                <group>
-                  <group>
-                    <field name="firstname" required="1"/>
-                    <field name="lastname" required="1"/>
-                    <field name="student_id" required="1" placeholder="Student ID"/>
-                    <field name="email" widget="email"/>
-                  </group>
-                  <group>
-                    <field name="date_of_birth" widget="date"/>
-                    <field name="gender"/>
-                    <field name="phone" widget="phone"/>
-                    <field name="emergency_contact" placeholder="Emergency Contact"/>
-                  </group>
-                </group>
-                <group>
-                  <field name="address" placeholder="Full Address"/>
-                </group>
-              </page>
-              <page string="Academic Information" name="academic_info">
-                <group>
-                  <group>
+    <data>
+        <!-- Student Form View -->
+        <record id="view_lms_student_form" model="ir.ui.view">
+            <field name="name">lms.student.form</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <form string="Student Profile">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="firstname"/>
+                                <field name="lastname"/>
+                                <field name="student_id"/>
+                                <field name="email"/>
+                                <field name="date_of_birth"/>
+                                <field name="gender"/>
+                            </group>
+                            <group>
+                                <field name="phone"/>
+                                <field name="emergency_contact"/>
+                                <field name="address"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="major"/>
+                                <field name="minor"/>
+                                <field name="gpa"/>
+                                <field name="academic_status"/>
+                            </group>
+                            <group>
+                                <field name="enrolled_courses"/>
+                                <field name="dashboard_data"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Student Tree View -->
+        <record id="view_lms_student_tree" model="ir.ui.view">
+            <field name="name">lms.student.tree</field>
+            <field name="model">res.users</field>
+            <field name="arch" type="xml">
+                <tree string="Students">
+                    <field name="firstname"/>
+                    <field name="lastname"/>
+                    <field name="student_id"/>
+                    <field name="email"/>
                     <field name="major"/>
-                    <field name="minor"/>
-                    <field name="gpa"/>
                     <field name="academic_status"/>
-                  </group>
-                  <group>
-                    <field name="enrolled_courses" widget="many2many_tags"/>
-                    <field name="dashboard_data"/>
-                  </group>
-                </group>
-              </page>
-            </notebook>
-          </sheet>
-          <div class="oe_chatter">
-            <field name="message_follower_ids" widget="mail_followers"/>
-            <field name="message_ids" widget="mail_thread"/>
-          </div>
-        </form>
-      </field>
-    </record>
-  </data>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Student Action -->
+        <record id="action_lms_students" model="ir.actions.act_window">
+            <field name="name">Students</field>
+            <field name="res_model">res.users</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_student','=',True)]</field>
+            <field name="context">{'default_is_student': True}</field>
+            <field name="help" type="html">
+                <p>Create and manage student profiles.</p>
+            </field>
+        </record>
+
+        <!-- Student Menu -->
+        <menuitem id="menu_lms_students" name="Students"
+                  parent="lms_module.menu_root"
+                  action="action_lms_students"
+                  sequence="10"/>
+    </data>
 </odoo>
