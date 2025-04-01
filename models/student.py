@@ -39,7 +39,7 @@ class StudentProfile(models.Model):
     major = fields.Char(string="Major")
     minor = fields.Char(string="Minor")
     
-    # Academic Progress (these might be computed elsewhere)
+    # Academic Progress (could be computed elsewhere)
     gpa = fields.Float(string="GPA", digits=(3, 2))
     academic_status = fields.Selection([
         ('good_standing', 'Good Standing'),
@@ -55,7 +55,7 @@ class StudentProfile(models.Model):
 
     @api.model
     def create(self, vals):
-        # When creating a user marked as student, add them to the student group
+        # When creating a user marked as a student, add them to the student group
         if vals.get('is_student'):
             student_group = self.env.ref('lms_module.group_lms_student', raise_if_not_found=False)
             if student_group:
