@@ -12,9 +12,10 @@
                 <page string="Student Information" name="student_information">
                     <group>
                         <group string="Personal Information">
+                            <field name="is_student"/>
+                            <field name="student_id"/>
                             <field name="firstname"/>
                             <field name="lastname"/>
-                            <field name="student_id"/>
                             <field name="date_of_birth"/>
                             <field name="gender"/>
                             <field name="phone"/>
@@ -27,6 +28,7 @@
                             <field name="gpa"/>
                             <field name="academic_status"/>
                             <field name="enrolled_courses" widget="many2many_tags"/>
+                            <field name="dashboard_data"/>
                         </group>
                     </group>
                 </page>
@@ -64,12 +66,10 @@
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
-                            <div>
-                                <strong><field name="name"/></strong>
-                                <div><field name="major"/></div>
-                                <div><field name="academic_status"/></div>
-                                <div><field name="email"/></div>
-                            </div>
+                            <strong><field name="name"/></strong>
+                            <div><field name="major"/></div>
+                            <div><field name="academic_status"/></div>
+                            <div><field name="email"/></div>
                         </div>
                     </t>
                 </templates>
