@@ -1,77 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <!-- Student Form View -->
-        <record id="view_lms_student_form" model="ir.ui.view">
-            <field name="name">lms.student.form</field>
-            <field name="model">res.users</field>
-            <field name="arch" type="xml">
-                <form string="Student Profile">
-                    <sheet>
-                        <group>
-                            <group>
-                                <field name="firstname"/>
-                                <field name="lastname"/>
-                                <field name="student_id"/>
-                                <field name="email"/>
-                                <field name="date_of_birth"/>
-                                <field name="gender"/>
-                            </group>
-                            <group>
-                                <field name="phone"/>
-                                <field name="emergency_contact"/>
-                                <field name="address"/>
-                            </group>
+  <data>
+
+    <!-- Student Form View Inheritance -->
+    <record id="view_lms_student_form_inherit" model="ir.ui.view">
+        <field name="name">lms.student.form.inherit</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='preferences']" position="after">
+                <page string="Student Information" name="student_information">
+                    <group>
+                        <group string="Personal Information">
+                            <field name="firstname"/>
+                            <field name="lastname"/>
+                            <field name="student_id"/>
+                            <field name="date_of_birth"/>
+                            <field name="gender"/>
+                            <field name="phone"/>
+                            <field name="emergency_contact"/>
+                            <field name="address"/>
                         </group>
-                        <group>
-                            <group>
-                                <field name="major"/>
-                                <field name="minor"/>
-                                <field name="gpa"/>
-                                <field name="academic_status"/>
-                            </group>
-                            <group>
-                                <field name="enrolled_courses"/>
-                                <field name="dashboard_data"/>
-                            </group>
+                        <group string="Academic Information">
+                            <field name="major"/>
+                            <field name="minor"/>
+                            <field name="gpa"/>
+                            <field name="academic_status"/>
+                            <field name="enrolled_courses" widget="many2many_tags"/>
                         </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
 
-        <!-- Student Tree View -->
-        <record id="view_lms_student_tree" model="ir.ui.view">
-            <field name="name">lms.student.tree</field>
-            <field name="model">res.users</field>
-            <field name="arch" type="xml">
-                <tree string="Students">
-                    <field name="firstname"/>
-                    <field name="lastname"/>
-                    <field name="student_id"/>
-                    <field name="email"/>
-                    <field name="major"/>
-                    <field name="academic_status"/>
-                </tree>
-            </field>
-        </record>
+    <!-- Student Tree View -->
+    <record id="view_lms_student_tree" model="ir.ui.view">
+        <field name="name">lms.student.tree</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <tree string="Students">
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="email"/>
+                <field name="major"/>
+                <field name="academic_status"/>
+                <field name="gpa"/>
+            </tree>
+        </field>
+    </record>
 
-        <!-- Student Action -->
-        <record id="action_lms_students" model="ir.actions.act_window">
-            <field name="name">Students</field>
-            <field name="res_model">res.users</field>
-            <field name="view_mode">tree,form</field>
-            <field name="domain">[('is_student','=',True)]</field>
-            <field name="context">{'default_is_student': True}</field>
-            <field name="help" type="html">
-                <p>Create and manage student profiles.</p>
-            </field>
-        </record>
+    <!-- Student Kanban View -->
+    <record id="view_lms_student_kanban" model="ir.ui.view">
+        <field name="name">lms.student.kanban</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="email"/>
+                <field name="major"/>
+                <field name="academic_status"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div>
+                                <strong><field name="name"/></strong>
+                                <div><field name="major"/></div>
+                                <div><field name="academic_status"/></div>
+                                <div><field name="email"/></div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 
-        <!-- Student Menu -->
-        <menuitem id="menu_lms_students" name="Students"
-                  parent="lms_module.menu_root"
-                  action="action_lms_students"
-                  sequence="10"/>
-    </data>
+    <!-- Student Search View -->
+    <record id="view_lms_student_search" model="ir.ui.view">
+        <field name="name">lms.student.search</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="email"/>
+                <field name="major"/>
+                <field name="academic_status"/>
+                <filter string="Students" domain="[('is_student', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+  </data>
 </odoo>

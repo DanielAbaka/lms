@@ -47,6 +47,6 @@ class StudentProfile(models.Model):
         if vals.get('is_student'):
             student_group = self.env.ref('lms_module.group_student', raise_if_not_found=False)
             if student_group:
-                vals.setdefault('groups_id', [])
-                vals['groups_id'].append((4, student_group.id))
+                existing_groups = vals.get('groups_id', [])
+                vals['groups_id'] = existing_groups + [(4, student_group.id)]
         return super(StudentProfile, self).create(vals)
