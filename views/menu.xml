@@ -13,24 +13,6 @@
         </field>
     </record>
 
-    <!-- Students Action Corrected -->
-    <record id="action_lms_students" model="ir.actions.act_window">
-        <field name="name">Students</field>
-        <field name="res_model">res.users</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="domain">[('is_student', '=', True)]</field>
-        <field name="context">{"default_is_student": True}</field>
-        <field name="search_view_id" ref="lms_module.view_lms_student_search"/>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Add your first student!
-            </p>
-            <p>
-                Create student profiles to manage academic information and course enrollments.
-            </p>
-        </field>
-    </record>
-
     <!-- Root Menu -->
     <menuitem id="menu_root" name="LMS" web_icon="lms_module,static/description/icon.png" sequence="10"/>
 
@@ -84,5 +66,25 @@
               parent="menu_lms_academic"
               action="action_lms_quiz"
               sequence="10"/>
+
+    <!-- Define Student Search View -->
+    <record id="view_lms_student_search" model="ir.ui.view">
+        <field name="name">lms.student.search</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="student_id"/>
+                <field name="email"/>
+                <field name="major"/>
+                <field name="academic_status"/>
+                <filter name="filter_students" string="Students" domain="[('is_student', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_major" string="Major" context="{'group_by': 'major'}"/>
+                    <filter name="group_by_status" string="Academic Status" context="{'group_by': 'academic_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
 
 </odoo>
